@@ -9,6 +9,8 @@ The following vision/detection modes are included.
 
 - **Blindsight**
   - _Note: Blindsight is blocked by total cover. There's no total cover wall restriction type. So Blindsight is blocked by sight-blocking walls, but doesn't go through proximity walls regardless of the distance to the wall. Therefore it is necessary to use proximity walls for glass windows._
+- **Darkvision**
+  - Unless blinded Darkvision detects any creature that isn't invisible and doesn't have the `Umbral Sight` feat.
 - **Detect Evil and Good**
   - _Note: Penetrates any wall, because there's no way to know what material the wall is made of or how thick it is._
 - **Detect Magic**

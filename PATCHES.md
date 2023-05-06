@@ -89,6 +89,12 @@ class VisionMode extends foundry.abstract.DataModel {
 
 class VisionSource extends RenderedPointSource {
   /**
+   * The detection mode of this vision source.
+   * @type {DetectionMode}
+   */
+  detectionMode;
+
+  /**
    * The polygon of light perception.
    * @type {PointSourcePolygon}
    * @readonly

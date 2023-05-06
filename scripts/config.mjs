@@ -1,4 +1,5 @@
 import { DetectionModeBlindsight } from "./detection-modes/blindsight.mjs";
+import { DetectionModeDarkvision } from "./detection-modes/darkvision.mjs";
 import { DetectionModeDetectEvilAndGood } from "./detection-modes/detect-evil-and-good.mjs";
 import { DetectionModeDetectMagic } from "./detection-modes/detect-magic.mjs";
 import { DetectionModeDetectPoisonAndDisease } from "./detection-modes/detect-poison-and-disease.mjs";
@@ -59,10 +60,10 @@ function refreshVision() {
 }
 
 Hooks.once("init", () => {
-    renameDetectionMode(DetectionMode.BASIC_MODE_ID, "DND5E.SenseDarkvision");
     renameDetectionMode(DetectionMode.LIGHT_MODE_ID, "VISION5E.LightPerception");
 
     registerDetectionMode(new DetectionModeBlindsight());
+    registerDetectionMode(new DetectionModeDarkvision());
     registerDetectionMode(new DetectionModeDetectEvilAndGood());
     registerDetectionMode(new DetectionModeDetectMagic());
     registerDetectionMode(new DetectionModeDetectPoisonAndDisease());
