@@ -66,3 +66,9 @@ The vision modes can be changed in token HUD. The player can select the preferre
 If a token doesn't produce any sound, give it the _inaudible_ status effect, which is right next to the _invisible_ status effect.
 
 ![hud](images/inaudible.png)
+
+---
+
+_Detect Evil and Good_, _Detect Magic_, _Detect Poison and Disease_, _Detect Thoughts_, _Hearing_, and _Tremorsense_ are all imprecise senses. They do not reveal any information about the detected token except for size and location.
+
+![hud](images/imprecise.gif)

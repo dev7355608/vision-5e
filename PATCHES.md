@@ -1,7 +1,8 @@
-This modules modifies and extends the vision and detection mode API.
+This module modifies and extends the vision and detection mode API.
 
 - Separates the light perception part of Basic Sight into a separate mode to allow control over the range of light perception.
-- Adds the possibility of imprecise detection modes that merely allow reveal the location and size of the token but nothing else.
+- Adds the possibility of imprecise detection modes that merely reveal the location and size of the token but nothing else.
+- Each vision mode is linked to a detection mode that becomes the primary detection mode when it is active.
 
 ```js
 class DetectionMode extends foundry.abstract.DataModel {
