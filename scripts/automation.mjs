@@ -60,6 +60,24 @@ const resetActiveTokens = (() => {
 })();
 
 Hooks.once("init", () => {
+    CONFIG.Actor.documentClass = class Actor5e extends CONFIG.Actor.documentClass {
+        #senses = {};
+
+        /** @override */
+        prepareData() {
+            super.prepareData();
+
+            for (const [key, value] of Object.entries(this.system.attributes.senses)) {
+                if (this.#senses[key] !== value) {
+                    this.#senses = { ...this.system.attributes.senses };
+                    resetActiveTokens(this);
+
+                    break;
+                }
+            }
+        }
+    };
+
     CONFIG.Token.documentClass = class TokenDocument5e extends CONFIG.Token.documentClass {
         /** @override */
         _prepareDetectionModes() {
@@ -82,26 +100,23 @@ Hooks.once("init", () => {
 
             super._prepareDetectionModes();
         }
-    };
-});
 
-Hooks.on("preUpdateToken", (document, data) => {
-    const basicId = DetectionMode.BASIC_MODE_ID;
-    const range = (data.detectionModes ?? document._source.detectionModes).find((m) => m.id === basicId)?.range ?? 0;
+        /** @override */
+        async _preUpdate(data, options, user) {
+            await super._preUpdate(data, options, user);
 
-    if (document._source.range !== range) {
-        if (data.sight) {
-            data.sight.range = range;
-        } else {
-            data.sight = { range };
+            const basicId = DetectionMode.BASIC_MODE_ID;
+            const range = (data.detectionModes ?? this._source.detectionModes).find((m) => m.id === basicId)?.range ?? 0;
+
+            if (this._source.range !== range) {
+                if (data.sight) {
+                    data.sight.range = range;
+                } else {
+                    data.sight = { range };
+                }
+            }
         }
-    }
-});
-
-Hooks.on("updateActor", (actor, changes) => {
-    if (foundry.utils.hasProperty(changes, "system.attributes.senses")) {
-        resetActiveTokens(actor);
-    }
+    };
 });
 
 Hooks.on("createActiveEffect", (effect) => {
@@ -114,7 +129,7 @@ Hooks.on("createActiveEffect", (effect) => {
     }
 });
 
-Hooks.on("updateActiveEffect", (effect) => {
+Hooks.on("updateActiveEffect", (effect, changes) => {
     const target = effect.target;
 
     if (target instanceof Actor) {

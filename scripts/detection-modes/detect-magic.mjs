@@ -93,8 +93,7 @@ export class DetectionModeDetectMagic extends DetectionMode {
         }
 
         // Is the target affect by a spell?
-        for (const effect of actor.effects) {
-            if (effect.disabled || effect.isSuppressed) continue;
+        for (const effect of actor.appliedEffects) {
             const item = effect.origin && !effect.origin.startsWith("Compendium.")
                 ? fromUuidSync(effect.origin) : null;
             if (item instanceof Item && (item.type === "spell" || isMagical(item))) {
