@@ -25,6 +25,6 @@ export class DetectionModeTremorsense extends DetectionMode {
 
     /** @override */
     _canDetect(visionSource, target) {
-        return !(target instanceof Token && target.document.hasStatusEffect(CONFIG.specialStatusEffects.FLY));
+        return target instanceof Token && !target.document.hasStatusEffect(CONFIG.specialStatusEffects.FLY);
     }
 }
