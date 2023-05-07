@@ -6,6 +6,7 @@ import { DetectionModeDetectPoisonAndDisease } from "./detection-modes/detect-po
 import { DetectionModeDetectThoughts } from "./detection-modes/detect-thoughts.mjs";
 import { DetectionModeDevilsSight } from "./detection-modes/devils-sight.mjs";
 import { DetectionModeEcholocation } from "./detection-modes/echolocation.mjs";
+import { DetectionModeGhostlyGaze } from "./detection-modes/ghostly-gaze.mjs";
 import { DetectionModeHearing } from "./detection-modes/hearing.mjs";
 import { DetectionModeSeeInvisibility } from "./detection-modes/see-invisibility.mjs";
 import { DetectionModeTremorsense } from "./detection-modes/tremorsense.mjs";
@@ -17,6 +18,7 @@ import { VisionModeDetectPoisonAndDisease } from "./vision-modes/detect-poison-a
 import { VisionModeDetectThoughts } from "./vision-modes/detect-thoughts.mjs";
 import { VisionModeDevilsSight } from "./vision-modes/devils-sight.mjs";
 import { VisionModeEcholocation } from "./vision-modes/echolocation.mjs";
+import { VisionModeGhostlyGaze } from "./vision-modes/ghostly-gaze.mjs";
 import { VisionModeTremorsense } from "./vision-modes/tremorsense.mjs";
 import { VisionModeTruesight } from "./vision-modes/truesight.mjs";
 
@@ -70,6 +72,7 @@ Hooks.once("init", () => {
     registerDetectionMode(new DetectionModeDetectThoughts());
     registerDetectionMode(new DetectionModeDevilsSight());
     registerDetectionMode(new DetectionModeEcholocation());
+    registerDetectionMode(new DetectionModeGhostlyGaze());
     registerDetectionMode(new DetectionModeHearing());
     registerDetectionMode(new DetectionModeTremorsense());
     registerDetectionMode(new DetectionModeTruesight());
@@ -84,6 +87,7 @@ Hooks.once("init", () => {
     registerVisionMode(new VisionModeDetectThoughts());
     registerVisionMode(new VisionModeDevilsSight());
     registerVisionMode(new VisionModeEcholocation());
+    registerVisionMode(new VisionModeGhostlyGaze());
     registerVisionMode(new VisionModeTremorsense());
     registerVisionMode(new VisionModeTruesight());
 

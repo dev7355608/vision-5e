@@ -2,13 +2,13 @@
  * The detection mode for Darkvision.
  */
 export class DetectionModeDarkvision extends DetectionModeBasicSight {
-    constructor() {
-        super({
+    constructor(data = {}, options = {}) {
+        super(foundry.utils.mergeObject({
             id: DetectionMode.BASIC_MODE_ID,
             label: "DND5E.SenseDarkvision",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
             walls: true
-        });
+        }, data), options);
     }
 
     /** @override */

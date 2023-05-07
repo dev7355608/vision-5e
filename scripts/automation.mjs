@@ -210,6 +210,16 @@ Hooks.once("i18nInit", () => {
     }
 
     for (const name of [
+        "Ghostly Gaze",
+        game.i18n.localize("VISION5E.GhostlyGaze")
+    ]) {
+        effectMapping.set(name, {
+            id: "ghostlyGaze",
+            range: 30
+        });
+    }
+
+    for (const name of [
         "See Invisibility",
         game.i18n.localize("VISION5E.SeeInvisibility")
     ]) {

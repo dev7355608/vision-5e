@@ -17,6 +17,7 @@ Hooks.on("renderTokenHUD", (hud, html) => {
         "detectThoughts",
         "devilsSight",
         "echolocation",
+        "ghostlyGaze",
         "tremorsense",
         "truesight"
     ]) {

@@ -27,6 +27,8 @@ The following vision/detection modes are included.
   - _Note: You need the [Vision Limitation]() module for magical darkness._
 - **Echolocation**
   - Detects the same things Blindsight does but doesn't work while deafened.
+- **Ghostly Gaze**
+  - Detects anything Darkvision would but isn't blocked by walls.
 - **Hearing**
   - Detects all creatures that do not have the _inaudible_ status effect and are not behind a sound-blocking walls. If the token is deafened, it cannot hear anything of course.
 - **See Invisibility**
@@ -53,6 +55,7 @@ A token gains ...
 - _Detect Thoughts_ if the actor has an active effect with the name `Detect Thoughts`.
 - _Devil's Sight_ if the actor has an active effect with the name `Devil's Sight`.
   - _Note: Remove the effect that gives 120 feet Darkvision if it exists: Devil's Sight doesn't increase the range of Darkvision._
+- _Ghostly Gaze_ if the actor has an active effect with the name `Ghostly Gaze`.
 - _See Invisibility_ if the actor has an active effect with the name `See Invisibility`.
 
 By default all tokens have hearing range of 30 feet.
