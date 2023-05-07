@@ -4,13 +4,25 @@
 export class DetectionModeBlindsight extends DetectionMode {
     priority = 500;
 
-    constructor() {
-        super({
+    /**
+     * @type {boolean}
+     * @protected
+     */
+    _ingoreVisionAngle = true;
+
+    /**
+     * @type {PointSourcePolygon.WALL_DIRECTION_MODES}
+     * @protected
+     */
+    _wallDirectionMode = PointSourcePolygon.WALL_DIRECTION_MODES.NORMAL;
+
+    constructor(data = {}, options = {}) {
+        super(foundry.utils.mergeObject({
             id: "blindsight",
             label: "DND5E.SenseBlindsight",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: true
-        });
+        }, data), options);
     }
 
     /** @override */
@@ -30,6 +42,7 @@ export class DetectionModeBlindsight extends DetectionMode {
 
     /** @override */
     _testLOS(visionSource, mode, target, test) {
+        if (!this._ingoreVisionAngle && !this.#testAngle(visionSource, test.point)) return false;
         return !CONFIG.Canvas.polygonBackends.sight.testCollision(
             { x: visionSource.x, y: visionSource.y },
             test.point,
@@ -37,6 +50,7 @@ export class DetectionModeBlindsight extends DetectionMode {
                 type: "sight",
                 mode: "any",
                 source: visionSource,
+                wallDirectionMode: this._wallDirectionMode,
                 // Blindsight is restricted by total cover and therefore cannot see
                 // through windows. So we do not want blindsight to see through
                 // a window as we get close to it. That's why we ignore thresholds.
@@ -47,5 +61,31 @@ export class DetectionModeBlindsight extends DetectionMode {
                 useThreshold: false
             }
         );
+    }
+
+    /**
+     * Test whether the point is inside the vision cone.
+     * @param {VisionSource} visionSource
+     * @param {PIXI.Point} point
+     * @returns {boolean}
+     */
+    #testAngle(visionSource, point) {
+        const { angle, rotation, externalRadius } = visionSource.data;
+
+        if (angle !== 360) {
+            const dx = point.x - visionSource.x;
+            const dy = point.y - visionSource.y;
+
+            if ((dx * dx) + (dy * dy) > externalRadius * externalRadius) {
+                const aMin = rotation + 90 - (angle / 2);
+                const a = Math.toDegrees(Math.atan2(dy, dx));
+
+                if ((((a - aMin) % 360) + 360) % 360 > angle) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
