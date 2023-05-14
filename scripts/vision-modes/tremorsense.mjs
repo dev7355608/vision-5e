@@ -27,11 +27,8 @@ export class VisionModeTremorsense extends VisionMode {
                 background: { shader: VoidBackgroundVisionShader },
                 illumination: { shader: VoidIlluminationVisionShader },
                 coloration: {
-                    // TODO
-                    shader: class TremorsenseColorationVisionShader extends TremorColorationVisionShader {
-                        /** @override */
-                        static defaultUniforms = { ...super.defaultUniforms, colorDetection: [1, 0, 1] };
-                    }
+                    shader: DetectColorationVisionShader,
+                    uniforms: { colorDetection: [1, 0, 1] }
                 }
             }
         }, { animated: true });

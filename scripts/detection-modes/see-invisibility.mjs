@@ -9,7 +9,8 @@ export class DetectionModeSeeInvisibility extends DetectionMode {
             id: "seeInvisibility",
             label: "DETECTION.SeeInvisibility",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            walls: false
+            walls: false,
+            angle: false
         });
     }
 

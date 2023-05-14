@@ -26,11 +26,8 @@ export class VisionModeDetectMagic extends VisionMode {
                 background: { shader: VoidBackgroundVisionShader },
                 illumination: { shader: VoidIlluminationVisionShader },
                 coloration: {
-                    // TODO
-                    shader: class DetectMagicColorationVisionShader extends DetectColorationVisionShader {
-                        /** @override */
-                        static defaultUniforms = { ...super.defaultUniforms, colorDetection: [1, 0, 1] };
-                    }
+                    shader: DetectColorationVisionShader,
+                    uniforms: { colorDetection: [1, 0, 1] }
                 }
             }
         }, { animated: true });

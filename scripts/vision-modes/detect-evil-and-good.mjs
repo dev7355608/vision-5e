@@ -26,11 +26,8 @@ export class VisionModeDetectEvilAndGood extends VisionMode {
                 background: { shader: VoidBackgroundVisionShader },
                 illumination: { shader: VoidIlluminationVisionShader },
                 coloration: {
-                    // TODO
-                    shader: class DetectEvilAndGoodColorationVisionShader extends DetectColorationVisionShader {
-                        /** @override */
-                        static defaultUniforms = { ...super.defaultUniforms, colorDetection: [1, 1, 0] };
-                    }
+                    shader: DetectColorationVisionShader,
+                    uniforms: { colorDetection: [1, 1, 0] }
                 }
             }
         }, { animated: true });

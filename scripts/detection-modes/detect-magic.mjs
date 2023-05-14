@@ -10,7 +10,8 @@ export class DetectionModeDetectMagic extends DetectionMode {
             id: "detectMagic",
             label: "VISION5E.DetectMagic",
             type: DetectionMode.DETECTION_TYPES.OTHER,
-            walls: false
+            walls: false,
+            angle: false
         });
     }
 

@@ -36,8 +36,8 @@ Hooks.on("renderTokenHUD", (hud, html) => {
         visionModes.push(visionMode);
     }
 
-    if (visionModes.length === 0) {
-        return;
+    if (!visionModes.find((m) => m.id === "darkvision")) {
+        visionModes.push(CONFIG.Canvas.visionModes.basic);
     }
 
     visionModes.sort((a, b) => game.i18n.localize(a.label).localeCompare(game.i18n.localize(b.label), game.i18n.lang));
@@ -64,7 +64,7 @@ Hooks.on("renderTokenHUD", (hud, html) => {
         <div class="vision-5e vision-modes">
             ${visionModes.map(mode => `
             <div class="vision-5e vision-mode ${mode.id === token.document.sight.visionMode ? "active" : ""} flexrow" data-vision-mode="${mode.id}">
-                <span class="vision-5e vision-mode-label">${game.i18n.localize(mode.label)}</span>
+                <span class="vision-5e vision-mode-label">${game.i18n.localize(mode.id !== "basic" ? mode.label : CONFIG.Canvas.visionModes.darkvision.label)}</span>
             </div>`).join("")}
         </div>
     `);
@@ -82,7 +82,16 @@ Hooks.on("renderTokenHUD", (hud, html) => {
         element => element.addEventListener("click", (event) => {
             event.preventDefault();
 
-            token.document.updateVisionMode(event.currentTarget.dataset.visionMode);
+            const visionMode = event.currentTarget.dataset.visionMode;
+            const update = { sight: { visionMode } };
+
+            foundry.utils.mergeObject(update.sight, CONFIG.Canvas.visionModes[visionMode].vision.defaults);
+
+            if (visionMode === "basic") {
+                foundry.utils.mergeObject(update.sight, CONFIG.Canvas.visionModes.darkvision.vision.defaults);
+            }
+
+            token.document.update(update);
             hud.clear();
         })
     );

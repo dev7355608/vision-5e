@@ -26,11 +26,8 @@ export class VisionModeDetectPoisonAndDisease extends VisionMode {
                 background: { shader: VoidBackgroundVisionShader },
                 illumination: { shader: VoidIlluminationVisionShader },
                 coloration: {
-                    // TODO
-                    shader: class DetectPoisonAndDiseaseColorationVisionShader extends DetectColorationVisionShader {
-                        /** @override */
-                        static defaultUniforms = { ...super.defaultUniforms, colorDetection: [0, 1, 0] };
-                    }
+                    shader: DetectColorationVisionShader,
+                    uniforms: { colorDetection: [0, 1, 0] }
                 }
             }
         }, { animated: true });

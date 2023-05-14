@@ -10,7 +10,8 @@ export class DetectionModeDetectEvilAndGood extends DetectionMode {
             id: "detectEvilAndGood",
             label: "VISION5E.DetectEvilAndGood",
             type: DetectionMode.DETECTION_TYPES.OTHER,
-            walls: false
+            walls: false,
+            angle: false
         });
     }
 

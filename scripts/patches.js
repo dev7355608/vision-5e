@@ -96,13 +96,24 @@ VisionSource.prototype._createRestrictedPolygon = function () {
     const radius = this.data.radius > 0 ? this.data.radius : this.data.externalRadius;
     const density = PIXI.Circle.approximateVertexDensity(radius);
     if (!this.detectionMode.walls) {
-        return CONFIG.Canvas.polygonBackends[this.constructor.sourceType].create(origin, {
+        const config = {
             ...this._getPolygonConfiguration(),
             type: "universal",
             radius,
             density,
             useThreshold: false
-        });
+        };
+        if (!this.detectionMode.angle) config.angle = 360;
+        return CONFIG.Canvas.polygonBackends[this.constructor.sourceType].create(origin, config);
+    }
+    if (!this.detectionMode.angle && this.data.angle !== 360) {
+        const config = {
+            ...this._getPolygonConfiguration(),
+            radius,
+            density,
+            angle: 360
+        };
+        return CONFIG.Canvas.polygonBackends[this.constructor.sourceType].create(origin, config);
     }
     const circle = new PIXI.Circle(origin.x, origin.y, radius);
     return this.los.applyConstraint(circle, { density, scalingFactor: 100 });

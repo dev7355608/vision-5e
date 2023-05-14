@@ -10,7 +10,8 @@ export class DetectionModeDetectPoisonAndDisease extends DetectionMode {
             id: "detectPoisonAndDisease",
             label: "VISION5E.DetectPoisonAndDisease",
             type: DetectionMode.DETECTION_TYPES.OTHER,
-            walls: false
+            walls: false,
+            angle: false
         });
     }
 

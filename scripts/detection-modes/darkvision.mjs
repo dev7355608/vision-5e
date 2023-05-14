@@ -7,7 +7,8 @@ export class DetectionModeDarkvision extends DetectionModeBasicSight {
             id: DetectionMode.BASIC_MODE_ID,
             label: "DND5E.SenseDarkvision",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            walls: true
+            walls: true,
+            angle: true
         }, data), options);
     }
 

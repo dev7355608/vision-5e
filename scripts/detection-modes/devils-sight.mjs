@@ -9,7 +9,8 @@ export class DetectionModeDevilsSight extends DetectionMode {
             id: "devilsSight",
             label: "VISION5E.DevilsSight",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            walls: true
+            walls: true,
+            angle: false
         });
     }
 

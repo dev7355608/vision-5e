@@ -127,14 +127,6 @@ Hooks.once("i18nInit", () => {
     sort(CONFIG.Canvas.visionModes);
 });
 
-// TODO
-Hooks.once("init", () => {
-    CONFIG.Token.objectClass = class Token5e extends CONFIG.Token.objectClass {
-        /** @override */
-        _onApplyStatusEffect(statusId, active) {
-            super._onApplyStatusEffect(statusId, active);
-
-            specialStatusEffectsHooks.get(statusId)?.(statusId, active);
-        }
-    };
+Hooks.on("applyTokenStatusEffect", (token, statusId, active) => {
+    specialStatusEffectsHooks.get(statusId)?.(token, statusId, active);
 });

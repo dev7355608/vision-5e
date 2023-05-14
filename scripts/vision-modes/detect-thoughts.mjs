@@ -26,11 +26,8 @@ export class VisionModeDetectThoughts extends VisionMode {
                 background: { shader: VoidBackgroundVisionShader },
                 illumination: { shader: VoidIlluminationVisionShader },
                 coloration: {
-                    // TODO
-                    shader: class DetectThoughtsColorationVisionShader extends DetectColorationVisionShader {
-                        /** @override */
-                        static defaultUniforms = { ...super.defaultUniforms, colorDetection: [0, 1, 1] };
-                    }
+                    shader: DetectColorationVisionShader,
+                    uniforms: { colorDetection: [0, 1, 1] }
                 }
             }
         }, { animated: true });

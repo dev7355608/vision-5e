@@ -10,7 +10,8 @@ export class DetectionModeDetectThoughts extends DetectionMode {
             id: "detectThoughts",
             label: "VISION5E.DetectThoughts",
             type: DetectionMode.DETECTION_TYPES.OTHER,
-            walls: false
+            walls: false,
+            angle: false
         });
     }
 

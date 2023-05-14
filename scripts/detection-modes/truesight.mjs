@@ -9,7 +9,8 @@ export class DetectionModeTruesight extends DetectionMode {
             id: "seeAll",
             label: "DND5E.SenseTruesight",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            walls: true
+            walls: true,
+            angle: true
         });
     }
 

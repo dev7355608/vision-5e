@@ -5,12 +5,6 @@ export class DetectionModeBlindsight extends DetectionMode {
     priority = 500;
 
     /**
-     * @type {boolean}
-     * @protected
-     */
-    _ingoreVisionAngle = true;
-
-    /**
      * @type {PointSourcePolygon.WALL_DIRECTION_MODES}
      * @protected
      */
@@ -21,7 +15,8 @@ export class DetectionModeBlindsight extends DetectionMode {
             id: "blindsight",
             label: "DND5E.SenseBlindsight",
             type: DetectionMode.DETECTION_TYPES.OTHER,
-            walls: true
+            walls: true,
+            angle: false
         }, data), options);
     }
 
@@ -42,7 +37,7 @@ export class DetectionModeBlindsight extends DetectionMode {
 
     /** @override */
     _testLOS(visionSource, mode, target, test) {
-        if (!this._ingoreVisionAngle && !this.#testAngle(visionSource, test.point)) return false;
+        if (this.angle && !this.#testAngle(visionSource, test.point)) return false;
         return !CONFIG.Canvas.polygonBackends.sight.testCollision(
             { x: visionSource.x, y: visionSource.y },
             test.point,

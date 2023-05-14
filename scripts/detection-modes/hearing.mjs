@@ -10,7 +10,8 @@ export class DetectionModeHearing extends DetectionMode {
             id: "hearing",
             label: "VISION5E.Hearing",
             type: DetectionMode.DETECTION_TYPES.SOUND,
-            walls: true
+            walls: true,
+            angle: false
         });
     }
 

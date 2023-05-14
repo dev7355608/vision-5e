@@ -10,7 +10,8 @@ export class DetectionModeTremorsense extends DetectionMode {
             id: "feelTremor",
             label: "DND5E.SenseTremorsense",
             type: DetectionMode.DETECTION_TYPES.MOVE,
-            walls: false
+            walls: false,
+            angle: false
         });
     }
 
