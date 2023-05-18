@@ -118,11 +118,7 @@ export class DetectionModeSeeInvisibility extends DetectionMode {
             effects = document.effects;
             document.effects = effects.filter(e => e !== icon);
         } else {
-            effects = document.actor.appliedEffects.filter(e => e.statuses.has(statusId));
-
-            for (const effect of effects) {
-                effect.statuses.delete(statusId);
-            }
+            document.actor.statuses.delete(statusId);
         }
 
         return effects;
@@ -139,11 +135,7 @@ export class DetectionModeSeeInvisibility extends DetectionMode {
         if (!document.actor) {
             document.effects = effects;
         } else {
-            const statusId = CONFIG.specialStatusEffects.INVISIBLE;
-
-            for (const effect of effects) {
-                effect.statuses.add(statusId);
-            }
+            document.actor.statuses.add(CONFIG.specialStatusEffects.INVISIBLE);
         }
     }
 }

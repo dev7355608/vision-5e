@@ -78,6 +78,7 @@ VisionSource.prototype._initializeVisionMode = function () {
 Object.defineProperties(VisionSource.prototype, {
     _createLightPolygon: {
         value: function () {
+            if (this.data.disabled) return this.los;
             const radius = this.data.lightRadius;
             if (radius >= canvas.dimensions.maxR) return this.los;
             const origin = { x: this.data.x, y: this.data.y };
@@ -92,6 +93,7 @@ Object.defineProperties(VisionSource.prototype, {
 });
 
 VisionSource.prototype._createRestrictedPolygon = function () {
+    if (this.data.disabled) return this.los;
     const origin = { x: this.data.x, y: this.data.y };
     const radius = this.data.radius > 0 ? this.data.radius : this.data.externalRadius;
     const density = PIXI.Circle.approximateVertexDensity(radius);
@@ -222,12 +224,7 @@ class DetectionModeLightPerception extends DetectionMode {
     _testPoint(visionSource, mode, target, test) {
         if (!super._testPoint(visionSource, mode, target, test)) return false;
         for (const lightSource of canvas.effects.lightSources) {
-            if (!lightSource.active) {
-                if (lightSource.hasActiveLayer) continue;
-                if (this.disabled) continue;
-                if (!canvas.darknessLevel.between(lightSource.data.darkness.min, lightSource.data.darkness.max)) continue;
-                if (lightSource instanceof GlobalLightSource && !canvas.effects.illumination.globalLight) continue;
-            }
+            if (lightSource.disabled) continue;
             if (lightSource.shape.contains(test.point.x, test.point.y)) return true;
         }
         return false;
@@ -241,22 +238,29 @@ CONFIG.Canvas.detectionModes.lightPerception = new DetectionModeLightPerception(
 });
 
 CanvasVisibility.prototype.refreshVisibility = ((refreshVisibility) => {
+    const TRUE = new Boolean(true);
+    const FALSE = new Boolean(false);
     return function () {
-        this.vision?.imprecise.clear();
+        this.vision?.sight.clear();
 
         const visionSources = canvas.effects.visionSources;
 
         for (const visionSource of visionSources) {
-            if (visionSource.data.radius === 0) {
-                visionSource.data.radius = Number.MIN_VALUE;
+            const blinded = visionSource.visionMode === CONFIG.Canvas.visionModes.blindness
+                || visionSource.detectionMode.imprecise;
+
+            if (visionSource.data.blinded === !blinded) {
+                visionSource.data.blinded = blinded ? TRUE : FALSE;
             }
         }
 
         refreshVisibility.call(this);
 
         for (const visionSource of visionSources) {
-            if (visionSource.data.radius === Number.MIN_VALUE) {
-                visionSource.data.radius = 0;
+            if (visionSource.data.blinded === TRUE) {
+                visionSource.data.blinded = false;
+            } else if (visionSource.data.blinded === FALSE) {
+                visionSource.data.blinded = true;
             }
         }
     };
@@ -378,7 +382,7 @@ CanvasVisibility.prototype.restrictVisibility = function () {
         t.detectionFilter = undefined;
         t.impreciseVisible = false;
         t.visible = (!this.tokenVision && !t.document.hidden) || t.isVisible;
-        if (this.tokenVision && t.visible && canvas.effects.visionSources.has(t.sourceId) && t.vision.detectionMode.imprecise) {
+        if (this.tokenVision && t.visible && canvas.effects.visionSources.get(t.sourceId)?.active && t.vision.detectionMode.imprecise) {
             t.detectionFilter = DetectionModeLightPerception.getDetectionFilter();
         }
         if (canvas.tokens._highlight) t.renderFlags.set({ refreshState: true });
@@ -400,8 +404,8 @@ CanvasVisibility.prototype.restrictVisibility = function () {
 Hooks.on("drawCanvasVisibility", (layer) => {
     const vision = layer.vision;
 
-    vision.imprecise = vision.addChild(new PIXI.LegacyGraphics());
-    vision.imprecise.blendMode = PIXI.BLEND_MODES.MAX_COLOR;
+    vision.sight = vision.addChild(new PIXI.LegacyGraphics());
+    vision.sight.blendMode = PIXI.BLEND_MODES.MAX_COLOR;
 
     vision.mask = null;
     vision.fov.mask = vision.los;
@@ -414,11 +418,7 @@ Hooks.on("drawCanvasVisibility", (layer) => {
                 const source = shape.config.source;
 
                 if (source instanceof VisionSource) {
-                    if (source.detectionMode.imprecise || source.data.radius <= Number.MIN_VALUE) {
-                        graphics = vision.imprecise;
-                    } else {
-                        graphics = vision.base;
-                    }
+                    graphics = vision.sight;
                 }
             }
 
@@ -457,16 +457,24 @@ Hooks.on("drawCanvasVisibility", (layer) => {
         configurable: true,
         writable: true
     });
-});
 
-FogManager.prototype.commit = ((commit) => {
-    return function () {
-        const vision = canvas.effects.visibility.vision;
-        vision.imprecise.visible = false;
-        commit.call(this);
-        vision.imprecise.visible = true;
-    }
-})(FogManager.prototype.commit);
+    Object.defineProperty(vision.los.preview, "drawShape", {
+        value: function (shape) {
+            if (shape instanceof PointSourcePolygon) {
+                const source = shape.config.source;
+
+                if (source instanceof VisionSource) {
+                    shape = source.light;
+                }
+            }
+
+            return Object.getPrototypeOf(this).drawShape.call(this, shape);
+        },
+        enumerable: false,
+        configurable: true,
+        writable: true
+    });
+});
 
 TokenDocument.prototype._prepareDetectionModes = function () {
     if (!this.sight.enabled) return;

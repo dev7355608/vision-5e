@@ -60,16 +60,18 @@ const resetActiveTokens = (() => {
 })();
 
 Hooks.once("init", () => {
-    CONFIG.Actor.documentClass = class Actor5e extends CONFIG.Actor.documentClass {
-        #senses = {};
+    const SENSES = Symbol("senses");
 
+    CONFIG.Actor.documentClass = class Actor5e extends CONFIG.Actor.documentClass {
         /** @override */
         prepareData() {
             super.prepareData();
 
+            const senses = this[SENSES] ??= {};
+
             for (const [key, value] of Object.entries(this.system.attributes.senses)) {
-                if (this.#senses[key] !== value) {
-                    this.#senses = { ...this.system.attributes.senses };
+                if (senses[key] !== value) {
+                    this[SENSES] = { ...this.system.attributes.senses };
                     resetActiveTokens(this);
 
                     break;
