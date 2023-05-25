@@ -13,7 +13,7 @@ export class DetectionModeBlindsight extends DetectionMode {
     constructor(data = {}, options = {}) {
         super(foundry.utils.mergeObject({
             id: "blindsight",
-            label: "DND5E.SenseBlindsight",
+            label: "ED4.SenseBlindsight",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: true,
             angle: false

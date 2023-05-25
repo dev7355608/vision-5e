@@ -7,7 +7,7 @@ export class DetectionModeTruesight extends DetectionMode {
     constructor() {
         super({
             id: "seeAll",
-            label: "DND5E.SenseTruesight",
+            label: "ED4.SenseTruesight",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
             walls: true,
             angle: true

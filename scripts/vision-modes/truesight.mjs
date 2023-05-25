@@ -7,7 +7,7 @@ export class VisionModeTruesight extends VisionMode {
     constructor() {
         super({
             id: "truesight",
-            label: "DND5E.SenseTruesight",
+            label: "ED4.SenseTruesight",
             canvas: {
                 shader: ColorAdjustmentsSamplerShader,
                 uniforms: { contrast: 0, saturation: 0, exposure: 0 }

@@ -1,4 +1,4 @@
-input[type="number"].vision-5e--range::placeholder {
+input[type="number"].vision-earthdawn--range::placeholder {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     font-family: "Font Awesome 6 Pro";
@@ -10,7 +10,7 @@ input[type="number"].vision-5e--range::placeholder {
     font-size: var(--font-size-12);
 }
 
-#token-hud .vision-5e.vision-modes {
+#token-hud .vision-earthdawn.vision-modes {
     visibility: hidden;
     position: absolute;
     top: -1px;
@@ -31,11 +31,11 @@ input[type="number"].vision-5e--range::placeholder {
     color: var(--color-text-light-3);
 }
 
-#token-hud .vision-5e.vision-modes.active {
+#token-hud .vision-earthdawn.vision-modes.active {
     visibility: visible;
 }
 
-#token-hud .vision-5e.vision-mode {
+#token-hud .vision-earthdawn.vision-mode {
     line-height: 20px;
     margin: 2px;
     padding: 1px 6px;
@@ -44,17 +44,17 @@ input[type="number"].vision-5e--range::placeholder {
     opacity: 0.75;
 }
 
-#token-hud .vision-5e.vision-mode:hover {
+#token-hud .vision-earthdawn.vision-mode:hover {
     color: var(--color-text-light-1);
     opacity: 1;
 }
 
-#token-hud .vision-5e.vision-mode.active {
+#token-hud .vision-earthdawn.vision-mode.active {
     border: 1px solid var(--color-border-highlight);
     opacity: 1;
 }
 
-#token-hud .vision-5e.vision-mode-label {
+#token-hud .vision-earthdawn.vision-mode-label {
     flex: 1;
     text-align: left;
     overflow: hidden;
@@ -82,6 +82,6 @@ input[type="number"].vision-5e--range::placeholder {
     color: var(--color-text-light-1);
 }
 
-.illandril-token-hud-scale--darken-hud-button-bg #token-hud .vision-5e.vision-modes {
+.illandril-token-hud-scale--darken-hud-button-bg #token-hud .vision-earthdawn.vision-modes {
     background: rgba(0, 0, 0, 0.8);
 }

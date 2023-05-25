@@ -11,7 +11,7 @@ export class VisionModeTremorsense extends VisionMode {
     constructor() {
         super({
             id: "tremorsense",
-            label: "DND5E.SenseTremorsense",
+            label: "ED4.SenseTremorsense",
             canvas: {
                 shader: VoidSamplerShader,
                 uniforms: { contrast: 0, saturation: 0, exposure: 0 }

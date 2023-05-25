@@ -1,16 +1,16 @@
 {
-  "id": "vision-5e",
-  "title": "Vision/Detection Modes 5e",
-  "description": "Vision/Detection Modes for D&D 5e",
+  "id": "vision-earthdawn",
+  "title": "Vision/Detection Modes Earthdawn",
+  "description": "Vision/Detection Modes for Earthdawn 4e",
   "authors": [
     {
-      "name": "dev7355608",
-      "email": "dev7355608@gmail.com"
+      "name": "insipidutopian",
+      "email": "insipidutopian@gmail.com"
     }
   ],
-  "version": "1.1.2",
+  "version": "1.0.0",
   "compatibility": {
-    "minimum": "11.298",
+    "minimum": "10",
     "verified": "11.298"
   },
   "scripts": [
@@ -34,16 +34,16 @@
   "relationships": {
     "systems": [
       {
-        "id": "dnd5e",
+        "id": "earthdawn4e",
         "type": "system"
       }
     ]
   },
-  "url": "https://github.com/dev7355608/vision-5e",
-  "manifest": "https://github.com/dev7355608/vision-5e/releases/latest/download/module.json",
-  "download": "https://github.com/dev7355608/vision-5e/releases/download/v1.1.2/module.zip",
-  "changelog": "https://github.com/dev7355608/vision-5e/releases/tag/v1.1.2",
-  "bugs": "https://github.com/dev7355608/vision-5e/issues",
-  "readme": "https://raw.githubusercontent.com/dev7355608/vision-5e/main/README.md",
-  "license": "https://raw.githubusercontent.com/dev7355608/vision-5e/main/LICENSE"
+  "url": "https://github.com/insipidutopian/vision-earthdawn",
+  "manifest": "https://github.com/insipidutopian/vision-earthdawn/releases/latest/download/module.json",
+  "download": "https://github.com/insipidutopian/vision-earthdawn/releases/download/v1.1.2/module.zip",
+  "changelog": "https://github.com/insipidutopian/vision-earthdawn/releases/tag/v1.1.2",
+  "bugs": "https://github.com/insipidutopian/vision-earthdawn/issues",
+  "readme": "https://raw.githubusercontent.com/insipidutopian/vision-earthdawn/main/README.md",
+  "license": "https://raw.githubusercontent.com/insipidutopian/vision-earthdawn/main/LICENSE"
 }

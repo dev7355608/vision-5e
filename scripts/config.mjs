@@ -62,7 +62,7 @@ function refreshVision() {
 }
 
 Hooks.once("init", () => {
-    renameDetectionMode(DetectionMode.LIGHT_MODE_ID, "VISION5E.LightPerception");
+    renameDetectionMode(DetectionMode.LIGHT_MODE_ID, "VISIONED4.LightPerception");
 
     registerDetectionMode(new DetectionModeBlindsight());
     registerDetectionMode(new DetectionModeDarkvision());
@@ -78,7 +78,7 @@ Hooks.once("init", () => {
     registerDetectionMode(new DetectionModeTruesight());
     registerDetectionMode(new DetectionModeSeeInvisibility());
 
-    renameVisionMode("darkvision", "DND5E.SenseDarkvision");
+    renameVisionMode("darkvision", "ED4.SenseDarkvision");
 
     registerVisionMode(new VisionModeBlindsight());
     registerVisionMode(new VisionModeDetectEvilAndGood());
@@ -100,7 +100,7 @@ Hooks.once("init", () => {
     registerStatusEffect(
         {
             id: CONFIG.specialStatusEffects.INAUDIBLE,
-            label: "VISION5E.Inaudible",
+            label: "VISIONED4.Inaudible",
             icon: "icons/svg/sound-off.svg"
         },
         CONFIG.statusEffects.findIndex(s => s.id === CONFIG.specialStatusEffects.INVISIBLE) + 1

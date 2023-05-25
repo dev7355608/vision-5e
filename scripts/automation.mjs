@@ -154,7 +154,7 @@ Hooks.on("deleteActiveEffect", (effect) => {
 Hooks.once("i18nInit", () => {
     for (const name of [
         "Detect Evil and Good",
-        game.i18n.localize("VISION5E.DetectEvilAndGood")
+        game.i18n.localize("VISIONED4.DetectEvilAndGood")
     ]) {
         effectMapping.set(name, {
             id: "detectEvilAndGood",
@@ -164,7 +164,7 @@ Hooks.once("i18nInit", () => {
 
     for (const name of [
         "Detect Magic",
-        game.i18n.localize("VISION5E.DetectMagic")
+        game.i18n.localize("VISIONED4.DetectMagic")
     ]) {
         effectMapping.set(name, {
             id: "detectMagic",
@@ -174,7 +174,7 @@ Hooks.once("i18nInit", () => {
 
     for (const name of [
         "Detect Poison and Disease",
-        game.i18n.localize("VISION5E.DetectPoisonAndDisease")
+        game.i18n.localize("VISIONED4.DetectPoisonAndDisease")
     ]) {
         effectMapping.set(name, {
             id: "detectPoisonAndDisease",
@@ -184,7 +184,7 @@ Hooks.once("i18nInit", () => {
 
     for (const name of [
         "Detect Thoughts",
-        game.i18n.localize("VISION5E.DetectThoughts")
+        game.i18n.localize("VISIONED4.DetectThoughts")
     ]) {
         effectMapping.set(name, {
             id: "detectThoughts",
@@ -194,7 +194,7 @@ Hooks.once("i18nInit", () => {
 
     for (const name of [
         "Devil's Sight",
-        game.i18n.localize("VISION5E.DevilsSight")
+        game.i18n.localize("VISIONED4.DevilsSight")
     ]) {
         effectMapping.set(name, {
             id: "devilsSight",
@@ -204,7 +204,7 @@ Hooks.once("i18nInit", () => {
 
     for (const name of [
         "Echolocation",
-        game.i18n.localize("VISION5E.Echolocation")
+        game.i18n.localize("VISIONED4.Echolocation")
     ]) {
         effectMapping.set(name, {
             id: "echolocation"
@@ -213,7 +213,7 @@ Hooks.once("i18nInit", () => {
 
     for (const name of [
         "Ghostly Gaze",
-        game.i18n.localize("VISION5E.GhostlyGaze")
+        game.i18n.localize("VISIONED4.GhostlyGaze")
     ]) {
         effectMapping.set(name, {
             id: "ghostlyGaze",
@@ -223,7 +223,7 @@ Hooks.once("i18nInit", () => {
 
     for (const name of [
         "See Invisibility",
-        game.i18n.localize("VISION5E.SeeInvisibility")
+        game.i18n.localize("VISIONED4.SeeInvisibility")
     ]) {
         effectMapping.set(name, {
             id: "seeInvisibility",
@@ -264,7 +264,7 @@ Hooks.on("renderTokenConfig", (sheet, html) => {
                     </div>
                     <div class="detection-mode-range">
                         <input type="number" value="${range !== Infinity ? range : ""}" disabled
-                            class="vision-5e--range" placeholder="&#xF534;">
+                            class="vision-earthdawn--range" placeholder="&#xF534;">
                     </div>
                     <div class="detection-mode-enabled">
                         <input type="checkbox" ${enabled ? "checked" : ""} disabled>
