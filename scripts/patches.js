@@ -1,22 +1,15 @@
 VisionSource._initializeShaderKeys.push("deafened");
 
-VisionSource.prototype._initialize = ((_initialize) => {
-    return function (data) {
-        _initialize.call(this, data);
+VisionSource.prototype._initialize = ((_initialize) => function (data) {
+    _initialize.call(this, data);
 
-        data = this.data;
-
-        if (data.radius > 0) {
-            data.radius = Math.max(data.radius, data.externalRadius);
-        }
-
-        if (this.object instanceof Token) {
-            data.lightRadius ??= Math.clamped(this.object.lightPerceptionRange, 0, canvas.dimensions.maxR);
-            data.deafened ??= this.object.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF);
-        } else {
-            data.lightRadius ??= Infinity;
-        }
-    };
+    if (this.object instanceof Token) {
+        this.data.lightRadius = data.lightRadius ?? Math.clamped(this.object.lightPerceptionRange, 0, canvas.dimensions.maxR);
+        this.data.deafened = data.deafened ?? this.object.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF);
+    } else {
+        this.data.lightRadius = data.lightRadius ?? canvas.dimensions.maxR;
+        this.data.deafened = data.deafened ?? false;
+    }
 })(VisionSource.prototype._initialize);
 
 VisionSource.prototype._configure = function (changes) {
@@ -28,7 +21,7 @@ VisionSource.prototype._configure = function (changes) {
     // Configure animation, if any
     this.animation = {
         animation: this.visionMode.animate,
-        seed: this.animation.seed ?? Math.floor(Math.random() * 100000)
+        seed: this.data.seed ?? this.animation.seed ?? Math.floor(Math.random() * 100000)
     };
 
     // Compute the light polygon
@@ -78,7 +71,6 @@ VisionSource.prototype._initializeVisionMode = function () {
 Object.defineProperties(VisionSource.prototype, {
     _createLightPolygon: {
         value: function () {
-            if (this.data.disabled) return this.los;
             const radius = this.data.lightRadius;
             if (radius >= canvas.dimensions.maxR) return this.los;
             const origin = { x: this.data.x, y: this.data.y };
@@ -93,9 +85,8 @@ Object.defineProperties(VisionSource.prototype, {
 });
 
 VisionSource.prototype._createRestrictedPolygon = function () {
-    if (this.data.disabled) return this.los;
     const origin = { x: this.data.x, y: this.data.y };
-    const radius = this.data.radius > 0 ? this.data.radius : this.data.externalRadius;
+    const radius = this.data.radius || this.data.externalRadius;
     const density = PIXI.Circle.approximateVertexDensity(radius);
     if (!this.detectionMode.walls) {
         const config = {
@@ -106,6 +97,7 @@ VisionSource.prototype._createRestrictedPolygon = function () {
             useThreshold: false
         };
         if (!this.detectionMode.angle) config.angle = 360;
+        if (this.disabled) config.radius = 0;
         return CONFIG.Canvas.polygonBackends[this.constructor.sourceType].create(origin, config);
     }
     if (!this.detectionMode.angle && this.data.angle !== 360) {
@@ -115,6 +107,7 @@ VisionSource.prototype._createRestrictedPolygon = function () {
             density,
             angle: 360
         };
+        if (this.disabled) config.radius = 0;
         return CONFIG.Canvas.polygonBackends[this.constructor.sourceType].create(origin, config);
     }
     const circle = new PIXI.Circle(origin.x, origin.y, radius);
@@ -295,7 +288,7 @@ CanvasVisibility.prototype.testVisibility = function (point, options = {}) {
     }
 
     // If no vision sources are present, the visibility is dependant of the type of user
-    if (!canvas.effects.visionSources.size) return game.user.isGM;
+    if (!canvas.effects.visionSources.some(s => s.active)) return game.user.isGM;
 
     // Prepare an array of test points depending on the requested tolerance
     const config = this._createTestConfig(point, options);
@@ -373,33 +366,12 @@ CanvasVisibility.prototype.testVisibility = function (point, options = {}) {
     return false;
 };
 
-CanvasVisibility.prototype.restrictVisibility = function () {
-    // Activate or deactivate visual effects vision masking
-    canvas.effects.toggleMaskingFilters(this.visible);
-
-    // Tokens
-    for (let t of canvas.tokens.placeables) {
-        t.detectionFilter = undefined;
-        t.impreciseVisible = false;
-        t.visible = (!this.tokenVision && !t.document.hidden) || t.isVisible;
-        if (this.tokenVision && t.visible && canvas.effects.visionSources.get(t.sourceId)?.active && t.vision.detectionMode.imprecise) {
-            t.detectionFilter = DetectionModeLightPerception.getDetectionFilter();
-        }
-        if (canvas.tokens._highlight) t.renderFlags.set({ refreshState: true });
+CanvasVisibility.prototype.restrictVisibility = ((restrictVisibility) => function () {
+    for (const token of canvas.tokens.placeables) {
+        token.impreciseVisible = false;
     }
-
-    // Door Icons
-    for (let d of canvas.controls.doors.children) {
-        d.visible = !this.tokenVision || d.isVisible;
-    }
-
-    // Map Notes
-    for (let n of canvas.notes.placeables) {
-        n.visible = n.isVisible;
-    }
-    canvas.notes.hintMapNotes();
-    Hooks.callAll("sightRefresh", this);
-};
+    return restrictVisibility.call(this);
+})(CanvasVisibility.prototype.restrictVisibility);
 
 Hooks.on("drawCanvasVisibility", (layer) => {
     const vision = layer.vision;
@@ -491,6 +463,23 @@ TokenDocument.prototype._prepareDetectionModes = function () {
 };
 
 Object.defineProperties(Token.prototype, {
+    isVisible: {
+        get: ((isVisible) => function () {
+            this.detectionFilter = undefined;
+            this.impreciseVisible = false;
+            const visible = isVisible.call(this);
+            if (visible
+                && canvas.effects.visibility.tokenVision
+                && canvas.effects.visionSources.get(this.sourceId)?.active
+                && this.vision.detectionMode.imprecise) {
+                this.detectionFilter = DetectionModeLightPerception.getDetectionFilter();
+                this.impreciseVisible = false;
+            }
+            return visible;
+        })(Object.getOwnPropertyDescriptor(Token.prototype, "isVisible").get),
+        configurable: true,
+        enumerable: false
+    },
     lightPerceptionRange: {
         get() {
             return this.getLightRadius(this.document.detectionModes.find(m => m.id === DetectionMode.LIGHT_MODE_ID && m.enabled)?.range ?? 0);
@@ -574,17 +563,13 @@ Object.defineProperties(Token.prototype, {
     }
 });
 
-Token.prototype._onApplyStatusEffect = ((_onApplyStatusEffect) => {
-    return function (statusId, active) {
-        _onApplyStatusEffect.call(this, statusId, active);
-
-        if (statusId === CONFIG.specialStatusEffects.DEAF) {
-            canvas.perception.update({ initializeVision: true });
-        } else if (statusId === CONFIG.specialStatusEffects.INAUDIBLE) {
-            canvas.perception.update({ refreshVision: true });
-        }
-    };
-})(Token.prototype._onApplyStatusEffect);
+Hooks.on("applyTokenStatusEffect", (token, statusId, active) => {
+    if (statusId === CONFIG.specialStatusEffects.DEAF) {
+        canvas.perception.update({ initializeVision: true });
+    } else if (statusId === CONFIG.specialStatusEffects.INAUDIBLE) {
+        canvas.perception.update({ refreshVision: true });
+    }
+});
 
 Hooks.on("refreshToken", (token) => {
     const mesh = token._impreciseMesh;
