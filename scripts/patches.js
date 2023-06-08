@@ -497,12 +497,16 @@ Object.defineProperties(Token.prototype, {
         get() {
             const mesh = new SpriteMesh(PIXI.Texture.EMPTY, BaseSamplerShader);
 
+            mesh.x = this.x;
+            mesh.y = this.y;
+            mesh.width = this.w;
+            mesh.height = this.h;
             mesh.visible = false;
             mesh.alpha = 0;
             mesh.eventMode = "none";
 
             loadTexture(CONFIG.Token.documentClass.DEFAULT_ICON)
-                .then((texture) => mesh.texture = texture);
+                .then((texture) => { if (!mesh.destroyed) mesh.texture = texture; });
 
             Object.defineProperty(this, "_impreciseMesh", {
                 value: mesh,
@@ -571,6 +575,15 @@ Hooks.on("applyTokenStatusEffect", (token, statusId, active) => {
     }
 });
 
+Hooks.on("tearDownTokenLayer", (layer) => {
+    layer._impreciseMeshes = null;
+});
+
+Hooks.on("drawToken", (token) => {
+    token.layer._impreciseMeshes ??= token.layer.addChild(new PIXI.Container());
+    token.layer._impreciseMeshes.addChild(token._impreciseMesh);
+});
+
 Hooks.on("refreshToken", (token) => {
     const mesh = token._impreciseMesh;
 
@@ -578,10 +591,6 @@ Hooks.on("refreshToken", (token) => {
     mesh.y = token.y;
     mesh.width = token.w;
     mesh.height = token.h;
-
-    if (mesh.parent !== token.layer) {
-        token.layer.addChild(mesh);
-    }
 });
 
 Hooks.on("destroyToken", (token) => {
