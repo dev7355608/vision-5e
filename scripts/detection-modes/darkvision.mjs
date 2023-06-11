@@ -2,6 +2,12 @@
  * The detection mode for Darkvision.
  */
 export class DetectionModeDarkvision extends DetectionModeBasicSight {
+    /**
+     * If false, Umbral Sight is ignored if the source and target have the same disposition.
+     * @type {boolean}
+     */
+    static friendlyUmbralSight = true;
+
     constructor(data = {}, options = {}) {
         super(foundry.utils.mergeObject({
             id: DetectionMode.BASIC_MODE_ID,
@@ -17,7 +23,9 @@ export class DetectionModeDarkvision extends DetectionModeBasicSight {
         if (target instanceof Token) {
             const actor = target.actor;
 
-            if (actor && (actor.type === "character" || actor.type === "npc")) {
+            if (actor && (actor.type === "character" || actor.type === "npc")
+                && (this.constructor.friendlyUmbralSight
+                    || visionSource.object.document.disposition !== target.document.disposition)) {
                 const localizedUmbralSight = game.i18n.localize("VISION5E.UmbralSight");
 
                 for (const item of actor.items) {
