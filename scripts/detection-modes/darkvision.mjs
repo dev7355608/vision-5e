@@ -23,7 +23,7 @@ export class DetectionModeDarkvision extends DetectionModeBasicSight {
                 for (const item of actor.items) {
                     if (item.type === "feat" && (item.name === "Umbral Sight"
                         || item.name === localizedUmbralSight)) {
-                        return true;
+                        return false;
                     }
                 }
             }
