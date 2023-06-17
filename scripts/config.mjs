@@ -22,25 +22,42 @@ import { VisionModeGhostlyGaze } from "./vision-modes/ghostly-gaze.mjs";
 import { VisionModeTremorsense } from "./vision-modes/tremorsense.mjs";
 import { VisionModeTruesight } from "./vision-modes/truesight.mjs";
 
-function registerDetectionMode(mode) {
+export function registerDetectionMode(mode) {
     CONFIG.Canvas.detectionModes[mode.id] = mode;
 }
 
-function registerVisionMode(mode) {
+export function registerVisionMode(mode) {
     CONFIG.Canvas.visionModes[mode.id] = mode;
 }
 
-function renameDetectionMode(id, label) {
+export function renameDetectionMode(id, label) {
     CONFIG.Canvas.detectionModes[id]?.updateSource({ label });
 }
 
-function renameVisionMode(id, label) {
+export function renameVisionMode(id, label) {
     CONFIG.Canvas.visionModes[id]?.updateSource({ label });
+}
+
+export function registerStatusEffect(id, name, icon, index) {
+    const statusEffect = { id, name, icon };
+
+    Object.defineProperty(statusEffect, "label", {
+        get() { return this.name; },
+        set(value) { this.name = value; },
+        enumerable: false,
+        configurable: true
+    });
+
+    if (index !== undefined) {
+        CONFIG.statusEffects.splice(index, 0, statusEffect);
+    } else {
+        CONFIG.statusEffects.push(statusEffect);
+    }
 }
 
 const specialStatusEffectsHooks = new Map();
 
-function registerSpecialStatusEffect(key, statusId, hook) {
+export function registerSpecialStatusEffect(key, statusId, hook) {
     if (key in CONFIG.specialStatusEffects && CONFIG.specialStatusEffects[key] !== statusId) {
         throw new Error();
     }
@@ -49,17 +66,23 @@ function registerSpecialStatusEffect(key, statusId, hook) {
     specialStatusEffectsHooks.set(statusId, hook);
 }
 
-function registerStatusEffect(statusEffect, index) {
-    if (index !== undefined) {
-        CONFIG.statusEffects.splice(index, 0, statusEffect);
-    } else {
-        CONFIG.statusEffects.push(statusEffect);
+export function reassignSpecialStatusEffect(key, statusId) {
+    const oldStatusId = CONFIG.specialStatusEffects[key];
+
+    if (!(key in CONFIG.specialStatusEffects) || !specialStatusEffectsHooks.has(oldStatusId)) {
+        throw new Error();
     }
+
+    const hook = specialStatusEffectsHooks.get(oldStatusId);
+
+    CONFIG.specialStatusEffects[key] = statusId;
+    specialStatusEffectsHooks.delete(oldStatusId);
+    specialStatusEffectsHooks.set(statusId, hook);
 }
 
-function refreshVision() {
-    canvas.perception.update({ refreshVision: true });
-}
+Hooks.on("applyTokenStatusEffect", (token, statusId, active) => {
+    specialStatusEffectsHooks.get(statusId)?.(token, statusId, active);
+});
 
 Hooks.once("init", () => {
     renameDetectionMode(DetectionMode.LIGHT_MODE_ID, "VISION5E.LightPerception");
@@ -91,6 +114,8 @@ Hooks.once("init", () => {
     registerVisionMode(new VisionModeTremorsense());
     registerVisionMode(new VisionModeTruesight());
 
+    const refreshVision = () => canvas.perception.update({ refreshVision: true });
+
     registerSpecialStatusEffect("DEAF", "deaf", refreshVision);
     registerSpecialStatusEffect("DISEASE", "disease", refreshVision);
     registerSpecialStatusEffect("FLY", "fly", refreshVision);
@@ -98,11 +123,9 @@ Hooks.once("init", () => {
     registerSpecialStatusEffect("POISON", "poison", refreshVision);
 
     registerStatusEffect(
-        {
-            id: CONFIG.specialStatusEffects.INAUDIBLE,
-            label: "VISION5E.Inaudible",
-            icon: "icons/svg/sound-off.svg"
-        },
+        CONFIG.specialStatusEffects.INAUDIBLE,
+        "VISION5E.Inaudible",
+        "icons/svg/sound-off.svg",
         CONFIG.statusEffects.findIndex(s => s.id === CONFIG.specialStatusEffects.INVISIBLE) + 1
     );
 });
@@ -125,8 +148,4 @@ Hooks.once("i18nInit", () => {
 
     sort(CONFIG.Canvas.detectionModes);
     sort(CONFIG.Canvas.visionModes);
-});
-
-Hooks.on("applyTokenStatusEffect", (token, statusId, active) => {
-    specialStatusEffectsHooks.get(statusId)?.(token, statusId, active);
 });

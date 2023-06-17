@@ -103,8 +103,8 @@ export class DetectionModeSeeInvisibility extends DetectionMode {
 
     /**
      * Temporarily remove the invisible status effects from the target token.
-     * @param {Token} target                 The target token.
-     * @returns {ActiveEffect[]|string[]}    The effects that need to be restored later.
+     * @param {Token} target            The target token.
+     * @returns {string[]|undefined}    The effects that need to be restored later.
      */
     #removeInvisibleStatusEffects(target) {
         const document = target.document;
@@ -126,8 +126,8 @@ export class DetectionModeSeeInvisibility extends DetectionMode {
 
     /**
      * Restore the status effects.
-     * @param {Token} target                       The target token.
-     * @param {ActiveEffect[]|string[]} effects    The effects that need to be restored.
+     * @param {Token} target                  The target token.
+     * @param {string[]|undefined} effects    The effects that need to be restored.
      */
     #restoreInvisibleStatusEffects(target, effects) {
         const document = target.document;
