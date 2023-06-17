@@ -1,3 +1,4 @@
+import { reassignSpecialStatusEffect, registerStatusEffect } from "./config.mjs";
 import { DetectionModeDarkvision } from "./detection-modes/darkvision.mjs";
 
 Hooks.once("init", () => {
@@ -59,6 +60,65 @@ Hooks.once("init", () => {
 
         for (const hook of ["createCombat", "updateCombat", "deleteCombat"]) {
             Hooks.on(hook, updateFriendlyUmbralSight);
+        }
+    });
+});
+
+Hooks.once("init", () => {
+    if (!game.modules.get("dfreds-convenient-effects")?.active) {
+        return;
+    }
+
+    function reregisterSpecialStatusEffect(key, id, name, icon, index) {
+        const statusId = CONFIG.specialStatusEffects[key];
+
+        if (CONFIG.statusEffects.find(s => s.id === id)) {
+            reassignSpecialStatusEffect(key, id);
+        } else if (!CONFIG.statusEffects.find(s => s.id === statusId)) {
+            registerStatusEffect(statusId, name, icon, index);
+        }
+    }
+
+    Hooks.once("dfreds-convenient-effects.ready", () => {
+        if (foundry.utils.isNewerVersion("5.0.2", game.modules.get("dfreds-convenient-effects").version)) {
+            CONFIG.specialStatusEffects.DEAF = "deaf";
+            CONFIG.specialStatusEffects.FLY = "fly";
+            CONFIG.specialStatusEffects.INAUDIBLE = "inaudible";
+            CONFIG.specialStatusEffects.POISON = "poison";
+            CONFIG.specialStatusEffects.DISEASE = "disease";
+        }
+
+        reregisterSpecialStatusEffect(
+            "DEAF",
+            "Convenient Effect: Deafened"
+        );
+        reregisterSpecialStatusEffect(
+            "POISON",
+            "Convenient Effect: Poisoned"
+        );
+        reregisterSpecialStatusEffect(
+            "DISEASE",
+            "Convenient Effect: Diseased",
+            "EFFECT.StatusDisease",
+            "icons/svg/biohazard.svg",
+            CONFIG.statusEffects.findIndex(s => s.id === CONFIG.specialStatusEffects.POISON) + 1
+        );
+        reregisterSpecialStatusEffect(
+            "INAUDIBLE",
+            "Convenient Effect: Inaudible",
+            "VISION5E.Inaudible",
+            "icons/svg/sound-off.svg",
+            CONFIG.statusEffects.findIndex(s => s.id === CONFIG.specialStatusEffects.INVISIBLE) + 1
+        );
+        reregisterSpecialStatusEffect(
+            "FLY",
+            "Convenient Effect: Flying",
+            "EFFECT.StatusFlying",
+            "icons/svg/wing.svg",
+        );
+
+        if (canvas.ready) {
+            canvas.perception.update({ initializeVision: true });
         }
     });
 });
