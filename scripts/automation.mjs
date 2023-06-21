@@ -72,7 +72,7 @@ Hooks.once("init", () => {
         prepareData() {
             super.prepareData();
 
-            if (this.type !== "character" && this.type !== "npc") {
+            if (!(this.type === "character" || this.type === "npc")) {
                 return;
             }
 
@@ -92,8 +92,10 @@ Hooks.once("init", () => {
     CONFIG.Token.documentClass = class TokenDocument5e extends CONFIG.Token.documentClass {
         /** @override */
         _prepareDetectionModes() {
-            if (this.sight.enabled && this.actor) {
-                const inheritedModes = getInheritedDetectionModes(this.actor);
+            const actor = this.actor;
+
+            if (this.sight.enabled && actor && (actor.type === "character" || actor.type === "npc")) {
+                const inheritedModes = getInheritedDetectionModes(actor);
                 const basicId = CONFIG.Canvas.visionModes[this.sight.visionMode]?.detectionMode
                     ?? DetectionMode.BASIC_MODE_ID;
                 const basicMode =
