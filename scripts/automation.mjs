@@ -72,6 +72,10 @@ Hooks.once("init", () => {
         prepareData() {
             super.prepareData();
 
+            if (this.type !== "character" && this.type !== "npc") {
+                return;
+            }
+
             const senses = this[SENSES] ??= {};
 
             for (const [key, value] of Object.entries(this.system.attributes.senses)) {
