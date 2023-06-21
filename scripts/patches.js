@@ -470,8 +470,9 @@ Object.defineProperties(Token.prototype, {
             const visible = isVisible.call(this);
             if (visible
                 && canvas.effects.visibility.tokenVision
-                && canvas.effects.visionSources.get(this.sourceId)?.active
-                && this.vision.detectionMode.imprecise) {
+                && canvas.effects.visionSources.has(this.sourceId)
+                && this.vision.active
+                && this.vision.detectionMode?.imprecise) {
                 this.detectionFilter = DetectionModeLightPerception.getDetectionFilter();
                 this.impreciseVisible = false;
             }
