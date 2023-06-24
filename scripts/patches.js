@@ -154,6 +154,15 @@ Object.defineProperties(DetectionMode.prototype, {
         configurable: true,
         enumerable: false,
         writable: true
+    },
+    _testPoint: {
+        value: function (visionSource, mode, target, test) {
+            if (!this._testRange(visionSource, mode, target, test)) return false;
+            return this._testLOS(visionSource, mode, target, test);
+        },
+        configurable: true,
+        enumerable: false,
+        writable: true
     }
 });
 
