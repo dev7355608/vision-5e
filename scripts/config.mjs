@@ -8,6 +8,7 @@ import { DetectionModeDevilsSight } from "./detection-modes/devils-sight.mjs";
 import { DetectionModeEcholocation } from "./detection-modes/echolocation.mjs";
 import { DetectionModeGhostlyGaze } from "./detection-modes/ghostly-gaze.mjs";
 import { DetectionModeHearing } from "./detection-modes/hearing.mjs";
+import { DetectionModeLightPerception } from "./detection-modes/light-perception.mjs";
 import { DetectionModeSeeInvisibility } from "./detection-modes/see-invisibility.mjs";
 import { DetectionModeTremorsense } from "./detection-modes/tremorsense.mjs";
 import { DetectionModeTruesight } from "./detection-modes/truesight.mjs";
@@ -85,8 +86,6 @@ Hooks.on("applyTokenStatusEffect", (token, statusId, active) => {
 });
 
 Hooks.once("init", () => {
-    renameDetectionMode(DetectionMode.LIGHT_MODE_ID, "VISION5E.LightPerception");
-
     registerDetectionMode(new DetectionModeBlindsight());
     registerDetectionMode(new DetectionModeDarkvision());
     registerDetectionMode(new DetectionModeDetectEvilAndGood());
@@ -97,9 +96,10 @@ Hooks.once("init", () => {
     registerDetectionMode(new DetectionModeEcholocation());
     registerDetectionMode(new DetectionModeGhostlyGaze());
     registerDetectionMode(new DetectionModeHearing());
+    registerDetectionMode(new DetectionModeLightPerception());
+    registerDetectionMode(new DetectionModeSeeInvisibility());
     registerDetectionMode(new DetectionModeTremorsense());
     registerDetectionMode(new DetectionModeTruesight());
-    registerDetectionMode(new DetectionModeSeeInvisibility());
 
     renameVisionMode("darkvision", "DND5E.SenseDarkvision");
 
@@ -116,6 +116,12 @@ Hooks.once("init", () => {
 
     const refreshVision = () => canvas.perception.update({ refreshVision: true });
 
+    registerSpecialStatusEffect("BURROW", "burrow", (token) => {
+        Promise.resolve().then(() => {
+            token.updateSource();
+            canvas.perception.update({ initializeVision: true, refreshLighting: true });
+        });
+    });
     registerSpecialStatusEffect("DEAF", "deaf", refreshVision);
     registerSpecialStatusEffect("DISEASE", "disease", refreshVision);
     registerSpecialStatusEffect("FLY", "fly", refreshVision);
@@ -123,12 +129,33 @@ Hooks.once("init", () => {
     registerSpecialStatusEffect("POISON", "poison", refreshVision);
 
     registerStatusEffect(
+        CONFIG.specialStatusEffects.BURROW,
+        "VISION5E.Burrowing",
+        "modules/vision-5e/icons/burrow.svg",
+        CONFIG.statusEffects.findIndex(s => s.id === CONFIG.specialStatusEffects.FLY) + 1
+    );
+    registerStatusEffect(
         CONFIG.specialStatusEffects.INAUDIBLE,
         "VISION5E.Inaudible",
         "icons/svg/sound-off.svg",
         CONFIG.statusEffects.findIndex(s => s.id === CONFIG.specialStatusEffects.INVISIBLE) + 1
     );
+
+    CONFIG.Token.objectClass = class Token5e extends CONFIG.Token.objectClass {
+        /** @override */
+        get emitsLight() {
+            return super.emitsLight && !this.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW);
+        }
+    };
 });
+
+VisionSource.prototype._initialize = ((_initialize) => function (data) {
+    if (this.object instanceof Token) {
+        data.blinded ||= this.object.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW);
+    }
+
+    _initialize.call(this, data);
+})(VisionSource.prototype._initialize);
 
 Hooks.once("i18nInit", () => {
     function sort(modes) {

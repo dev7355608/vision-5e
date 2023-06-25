@@ -69,6 +69,10 @@ The vision modes can be changed in token HUD. The player can select the preferre
 
 ---
 
+If a creature is burrowing, give it the _burrowing_ status effect. A burrowing creature cannot be detected by senses that are blocked by walls, but can be detected by senses like Hearing or Tremorsense for example. While burrowing the creature is effectively blinded and any light that the creature emits is suppressed.
+
+---
+
 If a token doesn't produce any sound, give it the _inaudible_ status effect, which is right next to the _invisible_ status effect.
 
 ![hud](images/inaudible.png)

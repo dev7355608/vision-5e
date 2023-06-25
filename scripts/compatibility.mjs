@@ -116,9 +116,15 @@ Hooks.once("init", () => {
             "EFFECT.StatusFlying",
             "icons/svg/wing.svg",
         );
+        reregisterSpecialStatusEffect(
+            "BURROW",
+            "Convenient Effect: Burrowing",
+            "VISION5E.Burrowing",
+            "modules/vision-5e/icons/burrow.svg",
+        );
 
         if (canvas.ready) {
-            canvas.perception.update({ initializeVision: true });
+            canvas.perception.update({ initializeVision: true, initializeLighting: true });
         }
     });
 });

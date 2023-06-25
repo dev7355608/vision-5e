@@ -22,4 +22,13 @@ export class DetectionModeDevilsSight extends DetectionMode {
             knockout: true
         });
     }
+
+    /** @override */
+    _canDetect(visionSource, target) {
+        const source = visionSource.object;
+        return !(source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.BLIND)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)))
+            && !(target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE)
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)));
+    }
 }

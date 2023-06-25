@@ -31,8 +31,7 @@ export class DetectionModeBlindsight extends DetectionMode {
 
     /** @override */
     _canDetect(visionSource, target) {
-        // Blindsight can detect anything.
-        return true;
+        return !(target instanceof Token && target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW));
     }
 
     /** @override */
