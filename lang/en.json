@@ -9,5 +9,7 @@
     "VISION5E.Hearing": "Hearing",
     "VISION5E.Inaudible": "Inaudible",
     "VISION5E.LightPerception": "Light Perception",
-    "VISION5E.UmbralSight": "Umbral Sight"
+    "VISION5E.UmbralSight": "Umbral Sight",
+    "VISION5E.Settings.DefaultHearingRangeN": "Default Hearing Range",
+    "VISION5E.Settings.DefaultHearingRangeL": "Configure how far tokens can hear by default. Requires the world to be reloaded."
 }

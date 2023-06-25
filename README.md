@@ -58,7 +58,7 @@ A token gains ...
 - _Ghostly Gaze_ if the actor has an active effect with the name `Ghostly Gaze`.
 - _See Invisibility_ if the actor has an active effect with the name `See Invisibility`.
 
-By default all tokens have hearing range of 30 feet.
+By default all tokens have hearing range of 30 feet. The default hearing range can be configured in the settings.
 
 ---
 

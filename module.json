@@ -20,7 +20,8 @@
     "scripts/automation.mjs",
     "scripts/compatibility.mjs",
     "scripts/config.mjs",
-    "scripts/hud.mjs"
+    "scripts/hud.mjs",
+    "scripts/settings.mjs"
   ],
   "styles": [
     "style.css"

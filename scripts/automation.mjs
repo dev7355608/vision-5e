@@ -1,3 +1,5 @@
+import settings from "./settings.mjs";
+
 const effectMapping = new Map();
 
 function getInheritedDetectionModes(actor) {
@@ -9,7 +11,7 @@ function getInheritedDetectionModes(actor) {
     modes.seeAll = senses.truesight;
     modes.blindsight = senses.blindsight;
     modes.feelTremor = senses.tremorsense;
-    modes.hearing = 30;
+    modes.hearing = settings.defaultHearingRange;
 
     for (const effect of actor.appliedEffects) {
         const mode = effectMapping.get(effect.name);
