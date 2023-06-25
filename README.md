@@ -34,7 +34,8 @@ The following vision/detection modes are included.
 - **See Invisibility**
   - _Note: The ethereal plane part of See Invisibility hasn't been implemented._
 - **Tremorsense**
-  - Detects all creatures that do not have the _fly_ status effect.
+  - Detects all creatures that do not have the _flying_ status effect.
+  - Is unable to detect anything while the creature itself is flying.
   - _Note: Tremorsense works differently compared to core's Feel Tremor, which detects all creatures that are not above 0 elevation._
 - **Truesight**
   - _Note: You need the [Vision Limitation]() module for magical darkness._
