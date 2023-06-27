@@ -155,6 +155,12 @@ Object.defineProperties(DetectionMode.prototype, {
         enumerable: false,
         writable: true
     },
+    important: {
+        value: false,
+        configurable: true,
+        enumerable: false,
+        writable: true
+    },
     _testPoint: {
         value: function (visionSource, mode, target, test) {
             if (!this._testRange(visionSource, mode, target, test)) return false;
@@ -288,92 +294,190 @@ Object.defineProperties(CanvasVisibility.prototype, {
     }
 });
 
-CanvasVisibility.prototype.testVisibility = function (point, options = {}) {
-    const object = options.object;
+CanvasVisibility.prototype.testVisibility = (() => {
+    class MultiDetectionFilter extends PIXI.Filter {
+        #filters;
 
-    if (object instanceof Token) {
-        object.detectionFilter = undefined;
-        object.impreciseVisible = false;
-    }
-
-    // If no vision sources are present, the visibility is dependant of the type of user
-    if (!canvas.effects.visionSources.some(s => s.active)) return game.user.isGM;
-
-    // Prepare an array of test points depending on the requested tolerance
-    const config = this._createTestConfig(point, options);
-
-    // First test basic detection for light sources which specifically provide vision
-    for (const lightSource of canvas.effects.lightSources) {
-        if (!lightSource.data.vision || !lightSource.active) continue;
-        const result = lightSource.testVisibility(config);
-        if (result === true) return true;
-    }
-
-    // Get scene rect to test that some points are not detected into the padding
-    const sr = canvas.dimensions.sceneRect;
-    const inBuffer = !sr.contains(point.x, point.y);
-    // Skip sources that are not both inside the scene or both inside the buffer
-    const activeVisionSources = canvas.effects.visionSources.filter(s => s.active && inBuffer !== sr.contains(s.x, s.y));
-    const modes = CONFIG.Canvas.detectionModes;
-
-    // Second test basic detection tests for vision sources
-    for (const visionSource of activeVisionSources) {
-        const token = visionSource.object.document;
-        const mode = token.detectionModes.find(m => m.id === visionSource.detectionMode.id);
-        const dm = modes[mode?.id];
-        const result = dm?.testVisibility(visionSource, mode, config);
-        if (result === true) {
-            if (object instanceof Token) {
-                if (!(dm.imprecise && object.impreciseVisible)) {
-                    object.detectionFilter = dm.constructor.getDetectionFilter(true);
-                }
-                object.impreciseVisible = dm.imprecise;
-            }
-            if (!dm.imprecise) return true;
+        constructor(filters) {
+            super();
+            this.#filters = filters;
         }
-    }
 
-    const basicVisible = object instanceof Token && object.impreciseVisible;
-
-    // Third test light perception for vision sources
-    for (const visionSource of activeVisionSources) {
-        const token = visionSource.object.document;
-        const mode = token.detectionModes.find(m => m.id === DetectionMode.LIGHT_MODE_ID);
-        const dm = modes[mode?.id];
-        const result = dm?.testVisibility(visionSource, mode, config);
-        if (result === true) {
-            if (object instanceof Token) {
-                if (!basicVisible) {
-                    object.detectionFilter = dm.constructor.getDetectionFilter(visionSource.visionMode.perceivesLight);
-                }
+        get autoFit() {
+            let autoFit = true;
+            for (let i = 0; i < this.#filters.length; i++) {
+                autoFit &&= this.#filters[i].autoFit;
             }
-            return true;
+            return autoFit;
         }
-    }
 
-    if (!(object instanceof Token)) return false; // Special detection modes can only detect tokens
+        set autoFit(value) { }
 
-    // Lastly test special detection modes for vision sources
-    for (const visionSource of activeVisionSources) {
-        const token = visionSource.object.document;
-        for (const mode of token.detectionModes) {
-            if (mode.id === DetectionMode.LIGHT_MODE_ID || mode.id === visionSource.detectionMode.id) continue;
-            const dm = modes[mode.id];
-            const result = dm?.testVisibility(visionSource, mode, config);
+        get padding() {
+            let padding = 0;
+            for (let i = 0; i < this.#filters.length; i++) {
+                padding = Math.max(padding, this.#filters[i].padding);
+            }
+            return padding;
+        }
+
+        set padding(value) { }
+
+        get resolution() {
+            const renderer = canvas.app.renderer;
+            const renderTextureSystem = renderer.renderTexture;
+            if (renderTextureSystem.current) {
+                return renderTextureSystem.current.resolution;
+            }
+            return renderer.resolution;
+        }
+
+        set resolution(value) { }
+
+        get multisample() {
+            const renderer = canvas.app.renderer;
+            const renderTextureSystem = renderer.renderTexture;
+            if (renderTextureSystem.current) {
+                return renderTextureSystem.current.multisample;
+            }
+            return renderer.multisample;
+        }
+
+        set multisample(value) { }
+
+        apply(filterManager, input, output, clearMode, currentState) {
+            for (let i = 0; i < this.#filters.length; i++) {
+                this.#filters[i].apply(filterManager, input, output, i === 0 ? clearMode : PIXI.CLEAR_MODES.BLEND, currentState);
+            }
+        }
+    };
+
+    return function (point, options = {}) {
+        const object = options.object;
+
+        if (object instanceof Token) {
+            object.detectionFilter = undefined;
+            object.impreciseVisible = false;
+        }
+
+        // If no vision sources are present, the visibility is dependant of the type of user
+        if (!canvas.effects.visionSources.some(s => s.active)) return game.user.isGM;
+
+        // Prepare an array of test points depending on the requested tolerance
+        const config = this._createTestConfig(point, options);
+        let preciseVisible = false;
+
+        // First test basic detection for light sources which specifically provide vision
+        for (const lightSource of canvas.effects.lightSources) {
+            if (!lightSource.data.vision || !lightSource.active) continue;
+            const result = lightSource.testVisibility(config);
+            if (result) {
+                preciseVisible = true;
+                break;
+            }
+        }
+
+        // Get scene rect to test that some points are not detected into the padding
+        const sr = canvas.dimensions.sceneRect;
+        const inBuffer = !sr.contains(point.x, point.y);
+        // Skip sources that are not both inside the scene or both inside the buffer
+        const activeVisionSources = canvas.effects.visionSources.filter(s => s.active && inBuffer !== sr.contains(s.x, s.y));
+        const modes = CONFIG.Canvas.detectionModes;
+        let importantModes;
+
+        // Second test basic detection tests for vision sources
+        for (const visionSource of activeVisionSources) {
+            const token = visionSource.object.document;
+            const mode = token.detectionModes.find(m => m.id === visionSource.detectionMode.id);
+            const dm = modes[mode?.id];
+            if (!dm || preciseVisible && !dm.important) continue;
+            const result = dm.testVisibility(visionSource, mode, config);
             if (result === true) {
-                if (!(dm.imprecise && object.impreciseVisible)) {
-                    if (!basicVisible) {
-                        object.detectionFilter = dm.constructor.getDetectionFilter(false);
+                if (object instanceof Token) {
+                    if (dm.important) {
+                        importantModes ??= new Set();
+                        importantModes.add(dm);
+                    }
+                    if (!preciseVisible && !(dm.imprecise && object.impreciseVisible)) {
+                        if (!dm.important) object.detectionFilter = dm.constructor.getDetectionFilter(true);
+                        object.impreciseVisible = dm.imprecise;
                     }
                 }
-                object.impreciseVisible = dm.imprecise;
-                if (!dm.imprecise) return true;
+                if (!dm.imprecise) {
+                    preciseVisible = true;
+                }
             }
         }
-    }
 
-    return false;
-};
+        const basicVisible = preciseVisible || object instanceof Token && object.impreciseVisible;
+
+        // Third test light perception for vision sources
+        for (const visionSource of activeVisionSources) {
+            const token = visionSource.object.document;
+            const mode = token.detectionModes.find(m => m.id === DetectionMode.LIGHT_MODE_ID);
+            const dm = modes[mode?.id];
+            if (!dm || preciseVisible && !dm.important) continue;
+            const result = dm.testVisibility(visionSource, mode, config);
+            if (result === true) {
+                if (object instanceof Token) {
+                    if (dm.important) {
+                        importantModes ??= new Set();
+                        importantModes.add(dm);
+                    }
+                    if (!preciseVisible && !basicVisible && !(dm.imprecise && object.impreciseVisible)) {
+                        if (!dm.important) object.detectionFilter = dm.constructor.getDetectionFilter(visionSource.visionMode.perceivesLight);
+                        object.impreciseVisible = dm.imprecise;
+                    }
+                }
+                if (!dm.imprecise) {
+                    preciseVisible = true;
+                }
+            }
+        }
+
+        if (!(object instanceof Token)) return preciseVisible; // Special detection modes can only detect tokens
+
+        // Lastly test special detection modes for vision sources
+        for (const visionSource of activeVisionSources) {
+            const token = visionSource.object.document;
+            for (const mode of token.detectionModes) {
+                if (mode.id === DetectionMode.LIGHT_MODE_ID || mode.id === visionSource.detectionMode.id) continue;
+                const dm = modes[mode.id];
+                if (!dm || preciseVisible && !dm.important) continue;
+                const result = dm.testVisibility(visionSource, mode, config);
+                if (result === true) {
+                    if (dm.important) {
+                        importantModes ??= new Set();
+                        importantModes.add(dm);
+                    }
+                    if (!preciseVisible && !basicVisible && !(dm.imprecise && object.impreciseVisible)) {
+                        if (!dm.important) object.detectionFilter = dm.constructor.getDetectionFilter(false);
+                        object.impreciseVisible = dm.imprecise;
+                    }
+                    if (!dm.imprecise) {
+                        preciseVisible = true;
+                    }
+                }
+            }
+        }
+
+        if (object instanceof Token) {
+            if (preciseVisible) {
+                object.impreciseVisible = false;
+            }
+
+            if (importantModes) {
+                const dmfs = object.detectionFilter ? [object.detectionFilter] : [];
+                for (const dm of importantModes) {
+                    dmfs.push(dm.constructor.getDetectionFilter(false));
+                }
+                object.detectionFilter = new MultiDetectionFilter(dmfs);
+            }
+        }
+
+        return preciseVisible;
+    };
+})();
 
 CanvasVisibility.prototype.restrictVisibility = ((restrictVisibility) => function () {
     for (const token of canvas.tokens.placeables) {

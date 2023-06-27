@@ -28,6 +28,14 @@ class DetectionMode extends foundry.abstract.DataModel {
   imprecise;
 
   /**
+   * Important detection modes always add their detection filter to token if they detect it.
+   * A token can have multiple detection filters: they are blended in a special filter.
+   * @type {boolean}
+   * @default false
+   */
+  important;
+
+  /**
    * The ID of the light perception mode (`DetectionModeLightPerception`).
    * @type {string}
    */

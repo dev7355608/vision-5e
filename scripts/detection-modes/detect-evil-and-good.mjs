@@ -3,7 +3,8 @@
  */
 export class DetectionModeDetectEvilAndGood extends DetectionMode {
     imprecise = true;
-    priority = -2000;
+    important = true;
+    priority = -3000;
 
     constructor() {
         super({

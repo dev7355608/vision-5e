@@ -3,7 +3,7 @@
  */
 export class DetectionModeHearing extends DetectionMode {
     imprecise = true;
-    priority = -3000;
+    priority = -2000;
 
     constructor() {
         super({
