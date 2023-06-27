@@ -176,3 +176,5 @@ Hooks.once("i18nInit", () => {
     sort(CONFIG.Canvas.detectionModes);
     sort(CONFIG.Canvas.visionModes);
 });
+
+PrimaryCanvasGroup.BACKGROUND_ELEVATION = -Infinity;
