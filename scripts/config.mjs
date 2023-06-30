@@ -40,6 +40,10 @@ export function renameVisionMode(id, label) {
 }
 
 export function registerStatusEffect(id, name, icon, index) {
+    if (CONFIG.statusEffects.find((s) => s.id === id)) {
+        return;
+    }
+
     const statusEffect = { id, name, icon };
 
     Object.defineProperty(statusEffect, "label", {
@@ -49,7 +53,7 @@ export function registerStatusEffect(id, name, icon, index) {
         configurable: true
     });
 
-    if (index !== undefined) {
+    if (Number.isFinite(index)) {
         CONFIG.statusEffects.splice(index, 0, statusEffect);
     } else {
         CONFIG.statusEffects.push(statusEffect);
@@ -64,20 +68,6 @@ export function registerSpecialStatusEffect(key, statusId, hook) {
     }
 
     CONFIG.specialStatusEffects[key] = statusId;
-    specialStatusEffectsHooks.set(statusId, hook);
-}
-
-export function reassignSpecialStatusEffect(key, statusId) {
-    const oldStatusId = CONFIG.specialStatusEffects[key];
-
-    if (!(key in CONFIG.specialStatusEffects) || !specialStatusEffectsHooks.has(oldStatusId)) {
-        throw new Error();
-    }
-
-    const hook = specialStatusEffectsHooks.get(oldStatusId);
-
-    CONFIG.specialStatusEffects[key] = statusId;
-    specialStatusEffectsHooks.delete(oldStatusId);
     specialStatusEffectsHooks.set(statusId, hook);
 }
 

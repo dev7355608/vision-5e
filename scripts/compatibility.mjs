@@ -1,4 +1,4 @@
-import { reassignSpecialStatusEffect, registerStatusEffect } from "./config.mjs";
+import { registerStatusEffect } from "./config.mjs";
 import { DetectionModeDarkvision } from "./detection-modes/darkvision.mjs";
 
 Hooks.once("init", () => {
@@ -69,62 +69,46 @@ Hooks.once("init", () => {
         return;
     }
 
-    function reregisterSpecialStatusEffect(key, id, name, icon, index) {
-        const statusId = CONFIG.specialStatusEffects[key];
+    function reregisterStatusEffect(id, name, icon, index) {
+        for (const statusEffect of CONFIG.statusEffects) {
+            if (statusEffect.id === id) {
+                return;
+            }
 
-        if (CONFIG.statusEffects.find(s => s.id === id)) {
-            reassignSpecialStatusEffect(key, id);
-        } else if (!CONFIG.statusEffects.find(s => s.id === statusId)) {
-            registerStatusEffect(statusId, name, icon, index);
+            if (statusEffect.id.startsWith("Convenient Effect: ") && statusEffect.statuses?.includes(id)) {
+                const otherStatuses = statusEffect.statuses.filter(s => s !== id);
+
+                if (otherStatuses.length === 0 || otherStatuses.length === 1 && otherStatuses[0] === statusEffect.id) {
+                    return;
+                }
+            }
         }
+
+        registerStatusEffect(id, name, icon, index);
     }
 
     Hooks.once("dfreds-convenient-effects.ready", () => {
-        if (foundry.utils.isNewerVersion("5.0.2", game.modules.get("dfreds-convenient-effects").version)) {
-            CONFIG.specialStatusEffects.DEAF = "deaf";
-            CONFIG.specialStatusEffects.FLY = "fly";
-            CONFIG.specialStatusEffects.INAUDIBLE = "inaudible";
-            CONFIG.specialStatusEffects.POISON = "poison";
-            CONFIG.specialStatusEffects.DISEASE = "disease";
-        }
-
-        reregisterSpecialStatusEffect(
-            "DEAF",
-            "Convenient Effect: Deafened"
-        );
-        reregisterSpecialStatusEffect(
-            "POISON",
-            "Convenient Effect: Poisoned"
-        );
-        reregisterSpecialStatusEffect(
-            "DISEASE",
-            "Convenient Effect: Diseased",
+        reregisterStatusEffect(
+            "disease",
             "EFFECT.StatusDisease",
             "icons/svg/biohazard.svg",
-            CONFIG.statusEffects.findIndex(s => s.id === CONFIG.specialStatusEffects.POISON) + 1
+            CONFIG.statusEffects.findIndex(s => s.id === "Convenient Effect: Poisoned") + 1
         );
-        reregisterSpecialStatusEffect(
-            "INAUDIBLE",
-            "Convenient Effect: Inaudible",
+        reregisterStatusEffect(
+            "fly",
+            "EFFECT.StatusFlying",
+            "icons/svg/wing.svg"
+        );
+        reregisterStatusEffect(
+            "burrow",
+            "VISION5E.Burrowing",
+            "modules/vision-5e/icons/burrow.svg"
+        );
+        reregisterStatusEffect(
+            "inaudible",
             "VISION5E.Inaudible",
             "icons/svg/sound-off.svg",
-            CONFIG.statusEffects.findIndex(s => s.id === CONFIG.specialStatusEffects.INVISIBLE) + 1
+            CONFIG.statusEffects.findIndex(s => s.id === "Convenient Effect: Invisible") + 1
         );
-        reregisterSpecialStatusEffect(
-            "FLY",
-            "Convenient Effect: Flying",
-            "EFFECT.StatusFlying",
-            "icons/svg/wing.svg",
-        );
-        reregisterSpecialStatusEffect(
-            "BURROW",
-            "Convenient Effect: Burrowing",
-            "VISION5E.Burrowing",
-            "modules/vision-5e/icons/burrow.svg",
-        );
-
-        if (canvas.ready) {
-            canvas.perception.update({ initializeVision: true, initializeLighting: true });
-        }
     });
 });
