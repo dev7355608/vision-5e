@@ -44,14 +44,14 @@ const resetActiveTokens = (() => {
             let initializeVision = false;
 
             for (const actor of actors) {
-                for (const token of actor.getActiveTokens(false, true)) {
-                    if (!token.sight.enabled) {
+                for (const token of actor.getActiveTokens(false, false)) {
+                    if (!token.document.sight.enabled) {
                         continue;
                     }
 
-                    token.reset();
+                    token.document.reset();
 
-                    if (canvas.ready && canvas.effects.visionSources.has(token.object.sourceId)) {
+                    if (canvas.ready && canvas.effects.visionSources.has(token.sourceId)) {
                         initializeVision = true;
                     }
                 }

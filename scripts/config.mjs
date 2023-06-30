@@ -117,10 +117,13 @@ Hooks.once("init", () => {
     const refreshVision = () => canvas.perception.update({ refreshVision: true });
 
     registerSpecialStatusEffect("BURROW", "burrow", (token) => {
-        Promise.resolve().then(() => {
-            token.updateSource();
-            canvas.perception.update({ initializeVision: true, refreshLighting: true });
-        });
+        // Workaround for #9687 (pre 11.304)
+        if (token.parent !== token.layer.objects) {
+            return;
+        }
+
+        token.updateLightSource();
+        canvas.perception.update({ initializeVision: true });
     });
     registerSpecialStatusEffect("DEAF", "deaf", refreshVision);
     registerSpecialStatusEffect("DISEASE", "disease", refreshVision);

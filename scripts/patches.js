@@ -640,6 +640,8 @@ Token.prototype._renderDetectionFilter = function (renderer) {
     const filter = this.detectionFilter;
     const mesh = !this.visible ? this._impreciseMesh : this.mesh;
 
+    if (!(mesh && filter && this.renderable)) return;
+
     mesh.filters ??= [];
     mesh.filters.push(filter);
 
