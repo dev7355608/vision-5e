@@ -12,17 +12,17 @@ The following vision/detection modes are included.
 - **Darkvision**
   - Unless blinded Darkvision detects any creature that isn't invisible and doesn't have the `Umbral Sight` feat.
 - **Detect Evil and Good**
-  - _Note: Penetrates any wall, because there's no way to know what material the wall is made of or how thick it is._
+  - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
 - **Detect Magic**
-  - _Note: Penetrates any wall, because there's no way to know what material the wall is made of or how thick it is._
+  - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
   - _Note: Magic items are considered magical if the rarity is common or higher. Mundane items should not have a rarity. Unfortunately, all mundane items in the system's item compendium are incorrectly given the common rarity, which means that all items that originated from this compendium pack are detected as magical. So you'll need to fix the rarity of these items if before you can use Detect Magic._
 - **Detect Poison and Disease**
   - Detects all creatures that have a poisonous natural weapon attack or have the poisoned or diseased status effect.
-  - _Note: Penetrates any wall, because there's no way to know what material the wall is made of or how thick it is._
+  - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
   - _Note: Some poisonous creatures might not be detected, because the Versatile Damage of the natural weapon attack is missing the `[poison]` flavor, which you'll need to fix yourself._
 - **Detect Thoughts**
   - Detects all creatures that have an Intelligence of 4 or higher and speak at least one language.
-  - _Note: Penetrates any wall, because there's no way to know what material the wall is made of or how thick it is._
+  - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
 - **Devil's Sight**
   - _Note: You need the [Vision Limitation]() module for magical darkness._
 - **Echolocation**

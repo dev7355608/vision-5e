@@ -10,13 +10,14 @@ export class DetectionModeDetect extends DetectionMode {
     constructor(data = {}, options = {}) {
         super(foundry.utils.mergeObject({
             type: DetectionMode.DETECTION_TYPES.OTHER,
-            walls: false,
-            angle: false
+            walls: true,
+            angle: true
         }, data), options);
     }
 
     /** @override */
     _canDetect(visionSource, target) {
         if (!(target instanceof Token)) return false;
+        return !target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW);
     }
 }
