@@ -171,3 +171,22 @@ Hooks.once("i18nInit", () => {
 });
 
 PrimaryCanvasGroup.BACKGROUND_ELEVATION = -Infinity;
+
+Object.defineProperty(TileDocument.prototype, "elevation", ((elevation) => ({
+    get() {
+        return this[elevation] ?? (this.overhead ? this.parent.foregroundElevation : PrimaryCanvasGroup.BACKGROUND_ELEVATION);
+    },
+    set(value) {
+        if (!Number.isFinite(value) && (value !== undefined)) {
+            throw new Error("Elevation must be a finite Number or undefined");
+        }
+        this[elevation] = value;
+        if (this.rendered) {
+            canvas.primary.sortDirty = true;
+            canvas.perception.update({ refreshTiles: true });
+            this._object.renderFlags.set({ refreshElevation: true });
+        }
+    },
+    configurable: true,
+    enumerable: false
+}))(Symbol("elevation")));
