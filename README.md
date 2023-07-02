@@ -25,6 +25,7 @@ The following vision/detection modes are included.
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
 - **Devil's Sight**
   - _Note: You need the [Vision Limitation]() module for magical darkness._
+- **Divine Sense**
 - **Echolocation**
   - Detects the same things Blindsight does but doesn't work while deafened.
 - **Ghostly Gaze**
@@ -56,6 +57,7 @@ A token gains ...
 - _Detect Thoughts_ if the actor has an active effect with the name `Detect Thoughts`.
 - _Devil's Sight_ if the actor has an active effect with the name `Devil's Sight`.
   - _Note: Remove the effect that gives 120 feet Darkvision if it exists: Devil's Sight doesn't increase the range of Darkvision._
+- _Divine Sense_ if the actor has an active effect with the name `Divine Sense`.
 - _Ghostly Gaze_ if the actor has an active effect with the name `Ghostly Gaze`.
 - _See Invisibility_ if the actor has an active effect with the name `See Invisibility`.
 

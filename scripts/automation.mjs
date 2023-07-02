@@ -221,6 +221,16 @@ Hooks.once("i18nInit", () => {
     }
 
     for (const name of [
+        "Divine Sense",
+        game.i18n.localize("VISION5E.DivineSense")
+    ]) {
+        effectMapping.set(name, {
+            id: "divineSense",
+            range: 60
+        });
+    }
+
+    for (const name of [
         "Echolocation",
         game.i18n.localize("VISION5E.Echolocation")
     ]) {
