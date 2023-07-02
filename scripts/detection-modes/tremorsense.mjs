@@ -2,6 +2,9 @@
  * The detection mode for Tremorsense.
  */
 export class DetectionModeTremorsense extends DetectionMode {
+    sourceType = "move";
+    wallDirectionMode = PointSourcePolygon.WALL_DIRECTION_MODES.NORMAL;
+    useThreshold = false;
     imprecise = true;
     priority = -1000;
 

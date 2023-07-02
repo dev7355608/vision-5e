@@ -1,18 +1,13 @@
+import { DetectionModeDetect } from "./detect.mjs";
+
 /**
  * The detection mode for Detect Evil and Good.
  */
-export class DetectionModeDetectEvilAndGood extends DetectionMode {
-    imprecise = true;
-    important = true;
-    priority = -3000;
-
+export class DetectionModeDetectEvilAndGood extends DetectionModeDetect {
     constructor() {
         super({
             id: "detectEvilAndGood",
-            label: "VISION5E.DetectEvilAndGood",
-            type: DetectionMode.DETECTION_TYPES.OTHER,
-            walls: false,
-            angle: false
+            label: "VISION5E.DetectEvilAndGood"
         });
     }
 
@@ -25,7 +20,7 @@ export class DetectionModeDetectEvilAndGood extends DetectionMode {
 
     /** @override */
     _canDetect(visionSource, target) {
-        if (!(target instanceof Token)) return false;
+        if (!super._canDetect(visionSource, target)) return false;
         const actor = target.actor;
         if (!(actor && actor.type === "npc")) return false;
         const type = actor.system.details.type.value;

@@ -1,18 +1,13 @@
+import { DetectionModeDetect } from "./detect.mjs";
+
 /**
  * The detection mode for Detect Poison and Disease.
  */
-export class DetectionModeDetectPoisonAndDisease extends DetectionMode {
-    imprecise = true;
-    important = true;
-    priority = -3000;
-
+export class DetectionModeDetectPoisonAndDisease extends DetectionModeDetect {
     constructor() {
         super({
             id: "detectPoisonAndDisease",
-            label: "VISION5E.DetectPoisonAndDisease",
-            type: DetectionMode.DETECTION_TYPES.OTHER,
-            walls: false,
-            angle: false
+            label: "VISION5E.DetectPoisonAndDisease"
         });
     }
 
@@ -25,7 +20,7 @@ export class DetectionModeDetectPoisonAndDisease extends DetectionMode {
 
     /** @override */
     _canDetect(visionSource, target) {
-        if (!(target instanceof Token)) return false;
+        if (!super._canDetect(visionSource, target)) return false;
 
         if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.POISON)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.DISEASE)) {

@@ -88,30 +88,44 @@ VisionSource.prototype._createRestrictedPolygon = function () {
     const origin = { x: this.data.x, y: this.data.y };
     const radius = this.data.radius || this.data.externalRadius;
     const density = PIXI.Circle.approximateVertexDensity(radius);
-    if (!this.detectionMode.walls) {
-        const config = {
-            ...this._getPolygonConfiguration(),
-            type: "universal",
-            radius,
-            density,
-            useThreshold: false
-        };
-        if (!this.detectionMode.angle) config.angle = 360;
-        if (this.disabled) config.radius = 0;
-        return CONFIG.Canvas.polygonBackends[this.constructor.sourceType].create(origin, config);
+    const config = {
+        ...this._getPolygonConfiguration(),
+        radius,
+        density
+    };
+    if (this.disabled) config.radius = 0;
+    let create = false;
+    let { sourceType, useThreshold, wallDirectionMode } = this.detectionMode;
+    const type = this.detectionMode.walls ? (sourceType ?? config.type) : "universal";
+    sourceType ??= this.constructor.sourceType;
+    useThreshold ??= config.useThreshold;
+    if (sourceType === "move") useThreshold = false;
+    wallDirectionMode ??= config.wallDirectionMode;
+    if (config.type !== type) {
+        config.type = type;
+        create = true;
     }
-    if (!this.detectionMode.angle && this.data.angle !== 360) {
-        const config = {
-            ...this._getPolygonConfiguration(),
-            radius,
-            density,
-            angle: 360
-        };
-        if (this.disabled) config.radius = 0;
-        return CONFIG.Canvas.polygonBackends[this.constructor.sourceType].create(origin, config);
+    if (config.useThreshold !== useThreshold) {
+        config.useThreshold = useThreshold;
+        if (sourceType !== "move") create = true;
+    }
+    if (config.wallDirectionMode !== wallDirectionMode) {
+        config.wallDirectionMode = wallDirectionMode;
+        create = true;
+    }
+    if (!this.detectionMode.angle && (config.angle ?? 360) !== 360) {
+        config.angle = 360;
+        create = true;
+    }
+    const polygonBackends = CONFIG.Canvas.polygonBackends;
+    create ||= polygonBackends[sourceType] !== polygonBackends[this.constructor.sourceType];
+    if (create) {
+        return polygonBackends[sourceType].create(origin, config);
     }
     const circle = new PIXI.Circle(origin.x, origin.y, radius);
-    return this.los.applyConstraint(circle, { density, scalingFactor: 100 });
+    const fov = this.los.applyConstraint(circle, { density, scalingFactor: 100 });
+    fov.config.type = type;
+    return fov;
 };
 
 Object.defineProperties(VisionMode.prototype, {
@@ -143,6 +157,24 @@ Object.defineProperties(DetectionMode, {
 });
 
 Object.defineProperties(DetectionMode.prototype, {
+    sourceType: {
+        value: undefined,
+        configurable: true,
+        enumerable: false,
+        writable: true
+    },
+    wallDirectionMode: {
+        value: undefined,
+        configurable: true,
+        enumerable: false,
+        writable: true
+    },
+    useThreshold: {
+        value: undefined,
+        configurable: true,
+        enumerable: false,
+        writable: true
+    },
     priority: {
         value: 0,
         configurable: true,

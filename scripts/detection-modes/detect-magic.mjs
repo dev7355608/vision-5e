@@ -1,18 +1,13 @@
+import { DetectionModeDetect } from "./detect.mjs";
+
 /**
  * The detection mode for Detect Magic.
  */
-export class DetectionModeDetectMagic extends DetectionMode {
-    imprecise = true;
-    important = true;
-    priority = -3000;
-
+export class DetectionModeDetectMagic extends DetectionModeDetect {
     constructor() {
         super({
             id: "detectMagic",
-            label: "VISION5E.DetectMagic",
-            type: DetectionMode.DETECTION_TYPES.OTHER,
-            walls: false,
-            angle: false
+            label: "VISION5E.DetectMagic"
         });
     }
 
@@ -74,7 +69,7 @@ export class DetectionModeDetectMagic extends DetectionMode {
 
     /** @override */
     _canDetect(visionSource, target) {
-        if (!(target instanceof Token)) return false;
+        if (!super._canDetect(visionSource, target)) return false;
         const actor = target.actor;
         if (!actor) return false;
 

@@ -2,13 +2,10 @@
  * The detection mode for Blindsight.
  */
 export class DetectionModeBlindsight extends DetectionMode {
+    sourceType = "sight";
+    wallDirectionMode = PointSourcePolygon.WALL_DIRECTION_MODES.NORMAL;
+    useThreshold = false;
     priority = 500;
-
-    /**
-     * @type {PointSourcePolygon.WALL_DIRECTION_MODES}
-     * @protected
-     */
-    _wallDirectionMode = PointSourcePolygon.WALL_DIRECTION_MODES.NORMAL;
 
     constructor(data = {}, options = {}) {
         super(foundry.utils.mergeObject({
@@ -42,10 +39,10 @@ export class DetectionModeBlindsight extends DetectionMode {
             { x: visionSource.x, y: visionSource.y },
             test.point,
             {
-                type: "sight",
+                type: this.sourceType,
                 mode: "any",
                 source: visionSource,
-                wallDirectionMode: this._wallDirectionMode,
+                wallDirectionMode: this.wallDirectionMode,
                 // Blindsight is restricted by total cover and therefore cannot see
                 // through windows. So we do not want blindsight to see through
                 // a window as we get close to it. That's why we ignore thresholds.
@@ -53,7 +50,7 @@ export class DetectionModeBlindsight extends DetectionMode {
                 // walls. A move-based visibility check would also be an option to check
                 // for total cover, but this would have the undesirable side effect that
                 // blindsight wouldn't work through fences, portcullises, etc.
-                useThreshold: false
+                useThreshold: this.useThreshold
             }
         );
     }

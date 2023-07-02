@@ -2,6 +2,9 @@
  * The detection mode for hearing.
  */
 export class DetectionModeHearing extends DetectionMode {
+    sourceType = "sound";
+    wallDirectionMode = PointSourcePolygon.WALL_DIRECTION_MODES.REVERSED;
+    useThreshold = true;
     imprecise = true;
     priority = -2000;
 
@@ -38,10 +41,11 @@ export class DetectionModeHearing extends DetectionMode {
             { x: visionSource.x, y: visionSource.y },
             test.point,
             {
-                type: "sound",
+                type: this.sourceType,
                 mode: "any",
                 source: visionSource,
-                wallDirectionMode: PointSourcePolygon.WALL_DIRECTION_MODES.REVERSED
+                wallDirectionMode: this.wallDirectionMode,
+                useThreshold: this.useThreshold
             }
         );
     }
