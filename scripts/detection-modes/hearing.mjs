@@ -29,9 +29,10 @@ export class DetectionModeHearing extends DetectionMode {
 
     /** @override */
     _canDetect(visionSource, target) {
+        if (!(target instanceof Token)) return false;
         const source = visionSource.object;
         return !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF))
-            && target instanceof Token && !(target.document.hasStatusEffect(CONFIG.specialStatusEffects.INAUDIBLE)
+            && !(target.document.hasStatusEffect(CONFIG.specialStatusEffects.INAUDIBLE)
                 || target.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED));
     }
 

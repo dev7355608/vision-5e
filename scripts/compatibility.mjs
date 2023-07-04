@@ -1,5 +1,7 @@
 import { registerStatusEffect } from "./config.mjs";
 import { DetectionModeDarkvision } from "./detection-modes/darkvision.mjs";
+import { DetectionModeHearing } from "./detection-modes/hearing.mjs";
+import { DetectionModeTremorsense } from "./detection-modes/tremorsense.mjs";
 
 Hooks.once("init", () => {
     if (foundry.utils.isNewerVersion(game.version, "11.304")) {
@@ -142,4 +144,24 @@ Hooks.once("init", () => {
             CONFIG.statusEffects.findIndex(s => s.id === "Convenient Effect: Invisible") + 1
         );
     });
+});
+
+Hooks.once("init", () => {
+    if (!game.modules.get("item-piles")?.active) {
+        return;
+    }
+
+    const wrap = (_canDetect) => function (visionSource, target) {
+        if (!_canDetect.call(this, visionSource, target)) {
+            return false;
+        }
+
+        const data = target.document.flags["item-piles"]?.data;
+
+        return !(data && data.enabled && data.type !== "merchant");
+    };
+
+    for (const detectionModeClass of [DetectionModeHearing, DetectionModeTremorsense]) {
+        detectionModeClass.prototype._canDetect = wrap(detectionModeClass.prototype._canDetect);
+    }
 });
