@@ -2,6 +2,37 @@ import { registerStatusEffect } from "./config.mjs";
 import { DetectionModeDarkvision } from "./detection-modes/darkvision.mjs";
 
 Hooks.once("init", () => {
+    if (foundry.utils.isNewerVersion(game.version, "11.304")) {
+        return;
+    }
+
+    if (game.modules.get("levels")?.active) {
+        return;
+    }
+
+    const elevation = Symbol("elevation");
+
+    Object.defineProperty(TileDocument.prototype, "elevation", {
+        get() {
+            return this[elevation] ?? (this.overhead ? this.parent.foregroundElevation : PrimaryCanvasGroup.BACKGROUND_ELEVATION);
+        },
+        set(value) {
+            if (!Number.isFinite(value) && (value !== undefined)) {
+                throw new Error("Elevation must be a finite Number or undefined");
+            }
+            this[elevation] = value;
+            if (this.rendered) {
+                canvas.primary.sortDirty = true;
+                canvas.perception.update({ refreshTiles: true });
+                this._object.renderFlags.set({ refreshElevation: true });
+            }
+        },
+        configurable: true,
+        enumerable: false
+    });
+});
+
+Hooks.once("init", () => {
     if (!game.modules.get("stealthy")?.active) {
         return;
     }
