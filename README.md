@@ -81,6 +81,6 @@ If a token doesn't produce any sound, give it the _inaudible_ status effect, whi
 
 ---
 
-_Detect Evil and Good_, _Detect Magic_, _Detect Poison and Disease_, _Detect Thoughts_, _Hearing_, and _Tremorsense_ are all imprecise senses. They do not reveal any information about the detected token except for size and location.
+_Detect Evil and Good_, _Detect Magic_, _Detect Poison and Disease_, _Detect Thoughts_, _Divine Sense_, _Hearing_, and _Tremorsense_ are all imprecise senses. They do not reveal any information about the detected token except for size and location. The detected token is also not targetable by the player. You can target tokens as the GM for your players with the [Manage Player Targets](https://foundryvtt.com/packages/manage-player-targets) module.
 
 ![hud](images/imprecise.gif)
