@@ -643,16 +643,25 @@ Object.defineProperties(Token.prototype, {
         get() {
             const mesh = new SpriteMesh(PIXI.Texture.EMPTY, BaseSamplerShader);
 
-            mesh.x = this.x;
-            mesh.y = this.y;
-            mesh.width = this.w;
-            mesh.height = this.h;
             mesh.visible = false;
             mesh.alpha = 0;
             mesh.eventMode = "none";
 
             loadTexture(CONFIG.Token.documentClass.DEFAULT_ICON)
-                .then((texture) => { if (!mesh.destroyed) mesh.texture = texture; });
+                .then((texture) => {
+                    if (!mesh.destroyed) {
+                        mesh.texture = texture;
+
+                        const { w, h } = this;
+                        const { width, height } = mesh.texture;
+                        const s = Math.min(w / width, h / height);
+
+                        mesh.width = width * s;
+                        mesh.height = height * s;
+                        mesh.x = this.x + (w - mesh.width) / 2;
+                        mesh.y = this.y + (h - mesh.height) / 2;
+                    }
+                });
 
             Object.defineProperty(this, "_impreciseMesh", {
                 value: mesh,
@@ -734,11 +743,14 @@ Hooks.on("drawToken", (token) => {
 
 Hooks.on("refreshToken", (token) => {
     const mesh = token._impreciseMesh;
+    const { w, h } = token;
+    const { width, height } = mesh.texture;
+    const s = Math.min(w / width, h / height);
 
-    mesh.x = token.x;
-    mesh.y = token.y;
-    mesh.width = token.w;
-    mesh.height = token.h;
+    mesh.width = width * s;
+    mesh.height = height * s;
+    mesh.x = token.x + (w - mesh.width) / 2;
+    mesh.y = token.y + (h - mesh.height) / 2;
 });
 
 Hooks.on("destroyToken", (token) => {
