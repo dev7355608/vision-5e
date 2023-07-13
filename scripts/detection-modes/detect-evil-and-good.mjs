@@ -22,13 +22,25 @@ export class DetectionModeDetectEvilAndGood extends DetectionModeDetect {
     _canDetect(visionSource, target) {
         if (!super._canDetect(visionSource, target)) return false;
         const actor = target.actor;
-        if (!(actor && actor.type === "npc")) return false;
-        const type = actor.system.details.type.value;
-        return type === "aberration"
-            || type === "celestial"
-            || type === "elemental"
-            || type === "fey"
-            || type === "fiend"
-            || type === "undead";
+        if (!actor) return false;
+        const type = actor.type;
+        if (type === "character") {
+            const race = actor.system.details.race;
+            return race === "Centaur"
+                || race === "Changeling"
+                || race === "Fairy"
+                || race === "Hexblood"
+                || race === "Satyr";
+        }
+        if (type === "npc") {
+            const type = actor.system.details.type.value;
+            return type === "aberration"
+                || type === "celestial"
+                || type === "elemental"
+                || type === "fey"
+                || type === "fiend"
+                || type === "undead";
+        }
+        return false;
     }
 }
