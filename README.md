@@ -24,7 +24,7 @@ The following vision/detection modes are included.
   - Detects all creatures that have an Intelligence of 4 or higher and speak at least one language.
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
 - **Devil's Sight**
-  - _Note: You need the [Vision Limitation]() module for magical darkness._
+  - _Note: You need the [Limits](https://github.com/dev7355608/limits) module for magical darkness._
 - **Divine Sense**
 - **Echolocation**
   - Detects the same things Blindsight does but doesn't work while deafened.
@@ -39,7 +39,7 @@ The following vision/detection modes are included.
   - Is unable to detect anything while the creature itself is flying.
   - _Note: Tremorsense works differently compared to core's Feel Tremor, which detects all creatures that are not above 0 elevation._
 - **Truesight**
-  - _Note: You need the [Vision Limitation]() module for magical darkness._
+  - _Note: You need the [Limits](https://github.com/dev7355608/limits) module for magical darkness._
   - _Note: The shapechanger and ethereal plane parts of Truesight haven't been implemented._
 
 _Basic Sight_ no longer detects creatures that are illuminate by light sources, which is now handled by the _Light Perception_ detection mode. Light perception being a separate detection modes allows you to configure the range of light perception. _Basic Sight_ is renamed to _Darkvision_.
