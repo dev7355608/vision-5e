@@ -262,23 +262,22 @@ Hooks.once("i18nInit", () => {
 
 Hooks.on("renderTokenConfig", (sheet, html) => {
     const token = sheet.document;
-
-    if (!["character", "npc"].includes(token.actor?.type)) {
-        return;
-    }
-
-    const source = token.toObject();
-    const sourceDetectionModes = source.detectionModes;
-    const activeDetectionModes = (!sheet.isPrototype ? token.detectionModes : getInheritedDetectionModes(token.actor))
+    const sourceDetectionModes = new Set(token.toObject().detectionModes.map((m) => m.id));
+    const activeDetectionModes = (sheet.isPrototype && ["character", "npc"].includes(token.actor?.type)
+        ? getInheritedDetectionModes(token.actor) : token.detectionModes)
         .filter((m) => m.id in CONFIG.Canvas.detectionModes)
         .sort((a, b) => game.i18n.localize(CONFIG.Canvas.detectionModes[a.id].label).localeCompare(
             game.i18n.localize(CONFIG.Canvas.detectionModes[b.id].label), game.i18n.lang))
         .reverse();
 
-    Array.from(html[0].querySelectorAll(`fieldset.detection-mode:not([data-index])`).values()).forEach((e) => e.remove());
+    for (const select of html[0].querySelectorAll(`fieldset.detection-mode .detection-mode-id select`)) {
+        if (select.value && !sourceDetectionModes.has(select.value)) {
+            select.closest("fieldset.detection-mode").remove();
+        }
+    }
 
     for (const { id, range, enabled } of activeDetectionModes) {
-        if (sourceDetectionModes.find((m) => m.id === id) || !(id in CONFIG.Canvas.detectionModes)) {
+        if (sourceDetectionModes.has(id) || !(id in CONFIG.Canvas.detectionModes)) {
             continue;
         }
 
