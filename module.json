@@ -40,7 +40,7 @@
         "type": "system",
         "compatibility": {
           "minimum": "2.2.0",
-          "verified": "2.2.1"
+          "verified": "2.2.2"
         }
       }
     ]
