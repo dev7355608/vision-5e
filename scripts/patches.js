@@ -416,6 +416,7 @@ CanvasVisibility.prototype.testVisibility = (() => {
         // Skip sources that are not both inside the scene or both inside the buffer
         const activeVisionSources = canvas.effects.visionSources.filter(s => s.active && inBuffer !== sr.contains(s.x, s.y));
         const modes = CONFIG.Canvas.detectionModes;
+        const impreciseTargetable = game.settings.get("vision-5e", "impreciseTargetable");
         let importantModes;
         let impreciseModes;
 
@@ -450,7 +451,7 @@ CanvasVisibility.prototype.testVisibility = (() => {
             const token = visionSource.object.document;
             const mode = token.detectionModes.find(m => m.id === DetectionMode.LIGHT_MODE_ID);
             const dm = modes[mode?.id];
-            // if (!dm || preciseVisible && !dm.important) continue;
+            if (!dm || preciseVisible && !impreciseTargetable && !dm.important) continue;
             const result = dm.testVisibility(visionSource, mode, config);
             if (result === true) {
                 if (object instanceof Token) {
@@ -481,7 +482,7 @@ CanvasVisibility.prototype.testVisibility = (() => {
             for (const mode of token.detectionModes) {
                 if (mode.id === DetectionMode.LIGHT_MODE_ID || mode.id === visionSource.detectionMode.id) continue;
                 const dm = modes[mode.id];
-                // if (!dm || preciseVisible && !dm.important) continue;
+                if (!dm || preciseVisible && !impreciseTargetable && !dm.important) continue;
                 const result = dm.testVisibility(visionSource, mode, config);
                 if (result === true) {
                     if (dm.important) {
@@ -502,7 +503,7 @@ CanvasVisibility.prototype.testVisibility = (() => {
                 }
             }
         }
-        const impreciseTargetable = game.settings.get("vision-5e", "impreciseTargetable");
+
         let impreciseVisible = object.impreciseVisible;
 
         if (impreciseTargetable) {
