@@ -20,11 +20,13 @@ export class DetectionModeTremorsense extends DetectionMode {
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= OutlineOverlayFilter.create({
+        let filter = this._detectionFilter ??= OutlineOverlayFilter.create({
             outlineColor: [1, 0, 1, 1],
             knockout: true,
             wave: true
         });
+        filter.thickness = game.settings.get("vision-5e", "defaultOutlineThickness");
+        return filter;
     }
 
     /** @override */

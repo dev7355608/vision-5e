@@ -24,6 +24,28 @@ Hooks.once("init", () => {
     } else {
         settings.defaultHearingRange = 0;
     }
+
+    game.settings.register(
+        "vision-5e",
+        "defaultOutlineThickness",
+        {
+            name: "VISION5E.Settings.DefaultOutlineThicknessN",
+            hint: "VISION5E.Settings.DefaultOutlineThicknessL",
+            scope: "world",
+            config: true,
+            requiresReload: true,
+            type: Number,
+            default: 3
+        }
+    );
+
+    const defaultOutlineThickness = game.settings.get("vision-5e", "defaultOutlineThickness") || 3;
+
+    if (!Number.isNaN(defaultOutlineThickness)) {
+        settings.defaultHearingRange = defaultOutlineThickness
+    } else {
+        settings.defaultHearingRange = 3;
+    }
 });
 
 Hooks.on("renderSettingsConfig", (app, html) => {
@@ -37,4 +59,11 @@ Hooks.on("renderSettingsConfig", (app, html) => {
     html[0].querySelector(`[data-setting-id="vision-5e.defaultHearingRange"]`).classList.add("slim");
     html[0].querySelector(`[data-setting-id="vision-5e.defaultHearingRange"] label`)
         .insertAdjacentHTML("beforeend", ` <span class="units">(ft)</span>`);
+
+    const defaultOutlineThickness = html[0].querySelector(`input[name="vision-5e.defaultOutlineThickness"]`);
+
+    defaultOutlineThickness.value ||= 3;
+    defaultOutlineThickness.min = 0;
+    defaultOutlineThickness.step = 1;
+    defaultOutlineThickness.required = true;
 });
