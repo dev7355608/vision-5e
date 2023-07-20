@@ -388,6 +388,7 @@ CanvasVisibility.prototype.testVisibility = (() => {
         const object = options.object;
 
         if (object instanceof Token) {
+            object.mesh.alpha = 1;
             object.detectionFilter = undefined;
             object.impreciseVisible = false;
         }
@@ -416,6 +417,7 @@ CanvasVisibility.prototype.testVisibility = (() => {
         const activeVisionSources = canvas.effects.visionSources.filter(s => s.active && inBuffer !== sr.contains(s.x, s.y));
         const modes = CONFIG.Canvas.detectionModes;
         let importantModes;
+        let impreciseModes;
 
         // Second test basic detection tests for vision sources
         for (const visionSource of activeVisionSources) {
@@ -448,13 +450,17 @@ CanvasVisibility.prototype.testVisibility = (() => {
             const token = visionSource.object.document;
             const mode = token.detectionModes.find(m => m.id === DetectionMode.LIGHT_MODE_ID);
             const dm = modes[mode?.id];
-            if (!dm || preciseVisible && !dm.important) continue;
+            // if (!dm || preciseVisible && !dm.important) continue;
             const result = dm.testVisibility(visionSource, mode, config);
             if (result === true) {
                 if (object instanceof Token) {
                     if (dm.important) {
                         importantModes ??= new Set();
                         importantModes.add(dm);
+                    }
+                    if (dm.imprecise) {
+                        impreciseModes ??= new Set();
+                        impreciseModes.add(dm);
                     }
                     if (!preciseVisible && !basicVisible && !(dm.imprecise && object.impreciseVisible)) {
                         if (!dm.important) object.detectionFilter = dm.constructor.getDetectionFilter(visionSource.visionMode.perceivesLight);
@@ -475,12 +481,16 @@ CanvasVisibility.prototype.testVisibility = (() => {
             for (const mode of token.detectionModes) {
                 if (mode.id === DetectionMode.LIGHT_MODE_ID || mode.id === visionSource.detectionMode.id) continue;
                 const dm = modes[mode.id];
-                if (!dm || preciseVisible && !dm.important) continue;
+                // if (!dm || preciseVisible && !dm.important) continue;
                 const result = dm.testVisibility(visionSource, mode, config);
                 if (result === true) {
                     if (dm.important) {
                         importantModes ??= new Set();
                         importantModes.add(dm);
+                    }
+                    if (dm.imprecise) {
+                        impreciseModes ??= new Set();
+                        impreciseModes.add(dm);
                     }
                     if (!preciseVisible && !basicVisible && !(dm.imprecise && object.impreciseVisible)) {
                         if (!dm.important) object.detectionFilter = dm.constructor.getDetectionFilter(false);
@@ -492,10 +502,26 @@ CanvasVisibility.prototype.testVisibility = (() => {
                 }
             }
         }
+        const impreciseTargetable = game.settings.get("vision-5e", "impreciseTargetable");
+        let impreciseVisible = object.impreciseVisible;
+
+        if (impreciseTargetable) {
+            object.impreciseVisible = false;
+        }
 
         if (object instanceof Token) {
             if (preciseVisible) {
+                object.mesh.alpha = 1;
                 object.impreciseVisible = false;
+            }
+
+            if (impreciseTargetable && impreciseVisible) {
+                object.mesh.alpha = 0;
+                const dmfs = object.detectionFilter ? [object.detectionFilter] : [];
+                for (const dm of impreciseModes) {
+                    dmfs.push(dm.constructor.getDetectionFilter(false));
+                }
+                object.detectionFilter = new MultiDetectionFilter(dmfs);
             }
 
             if (importantModes) {
@@ -507,7 +533,7 @@ CanvasVisibility.prototype.testVisibility = (() => {
             }
         }
 
-        return preciseVisible;
+        return preciseVisible || (impreciseTargetable && impreciseVisible);
     };
 })();
 
@@ -610,6 +636,7 @@ TokenDocument.prototype._prepareDetectionModes = function () {
 Object.defineProperties(Token.prototype, {
     isVisible: {
         get: ((isVisible) => function () {
+            this.mesh.alpha = 1;
             this.detectionFilter = undefined;
             this.impreciseVisible = false;
             const visible = isVisible.call(this);

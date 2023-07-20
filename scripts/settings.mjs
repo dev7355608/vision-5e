@@ -24,6 +24,20 @@ Hooks.once("init", () => {
     } else {
         settings.defaultHearingRange = 0;
     }
+
+    game.settings.register(
+        "vision-5e",
+        "impreciseTargetable",
+        {
+            name: "VISION5E.Settings.ImpreciseTargetableN",
+            hint: "VISION5E.Settings.ImpreciseTargetableL",
+            scope: "world",
+            config: true,
+            requiresReload: true,
+            type: Boolean,
+            default: false
+        }
+    );
 });
 
 Hooks.on("renderSettingsConfig", (app, html) => {
