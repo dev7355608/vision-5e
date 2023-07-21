@@ -42,9 +42,9 @@ Hooks.once("init", () => {
     const defaultOutlineThickness = game.settings.get("vision-5e", "defaultOutlineThickness") || 3;
 
     if (!Number.isNaN(defaultOutlineThickness)) {
-        settings.defaultHearingRange = defaultOutlineThickness
+        settings.defaultOutlineThickness = defaultOutlineThickness
     } else {
-        settings.defaultHearingRange = 3;
+        settings.defaultOutlineThickness = 3;
     }
 });
 
@@ -66,4 +66,6 @@ Hooks.on("renderSettingsConfig", (app, html) => {
     defaultOutlineThickness.min = 0;
     defaultOutlineThickness.step = 1;
     defaultOutlineThickness.required = true;
+
+    html[0].querySelector(`[data-setting-id="vision-5e.defaultOutlineThickness"]`).classList.add("slim");
 });
