@@ -11,7 +11,7 @@
   "version": "1.6.3",
   "compatibility": {
     "minimum": "11.299",
-    "verified": "11.305"
+    "verified": "11.306"
   },
   "scripts": [
     "scripts/patches.js"
