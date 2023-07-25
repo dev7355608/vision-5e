@@ -33,14 +33,14 @@ The following vision/detection modes are included.
 - **Hearing**
   - Detects all creatures that do not have the _inaudible_ status effect and are not behind a sound-blocking walls. If the token is deafened, it cannot hear anything of course.
 - **See Invisibility**
-  - _Note: The ethereal plane part of See Invisibility hasn't been implemented._
+  - Allows detection of invisible and ethereal creatures.
 - **Tremorsense**
   - Detects all creatures that do not have the _flying_ status effect.
   - Is unable to detect anything while the creature itself is flying.
   - _Note: Tremorsense works differently compared to core's Feel Tremor, which detects all creatures that are not above 0 elevation._
 - **Truesight**
   - _Note: You need the [Limits](https://github.com/dev7355608/limits) module for magical darkness._
-  - _Note: The shapechanger and ethereal plane parts of Truesight haven't been implemented._
+  - _Note: The original form of a shapechanger is not revealed nor highlighted with a special effect._
 
 _Basic Sight_ no longer detects creatures that are illuminate by light sources, which is now handled by the _Light Perception_ detection mode. Light perception being a separate detection modes allows you to configure the range of light perception. _Basic Sight_ is renamed to _Darkvision_.
 
@@ -72,6 +72,10 @@ The vision modes can be changed in token HUD. The player can select the preferre
 ---
 
 If a creature is burrowing, give it the _burrowing_ status effect. A burrowing creature cannot be detected by senses that are blocked by walls, but can be detected by senses like Hearing or Tremorsense for example. While burrowing the creature is effectively blinded and any light that the creature emits is suppressed.
+
+---
+
+If a token is in the ethereal plane, give it the _ethereal_ status effect. Tokens in the ethereal plane can see other ethereal tokens. Tokens that are not need _Truesight_ or _See Invisibility_ to see ethereal tokens.
 
 ---
 

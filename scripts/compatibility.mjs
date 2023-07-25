@@ -138,6 +138,11 @@ Hooks.once("init", () => {
             "modules/vision-5e/icons/burrow.svg"
         );
         reregisterStatusEffect(
+            "ethereal",
+            "VISION5E.Ethereal",
+            "modules/vision-5e/icons/ethereal.svg"
+        );
+        reregisterStatusEffect(
             "inaudible",
             "VISION5E.Inaudible",
             "modules/vision-5e/icons/inaudible.svg",

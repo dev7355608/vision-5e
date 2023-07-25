@@ -18,6 +18,9 @@ export class DetectionModeDetect extends DetectionMode {
     /** @override */
     _canDetect(visionSource, target) {
         if (!(target instanceof Token)) return false;
-        return !target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW);
+        const source = visionSource.object;
+        return !(target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)));
     }
 }

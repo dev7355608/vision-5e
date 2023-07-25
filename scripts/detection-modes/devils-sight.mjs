@@ -29,6 +29,8 @@ export class DetectionModeDevilsSight extends DetectionMode {
         return !(source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.BLIND)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)))
             && !(target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)));
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+                && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))));
     }
 }
