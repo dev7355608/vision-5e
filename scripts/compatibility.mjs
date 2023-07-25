@@ -140,7 +140,7 @@ Hooks.once("init", () => {
         reregisterStatusEffect(
             "inaudible",
             "VISION5E.Inaudible",
-            "icons/svg/sound-off.svg",
+            "modules/vision-5e/icons/inaudible.svg",
             CONFIG.statusEffects.findIndex(s => s.id === "Convenient Effect: Invisible") + 1
         );
     });

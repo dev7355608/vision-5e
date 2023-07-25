@@ -134,7 +134,7 @@ Hooks.once("init", () => {
     registerStatusEffect(
         CONFIG.specialStatusEffects.INAUDIBLE,
         "VISION5E.Inaudible",
-        "icons/svg/sound-off.svg",
+        "modules/vision-5e/icons/inaudible.svg",
         CONFIG.statusEffects.findIndex(s => s.id === CONFIG.specialStatusEffects.INVISIBLE) + 1
     );
 
