@@ -81,7 +81,7 @@ export class DetectionModeDetectMagic extends DetectionModeDetect {
                 || type === "loot"
                 || type === "tool"
                 || type === "weapon")
-                && !!item.system.rarity;
+                && !!item.system.rarity && item.system.rarity !== "common";
         };
 
         // Does the target carry a magical item?
