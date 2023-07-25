@@ -1,3 +1,5 @@
+import { PingDetectionFilter } from "./filters/ping.mjs";
+
 /**
  * The detection mode for hearing.
  */
@@ -20,10 +22,9 @@ export class DetectionModeHearing extends DetectionMode {
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= OutlineOverlayFilter.create({
-            outlineColor: [1, 1, 1, 1],
-            knockout: true,
-            wave: true
+        return this._detectionFilter ??= PingDetectionFilter.create({
+            color: [1, 1, 1],
+            alpha: 0.75
         });
     }
 
