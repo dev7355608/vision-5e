@@ -23,8 +23,9 @@ export class DetectionModeSeeInvisibility extends DetectionMode {
 
     /** @override */
     _canDetect(visionSource, target) {
-        // Only invisible tokens can be detected.
-        return target instanceof Token && target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE);
+        // Only invisible and ethereal tokens can be detected.
+        return target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL));
     }
 
     /** @override */
@@ -35,14 +36,14 @@ export class DetectionModeSeeInvisibility extends DetectionMode {
 
         const visionSources = this.#removeOtherVisionSources(visionSource);
         const detectionsModes = this.#removeNonSightDetectionModes(visionSource);
-        const activeEffects = this.#removeInvisibleStatusEffects(target);
+        const statuses = this.#removeInvisibleAndEtherealStatusEffects(target);
 
         // Test whether this vision source sees the target without the invisible status effect.
         const isVisible = canvas.effects.visibility.testVisibility(test.point, { tolerance: 0, object: target });
 
         this.#restoreOtherVisionSources(visionSources);
         this.#restoreNonSightDetectionModes(visionSource, detectionsModes);
-        this.#restoreInvisibleStatusEffects(target, activeEffects);
+        this.#restoreInvisibleAndEtherealStatusEffects(target, statuses);
 
         return isVisible;
     }
@@ -102,40 +103,50 @@ export class DetectionModeSeeInvisibility extends DetectionMode {
     }
 
     /**
-     * Temporarily remove the invisible status effects from the target token.
-     * @param {Token} target            The target token.
-     * @returns {string[]|undefined}    The effects that need to be restored later.
+     * Temporarily remove the invisible and ethereal status effects from the target token.
+     * @param {Token} target    The target token.
+     * @returns {string[]}      The statuses that need to be restored later.
      */
-    #removeInvisibleStatusEffects(target) {
+    #removeInvisibleAndEtherealStatusEffects(target) {
         const document = target.document;
-        const statusId = CONFIG.specialStatusEffects.INVISIBLE;
-        let effects;
+        let statuses;
 
         // See TokenDocument.hasStatusEffect
         if (!document.actor) {
-            const icon = CONFIG.statusEffects.find(e => e.id === statusId)?.icon;
+            const icon = CONFIG.statusEffects.find(e => e.id === CONFIG.specialStatusEffects.INVISIBLE
+                || e.id === CONFIG.specialStatusEffects.ETHEREAL)?.icon;
 
-            effects = document.effects;
-            document.effects = effects.filter(e => e !== icon);
+            statuses = document.effects;
+            document.effects = statuses.filter(e => e !== icon);
         } else {
-            document.actor.statuses.delete(statusId);
+            statuses = [];
+
+            if (document.actor.statuses.delete(CONFIG.specialStatusEffects.INVISIBLE)) {
+                statuses.push(CONFIG.specialStatusEffects.INVISIBLE);
+            }
+
+            if (document.actor.statuses.delete(CONFIG.specialStatusEffects.ETHEREAL)) {
+                statuses.push(CONFIG.specialStatusEffects.ETHEREAL);
+            }
         }
 
-        return effects;
+        return statuses;
     }
 
     /**
      * Restore the status effects.
-     * @param {Token} target                  The target token.
-     * @param {string[]|undefined} effects    The effects that need to be restored.
+     * @param {Token} target         The target token.
+     * @param {string[]} statuses    The statuses that need to be restored.
      */
-    #restoreInvisibleStatusEffects(target, effects) {
+    #restoreInvisibleAndEtherealStatusEffects(target, statuses) {
         const document = target.document;
 
         if (!document.actor) {
-            document.effects = effects;
+            document.effects = statuses;
         } else {
-            document.actor.statuses.add(CONFIG.specialStatusEffects.INVISIBLE);
+            for (const status of statuses) {
+                document.actor.statuses.add(status);
+            }
         }
     }
 }

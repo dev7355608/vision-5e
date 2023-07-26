@@ -24,6 +24,8 @@ export class DetectionModeGhostlyGaze extends DetectionModeDarkvision {
     _canDetect(visionSource, target) {
         const source = visionSource.object;
         return !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.BLIND))
-            && !(target instanceof Token && target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE));
+            && !(target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE)
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+                && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))));
     }
 }

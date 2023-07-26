@@ -1,4 +1,3 @@
-import { registerStatusEffect } from "./config.mjs";
 import { DetectionModeDarkvision } from "./detection-modes/darkvision.mjs";
 import { DetectionModeHearing } from "./detection-modes/hearing.mjs";
 import { DetectionModeTremorsense } from "./detection-modes/tremorsense.mjs";
@@ -97,52 +96,90 @@ Hooks.once("init", () => {
     });
 });
 
-Hooks.once("init", () => {
+Hooks.once("setup", () => {
     if (!game.modules.get("dfreds-convenient-effects")?.active) {
         return;
     }
 
-    function reregisterStatusEffect(id, name, icon, index) {
-        for (const statusEffect of CONFIG.statusEffects) {
-            if (statusEffect.id === id) {
-                return;
-            }
+    const customStatusEffects = [
+        {
+            id: "burrow",
+            name: "Burrowing",
+            icon: "modules/vision-5e/icons/burrow.svg"
+        },
+        {
+            id: "disease",
+            name: "Diseased",
+            icon: "icons/svg/biohazard.svg"
+        },
+        {
+            id: "ethereal",
+            name: "Ethereal",
+            icon: "modules/vision-5e/icons/ethereal.svg"
+        },
+        {
+            id: "fly",
+            name: "Flying",
+            icon: "icons/svg/wing.svg"
+        },
+        {
+            id: "inaudible",
+            name: "Inaudible",
+            icon: "modules/vision-5e/icons/inaudible.svg"
+        }
+    ];
 
-            if (statusEffect.id.startsWith("Convenient Effect: ") && statusEffect.statuses?.includes(id)) {
-                const otherStatuses = statusEffect.statuses.filter(s => s !== id);
+    const EffectDefinitions = game.dfreds.effects.constructor;
 
-                if (otherStatuses.length === 0 || otherStatuses.length === 1 && otherStatuses[0] === statusEffect.id) {
-                    return;
-                }
+    EffectDefinitions.prototype.initialize = ((initialize) => function () {
+        this._conditions = this.conditions;
+
+        for (const { id, name, icon } of customStatusEffects) {
+            this._conditions.push(this._effectHelpers.createActiveEffect({
+                name,
+                icon,
+                statuses: [id]
+            }));
+        }
+
+        this._conditions.sort((e1, e2) => e1.name.localeCompare(e2.name, "en"));
+
+        return initialize.call(this);
+    })(EffectDefinitions.prototype.initialize);
+
+    game.settings.register(
+        "vision-5e",
+        "compatibility.dfreds-convenient-effects",
+        {
+            scope: "world",
+            config: false,
+            type: Object,
+            default: {}
+        }
+    );
+
+    Hooks.once("dfreds-convenient-effects.ready", async () => {
+        if (!game.users.activeGM?.isSelf) {
+            return;
+        }
+
+        const compatibility = foundry.utils.deepClone(await game.settings.get("vision-5e", "compatibility.dfreds-convenient-effects"));
+        const statusEffects = compatibility.addedStatusEffects ??= [];
+        let addedStatusEffect = false;
+
+        for (const { id, name } of customStatusEffects) {
+            if (!statusEffects.includes(id)) {
+                statusEffects.push(id);
+                await game.dfreds.effectInterface.addStatusEffect(name);
+                addedStatusEffect = true;
             }
         }
 
-        registerStatusEffect(id, name, icon, index);
-    }
-
-    Hooks.once("dfreds-convenient-effects.ready", () => {
-        reregisterStatusEffect(
-            "disease",
-            "EFFECT.StatusDisease",
-            "icons/svg/biohazard.svg",
-            CONFIG.statusEffects.findIndex(s => s.id === "Convenient Effect: Poisoned") + 1
-        );
-        reregisterStatusEffect(
-            "fly",
-            "EFFECT.StatusFlying",
-            "icons/svg/wing.svg"
-        );
-        reregisterStatusEffect(
-            "burrow",
-            "VISION5E.Burrowing",
-            "modules/vision-5e/icons/burrow.svg"
-        );
-        reregisterStatusEffect(
-            "inaudible",
-            "VISION5E.Inaudible",
-            "icons/svg/sound-off.svg",
-            CONFIG.statusEffects.findIndex(s => s.id === "Convenient Effect: Invisible") + 1
-        );
+        if (addedStatusEffect) {
+            statusEffects.sort((a, b) => a.localeCompare(b, "en"));
+            await game.settings.set("vision-5e", "compatibility.dfreds-convenient-effects", compatibility);
+            ui.notifications.warn("Foundry must be reloaded to update token status effects.", { permanent: true });
+        }
     });
 });
 

@@ -33,6 +33,8 @@ export class DetectionModeTremorsense extends DetectionMode {
         const source = visionSource.object;
         return !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.FLY))
             && !(target.document.hasStatusEffect(CONFIG.specialStatusEffects.FLY)
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+                && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))
                 || target.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED));
     }
 }

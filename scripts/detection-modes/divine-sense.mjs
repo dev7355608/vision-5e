@@ -29,7 +29,12 @@ export class DetectionModeDivineSense extends DetectionMode {
     /** @override */
     _canDetect(visionSource, target) {
         if (!(target instanceof Token)) return false;
-        if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)) return true;
+        const source = visionSource.object;
+        if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))) {
+            return true;
+        }
         const actor = target.actor;
         if (!(actor && actor.type === "npc")) return false;
         const type = actor.system.details.type.value;

@@ -122,6 +122,7 @@ Hooks.once("init", () => {
     registerSpecialStatusEffect("DEAF", "deaf", refreshVision);
     registerSpecialStatusEffect("DISEASE", "disease", refreshVision);
     registerSpecialStatusEffect("FLY", "fly", refreshVision);
+    registerSpecialStatusEffect("ETHEREAL", "ethereal", refreshVision);
     registerSpecialStatusEffect("INAUDIBLE", "inaudible", refreshVision);
     registerSpecialStatusEffect("POISON", "poison", refreshVision);
 
@@ -132,9 +133,14 @@ Hooks.once("init", () => {
         CONFIG.statusEffects.findIndex(s => s.id === CONFIG.specialStatusEffects.FLY) + 1
     );
     registerStatusEffect(
+        CONFIG.specialStatusEffects.ETHEREAL,
+        "VISION5E.Ethereal",
+        "modules/vision-5e/icons/ethereal.svg"
+    );
+    registerStatusEffect(
         CONFIG.specialStatusEffects.INAUDIBLE,
         "VISION5E.Inaudible",
-        "icons/svg/sound-off.svg",
+        "modules/vision-5e/icons/inaudible.svg",
         CONFIG.statusEffects.findIndex(s => s.id === CONFIG.specialStatusEffects.INVISIBLE) + 1
     );
 
