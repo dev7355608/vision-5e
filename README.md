@@ -3,9 +3,11 @@
 [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fvision-5e&colorB=blueviolet)](https://forge-vtt.com/bazaar#package=vision-5e)
 [![License](https://img.shields.io/github/license/dev7355608/vision-5e?label=License)](LICENSE)
 
-# Vision/Detection Modes for D&D 5e (Foundry VTT Module)
+# Vision 5e (Foundry VTT Module)
 
-The following vision/detection modes are included.
+Additional and improved Vision/Detection modes for D&D 5e including automatic vision management based on the actor's senses and active effects.
+
+---
 
 - **Blindsight**
   - _Note: Blindsight is blocked by total cover. There's no total cover wall restriction type. So Blindsight is blocked by sight-blocking walls, but doesn't go through proximity walls regardless of the distance to the wall. Therefore it is necessary to use proximity walls for glass windows._
