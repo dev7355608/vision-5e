@@ -388,7 +388,14 @@ CanvasVisibility.prototype.testVisibility = (() => {
         const object = options.object;
 
         if (object instanceof Token) {
-            object.mesh.alpha = 1;
+            if (object.originalAlphas) {
+                object.mesh.alpha = object.originalAlphas.mesh;
+                object.bars.alpha = object.originalAlphas.bars;
+                object.effects.alpha = object.originalAlphas.effects;
+                object.nameplate.alpha = object.originalAlphas.nameplate;
+                object.border.alpha = object.originalAlphas.border;
+                object.tooltip.alpha = object.originalAlphas.tooltip;
+            }
             object.detectionFilter = undefined;
             object.impreciseVisible = false;
         }
@@ -504,7 +511,7 @@ CanvasVisibility.prototype.testVisibility = (() => {
             }
         }
 
-        let impreciseVisible = object.impreciseVisible;
+        object.imprecise = object.impreciseVisible;
 
         if (impreciseTargetable) {
             object.impreciseVisible = false;
@@ -512,12 +519,32 @@ CanvasVisibility.prototype.testVisibility = (() => {
 
         if (object instanceof Token) {
             if (preciseVisible) {
-                object.mesh.alpha = 1;
+                if (object.originalAlphas) {
+                    object.mesh.alpha = object.originalAlphas.mesh;
+                    object.bars.alpha = object.originalAlphas.bars;
+                    object.effects.alpha = object.originalAlphas.effects;
+                    object.nameplate.alpha = object.originalAlphas.nameplate;
+                    object.border.alpha = object.originalAlphas.border;
+                    object.tooltip.alpha = object.originalAlphas.tooltip;
+                }
                 object.impreciseVisible = false;
             }
 
-            if (impreciseTargetable && impreciseVisible) {
+            if (impreciseTargetable && object.imprecise) {
+                object.originalAlphas = {
+                    mesh: object.mesh.alpha,
+                    bars: object.bars.alpha,
+                    effects: object.effects.alpha,
+                    nameplate: object.nameplate.alpha,
+                    border: object.border.alpha,
+                    tooltip: object.tooltip.alpha
+                }
                 object.mesh.alpha = 0;
+                object.bars.alpha = 0;
+                object.effects.alpha = 0;
+                object.nameplate.alpha = 0;
+                object.border.alpha = 0;
+                object.tooltip.alpha = 0;
                 const dmfs = object.detectionFilter ? [object.detectionFilter] : [];
                 for (const dm of impreciseModes) {
                     dmfs.push(dm.constructor.getDetectionFilter(false));
@@ -534,7 +561,7 @@ CanvasVisibility.prototype.testVisibility = (() => {
             }
         }
 
-        return preciseVisible || (impreciseTargetable && impreciseVisible);
+        return preciseVisible || (impreciseTargetable && object.imprecise);
     };
 })();
 
@@ -637,7 +664,14 @@ TokenDocument.prototype._prepareDetectionModes = function () {
 Object.defineProperties(Token.prototype, {
     isVisible: {
         get: ((isVisible) => function () {
-            this.mesh.alpha = 1;
+            if (this.originalAlphas) {
+                this.mesh.alpha = this.originalAlphas.mesh;
+                this.bars.alpha = this.originalAlphas.bars;
+                this.effects.alpha = this.originalAlphas.effects;
+                this.nameplate.alpha = this.originalAlphas.nameplate;
+                this.border.alpha = this.originalAlphas.border;
+                this.tooltip.alpha = this.originalAlphas.tooltip;
+            }
             this.detectionFilter = undefined;
             this.impreciseVisible = false;
             const visible = isVisible.call(this);
@@ -729,6 +763,39 @@ Token.prototype._renderDetectionFilter = function (renderer) {
 
     mesh.filters.pop();
 };
+
+Token.prototype._refreshTarget = function (reticule) {
+    this.target.clear();
+
+    // We don't show the target arrows for a secret token disposition and non-GM users
+    const isSecret = (this.document.disposition === CONST.TOKEN_DISPOSITIONS.SECRET) && !this.isOwner;
+    if ( !this.targeted.size || isSecret ) return;
+
+    // Determine whether the current user has target and any other users
+    const [others, user] = Array.from(this.targeted).partition(u => u === game.user);
+
+    if(this.imprecise && game.settings.get("vision-5e", "impreciseTargetable")) {
+        if(!reticule) {
+            reticule = {
+                color: CONFIG.Canvas.dispositionColors.NEUTRAL
+            }
+        } else {
+            reticule.color = CONFIG.Canvas.dispositionColors.NEUTRAL;
+        }
+    }
+
+    // For the current user, draw the target arrows
+    if ( user.length ) this._drawTarget(reticule);
+
+    // For other users, draw offset pips
+    const hw = (this.w / 2) + (others.length % 2 === 0 ? 8 : 0);
+    for ( let [i, u] of others.entries() ) {
+      const offset = Math.floor((i+1) / 2) * 16;
+      const sign = i % 2 === 0 ? 1 : -1;
+      const x = hw + (sign * offset);
+      this.target.beginFill(Color.from(u.color), 1.0).lineStyle(2, 0x0000000).drawCircle(x, 0, 6);
+    }
+  }
 
 Object.defineProperties(Token.prototype, {
     sightRange: {
