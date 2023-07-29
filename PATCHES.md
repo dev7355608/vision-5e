@@ -51,6 +51,17 @@ class DetectionMode extends foundry.abstract.DataModel {
   static getDetectionFilter(revealed) {
     /* ... */
   }
+
+  /**
+   * Should the blindness vision mode be applied to the vision source? If this method is defined,
+   * it called when the vision mode is initialized.
+   * @param {VisionSource} visionSource
+   * @returns {boolean}
+   * @internal
+   */
+  _applyBlindness(visionSource) {
+    /* ... */
+  }
 }
 
 // No longer tests whether the target is illuminated by light sources.

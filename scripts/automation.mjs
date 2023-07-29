@@ -22,7 +22,7 @@ function getInheritedDetectionModes(actor) {
         if (mode) {
             let range = mode.range;
 
-            if (typeof range !== "number") {
+            if (range && typeof range !== "number") {
                 range = parseFloat(effect.description?.match(range)?.[1]);
             }
 
@@ -42,7 +42,7 @@ function getInheritedDetectionModes(actor) {
         if (mode) {
             let range = mode.range;
 
-            if (typeof range !== "number") {
+            if (range && typeof range !== "number") {
                 range = parseFloat(item.system.description.value?.match(range)?.[1]);
             }
 
@@ -287,7 +287,8 @@ Hooks.once("i18nInit", () => {
         game.i18n.localize("VISION5E.Echolocation")
     ]) {
         effectMapping.set(name, {
-            id: "echolocation"
+            id: "echolocation",
+            range: 1
         });
     }
 

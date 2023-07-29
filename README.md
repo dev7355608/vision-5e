@@ -11,6 +11,7 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 
 - **Blindsense**
 - **Blindsight**
+  - If the actor has the *Echolocation* or *Blind Senses* feat, Blindsight doesn't work while deafened.
   - _Note: Blindsight is blocked by total cover. There's no total cover wall restriction type. So Blindsight is blocked by sight-blocking walls, but doesn't go through proximity walls regardless of the distance to the wall. Therefore it is necessary to use proximity walls for glass windows._
 - **Darkvision**
   - Unless blinded Darkvision detects any creature that isn't invisible and doesn't have the `Umbral Sight` feat.
@@ -29,8 +30,6 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 - **Devil's Sight**
   - _Note: You need the [Limits](https://github.com/dev7355608/limits) module for magical darkness._
 - **Divine Sense**
-- **Echolocation**
-  - Detects the same things Blindsight does but doesn't work while deafened.
 - **Ethereal Sight**
   - Allows detection of ethereal creatures.
 - **Ghostly Gaze**
@@ -60,7 +59,6 @@ Detection modes of tokens are automatically configured based on the actor's sens
 A token gains ...
 
 - _Blindsense_ if the actor has a feat with the name `Blindsense`.
-- _Echolocation_ instead of _Blindsight_ if the actor has an active effect with the name `Echolocation`.
 - _Detect Evil and Good_ if the actor has an active effect with the name `Detect Evil and Good`.
 - _Detect Magic_ if the actor has an active effect with the name `Detect Magic` or `Sense Magic`. An active effect named `Magic Awareness` grants 60 feet of Detect Magic.
 - _Detect Poison and Disease_ if the actor has an active effect with the name `Detect Poison and Disease`.

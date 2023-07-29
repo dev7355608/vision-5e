@@ -26,12 +26,38 @@ export class DetectionModeBlindsight extends DetectionMode {
         });
     }
 
+    #ignoreDeafness(visionSource) {
+        if (this.id === "echolocation") return false;
+        const source = visionSource.object;
+        if (source instanceof Token) {
+            const actor = source.actor;
+            if (actor && (actor.type === "character" || actor.type === "npc")) {
+                const localizedBlindSenses = game.i18n.localize("VISION5E.BlindSenses");
+                const localizedEcholocation = game.i18n.localize("VISION5E.Echolocation");
+                for (const item of actor.items) {
+                    if (item.type === "feat" && (item.name === "Blind Senses"
+                        || item.name === localizedBlindSenses
+                        || item.name === "Echolocation"
+                        || item.name === localizedEcholocation)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     /** @override */
     _canDetect(visionSource, target) {
         const source = visionSource.object;
-        return !(target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
-            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-            && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))));
+        return !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF) && !this.#ignoreDeafness(visionSource))
+            && !(target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+                && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))));
+    }
+
+    _applyBlindness(visionSource) {
+        return visionSource.data.deafened && !this.#ignoreDeafness(visionSource);
     }
 
     /** @override */

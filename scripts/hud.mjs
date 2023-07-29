@@ -12,7 +12,6 @@ Hooks.on("renderTokenHUD", (hud, html) => {
         "blindsight",
         "darkvision",
         "devilsSight",
-        "echolocation",
         "ghostlyGaze",
         "tremorsense",
         "truesight"
