@@ -11,12 +11,7 @@ Hooks.on("renderTokenHUD", (hud, html) => {
     for (const id of [
         "blindsight",
         "darkvision",
-        "detectEvilAndGood",
-        "detectMagic",
-        "detectPoisonAndDisease",
-        "detectThoughts",
         "devilsSight",
-        "divineSense",
         "echolocation",
         "ghostlyGaze",
         "tremorsense",

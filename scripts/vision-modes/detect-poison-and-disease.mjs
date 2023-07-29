@@ -11,6 +11,7 @@ export class VisionModeDetectPoisonAndDisease extends VisionMode {
         super({
             id: "detectPoisonAndDisease",
             label: "VISION5E.DetectPoisonAndDisease",
+            tokenConfig: false,
             canvas: {
                 shader: VoidSamplerShader,
                 uniforms: { contrast: 0, saturation: 0, exposure: 0 }

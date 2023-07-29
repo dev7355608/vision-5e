@@ -11,6 +11,7 @@ export class VisionModeDivineSense extends VisionMode {
         super({
             id: "divineSense",
             label: "VISION5E.DivineSense",
+            tokenConfig: false,
             canvas: {
                 shader: VoidSamplerShader,
                 uniforms: { contrast: 0, saturation: 0, exposure: 0 }

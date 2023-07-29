@@ -11,6 +11,7 @@ export class VisionModeDetectMagic extends VisionMode {
         super({
             id: "detectMagic",
             label: "VISION5E.DetectMagic",
+            tokenConfig: false,
             canvas: {
                 shader: VoidSamplerShader,
                 uniforms: { contrast: 0, saturation: 0, exposure: 0 }
