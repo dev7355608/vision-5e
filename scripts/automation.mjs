@@ -341,6 +341,16 @@ Hooks.once("i18nInit", () => {
             range: 120
         });
     }
+
+    for (const name of [
+        "Invocation: Witch Sight",
+        game.i18n.localize("VISION5E.InvocationWitchSight")
+    ]) {
+        featMapping.set(name, {
+            id: "witchSight",
+            range: 30
+        });
+    }
 });
 
 Hooks.on("renderTokenConfig", (sheet, html) => {

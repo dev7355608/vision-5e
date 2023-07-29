@@ -46,6 +46,10 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 - **Truesight**
   - _Note: You need the [Limits](https://github.com/dev7355608/limits) module for magical darkness._
   - _Note: The original form of a shapechanger is not revealed nor highlighted with a special effect._
+- **Witch Sight**
+  - Allows detection of shapechangers.
+  - _Note: An actor is an shapechanger if it has the Shapechanger subtype or the Shapechanger feat._
+  - _Note: The original form of the shapechanger is not revealed._
 
 _Basic Sight_ no longer detects creatures that are illuminate by light sources, which is now handled by the _Light Perception_ detection mode. Light perception being a separate detection modes allows you to configure the range of light perception. _Basic Sight_ is renamed to _Darkvision_.
 
@@ -66,6 +70,7 @@ A token gains ...
 - _Ethereal Sight_ if the actor has a feat with the name `Ethereal Sight` and its description contains the range in feet.
 - _Ghostly Gaze_ if the actor has an active effect with the name `Ghostly Gaze`.
 - _See Invisibility_ if the actor has an active effect with the name `See Invisibility`.
+- _Witch Sight_ if the actor has a feat with the name `Invocation: Witch Sight`.
 
 By default all tokens have hearing range of 30 feet. The default hearing range can be configured in the settings.
 
