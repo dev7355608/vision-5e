@@ -17,7 +17,7 @@ function getInheritedDetectionModes(actor) {
         const mode = effectMapping.get(effect.name);
 
         if (mode) {
-            modes[mode.id] = mode.range;
+            modes[mode.id] = Math.max(modes[mode.id] ?? 0, mode.range);
         }
     }
 
@@ -187,6 +187,16 @@ Hooks.once("i18nInit", () => {
         effectMapping.set(name, {
             id: "detectMagic",
             range: 30
+        });
+    }
+
+    for (const name of [
+        "Magic Awareness",
+        game.i18n.localize("VISION5E.MagicAwareness")
+    ]) {
+        effectMapping.set(name, {
+            id: "detectMagic",
+            range: 60
         });
     }
 

@@ -54,7 +54,7 @@ A token gains ...
 
 - _Echolocation_ instead of _Blindsight_ if the actor has an active effect with the name `Echolocation`.
 - _Detect Evil and Good_ if the actor has an active effect with the name `Detect Evil and Good`.
-- _Detect Magic_ if the actor has an active effect with the name `Detect Magic`.
+- _Detect Magic_ if the actor has an active effect with the name `Detect Magic`. An active effect named `Magic Awareness` grants 60 feet of Detect Magic.
 - _Detect Poison and Disease_ if the actor has an active effect with the name `Detect Poison and Disease`.
 - _Detect Thoughts_ if the actor has an active effect with the name `Detect Thoughts`.
 - _Devil's Sight_ if the actor has an active effect with the name `Devil's Sight`.
