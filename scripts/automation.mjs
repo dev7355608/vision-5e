@@ -299,6 +299,16 @@ Hooks.once("i18nInit", () => {
             range: /\b(\d+)\s+(?:feet|ft.?)\b/i
         });
     }
+
+    for (const name of [
+        "Invocation: Devil's Sight",
+        game.i18n.localize("VISION5E.InvocationDevilsSight")
+    ]) {
+        featMapping.set(name, {
+            id: "devilsSight",
+            range: 120
+        });
+    }
 });
 
 Hooks.on("renderTokenConfig", (sheet, html) => {

@@ -59,8 +59,7 @@ A token gains ...
 - _Detect Magic_ if the actor has an active effect with the name `Detect Magic`. An active effect named `Magic Awareness` grants 60 feet of Detect Magic.
 - _Detect Poison and Disease_ if the actor has an active effect with the name `Detect Poison and Disease`.
 - _Detect Thoughts_ if the actor has an active effect with the name `Detect Thoughts`.
-- _Devil's Sight_ if the actor has an active effect with the name `Devil's Sight`.
-  - _Note: Remove the effect that gives 120 feet Darkvision if it exists: Devil's Sight doesn't increase the range of Darkvision._
+- _Devil's Sight_ if the actor has a feat with the name `Invocation: Devil's Sight`.
 - _Divine Sense_ if the actor has an active effect with the name `Divine Sense`.
 - _Ethereal Sight_ if the actor has a feat with the name `Ethereal Sight` and its description contains the range in feet.
 - _Ghostly Gaze_ if the actor has an active effect with the name `Ghostly Gaze`.
