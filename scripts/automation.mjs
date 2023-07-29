@@ -1,5 +1,7 @@
 import settings from "./settings.mjs";
 
+const RANGE_REGEX = /\b(\d+)\s+(?:feet|ft.?)\b/i;
+
 const effectMapping = new Map();
 const featMapping = new Map();
 
@@ -18,7 +20,15 @@ function getInheritedDetectionModes(actor) {
         const mode = effectMapping.get(effect.name);
 
         if (mode) {
-            modes[mode.id] = Math.max(modes[mode.id] ?? 0, mode.range);
+            let range = mode.range;
+
+            if (typeof range !== "number") {
+                range = parseFloat(effect.description?.match(range)?.[1]);
+            }
+
+            if (range > 0 || mode.defaultRange) {
+                modes[mode.id] = Math.max(modes[mode.id] ?? 0, range || mode.defaultRange);
+            }
         }
     }
 
@@ -207,7 +217,18 @@ Hooks.once("i18nInit", () => {
     ]) {
         effectMapping.set(name, {
             id: "detectMagic",
-            range: 30
+            range: RANGE_REGEX,
+            defaulRange: 30
+        });
+    }
+
+    for (const name of [
+        "Sense Magic",
+        game.i18n.localize("VISION5E.SenseMagic")
+    ]) {
+        effectMapping.set(name, {
+            id: "detectMagic",
+            range: RANGE_REGEX
         });
     }
 
@@ -296,7 +317,7 @@ Hooks.once("i18nInit", () => {
     ]) {
         featMapping.set(name, {
             id: "blindsense",
-            range: /\b(\d+)\s+(?:feet|ft.?)\b/i,
+            range: RANGE_REGEX,
             defaultRange: 10
         });
     }
@@ -307,7 +328,7 @@ Hooks.once("i18nInit", () => {
     ]) {
         featMapping.set(name, {
             id: "etherealSight",
-            range: /\b(\d+)\s+(?:feet|ft.?)\b/i
+            range: RANGE_REGEX
         });
     }
 
