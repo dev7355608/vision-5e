@@ -30,6 +30,8 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 - **Divine Sense**
 - **Echolocation**
   - Detects the same things Blindsight does but doesn't work while deafened.
+- **Ethereal Sight**
+  - Allows detection of ethereal creatures.
 - **Ghostly Gaze**
   - Detects anything Darkvision would but isn't blocked by walls.
 - **Hearing**
@@ -60,6 +62,7 @@ A token gains ...
 - _Devil's Sight_ if the actor has an active effect with the name `Devil's Sight`.
   - _Note: Remove the effect that gives 120 feet Darkvision if it exists: Devil's Sight doesn't increase the range of Darkvision._
 - _Divine Sense_ if the actor has an active effect with the name `Divine Sense`.
+- _Ethereal Sight_ if the actor has a feat with the name `Ethereal Sight` and its description contains the range in feet.
 - _Ghostly Gaze_ if the actor has an active effect with the name `Ghostly Gaze`.
 - _See Invisibility_ if the actor has an active effect with the name `See Invisibility`.
 

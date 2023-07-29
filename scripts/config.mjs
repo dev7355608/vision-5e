@@ -7,6 +7,7 @@ import { DetectionModeDetectThoughts } from "./detection-modes/detect-thoughts.m
 import { DetectionModeDevilsSight } from "./detection-modes/devils-sight.mjs";
 import { DetectionModeDivineSense } from "./detection-modes/divine-sense.mjs";
 import { DetectionModeEcholocation } from "./detection-modes/echolocation.mjs";
+import { DetectionModeEtherealSight } from "./detection-modes/ethereral-sight.mjs";
 import { DetectionModeGhostlyGaze } from "./detection-modes/ghostly-gaze.mjs";
 import { DetectionModeHearing } from "./detection-modes/hearing.mjs";
 import { DetectionModeLightPerception } from "./detection-modes/light-perception.mjs";
@@ -87,6 +88,7 @@ Hooks.once("init", () => {
     registerDetectionMode(new DetectionModeDevilsSight());
     registerDetectionMode(new DetectionModeDivineSense());
     registerDetectionMode(new DetectionModeEcholocation());
+    registerDetectionMode(new DetectionModeEtherealSight());
     registerDetectionMode(new DetectionModeGhostlyGaze());
     registerDetectionMode(new DetectionModeHearing());
     registerDetectionMode(new DetectionModeLightPerception());

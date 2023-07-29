@@ -1,6 +1,7 @@
 import settings from "./settings.mjs";
 
 const effectMapping = new Map();
+const featMapping = new Map();
 
 function getInheritedDetectionModes(actor) {
     const modes = {};
@@ -18,6 +19,26 @@ function getInheritedDetectionModes(actor) {
 
         if (mode) {
             modes[mode.id] = Math.max(modes[mode.id] ?? 0, mode.range);
+        }
+    }
+
+    for (const item of actor.items) {
+        if (item.type !== "feat") {
+            continue;
+        }
+
+        const mode = featMapping.get(item.name);
+
+        if (mode) {
+            let range = mode.range;
+
+            if (typeof range !== "number") {
+                range = parseFloat(item.system.description.value?.match(range)?.[1]);
+            }
+
+            if (Number.isFinite(range)) {
+                modes[mode.id] = Math.max(modes[mode.id] ?? 0, range);
+            }
         }
     }
 
@@ -266,6 +287,16 @@ Hooks.once("i18nInit", () => {
         effectMapping.set(name, {
             id: "seeInvisibility",
             range: Infinity
+        });
+    }
+
+    for (const name of [
+        "Ethereal Sight",
+        game.i18n.localize("VISION5E.EtherealSight")
+    ]) {
+        featMapping.set(name, {
+            id: "etherealSight",
+            range: /\b(\d+)\s+(?:feet|ft.?)\b/i
         });
     }
 });
