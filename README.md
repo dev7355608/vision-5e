@@ -9,6 +9,7 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 
 ---
 
+- **Blindsense**
 - **Blindsight**
   - _Note: Blindsight is blocked by total cover. There's no total cover wall restriction type. So Blindsight is blocked by sight-blocking walls, but doesn't go through proximity walls regardless of the distance to the wall. Therefore it is necessary to use proximity walls for glass windows._
 - **Darkvision**
@@ -54,6 +55,7 @@ Detection modes of tokens are automatically configured based on the actor's sens
 
 A token gains ...
 
+- _Blindsense_ if the actor has a feat with the name `Blindsense`.
 - _Echolocation_ instead of _Blindsight_ if the actor has an active effect with the name `Echolocation`.
 - _Detect Evil and Good_ if the actor has an active effect with the name `Detect Evil and Good`.
 - _Detect Magic_ if the actor has an active effect with the name `Detect Magic`. An active effect named `Magic Awareness` grants 60 feet of Detect Magic.

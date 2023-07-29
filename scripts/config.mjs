@@ -1,3 +1,4 @@
+import { DetectionModeBlindsense } from "./detection-modes/blindsense.mjs";
 import { DetectionModeBlindsight } from "./detection-modes/blindsight.mjs";
 import { DetectionModeDarkvision } from "./detection-modes/darkvision.mjs";
 import { DetectionModeDetectEvilAndGood } from "./detection-modes/detect-evil-and-good.mjs";
@@ -79,6 +80,7 @@ Hooks.on("applyTokenStatusEffect", (token, statusId, active) => {
 });
 
 Hooks.once("init", () => {
+    registerDetectionMode(new DetectionModeBlindsense());
     registerDetectionMode(new DetectionModeBlindsight());
     registerDetectionMode(new DetectionModeDarkvision());
     registerDetectionMode(new DetectionModeDetectEvilAndGood());

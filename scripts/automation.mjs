@@ -36,8 +36,8 @@ function getInheritedDetectionModes(actor) {
                 range = parseFloat(item.system.description.value?.match(range)?.[1]);
             }
 
-            if (Number.isFinite(range)) {
-                modes[mode.id] = Math.max(modes[mode.id] ?? 0, range);
+            if (range > 0 || mode.defaultRange) {
+                modes[mode.id] = Math.max(modes[mode.id] ?? 0, range || mode.defaultRange);
             }
         }
     }
@@ -287,6 +287,17 @@ Hooks.once("i18nInit", () => {
         effectMapping.set(name, {
             id: "seeInvisibility",
             range: Infinity
+        });
+    }
+
+    for (const name of [
+        "Blindsense",
+        game.i18n.localize("VISION5E.Blindsense")
+    ]) {
+        featMapping.set(name, {
+            id: "blindsense",
+            range: /\b(\d+)\s+(?:feet|ft.?)\b/i,
+            defaultRange: 10
         });
     }
 
