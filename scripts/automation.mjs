@@ -20,6 +20,10 @@ function getInheritedDetectionModes(actor) {
         const mode = effectMapping.get(effect.name);
 
         if (mode) {
+            if (mode[actor.type] === false) {
+                continue;
+            }
+
             let range = mode.range;
 
             if (range && typeof range !== "number") {
@@ -40,6 +44,10 @@ function getInheritedDetectionModes(actor) {
         const mode = featMapping.get(item.name);
 
         if (mode) {
+            if (mode[actor.type] === false) {
+                continue;
+            }
+
             let range = mode.range;
 
             if (range && typeof range !== "number") {
@@ -50,6 +58,11 @@ function getInheritedDetectionModes(actor) {
                 modes[mode.id] = Math.max(modes[mode.id] ?? 0, range || mode.defaultRange);
             }
         }
+    }
+
+    if ("devilsSight_npc" in modes) {
+        modes.devilsSight = Math.max(modes.devilsSight ?? 0, modes[DetectionMode.BASIC_MODE_ID] ?? 0);
+        delete modes.devilsSight_npc;
     }
 
     if ("echolocation" in modes) {
@@ -320,6 +333,17 @@ Hooks.once("i18nInit", () => {
             id: "blindsense",
             range: RANGE_REGEX,
             defaultRange: 10
+        });
+    }
+
+    for (const name of [
+        "Devil's Sight",
+        game.i18n.localize("VISION5E.DevilsSight")
+    ]) {
+        featMapping.set(name, {
+            id: "devilsSight_npc",
+            character: false,
+            range: 1
         });
     }
 
