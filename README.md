@@ -18,7 +18,7 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
 - **Detect Magic**
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
-  - _Note: Magic items are considered magical if the rarity is common or higher. Mundane items should not have a rarity. Unfortunately, all mundane items in the system's item compendium are incorrectly given the common rarity, which means that all items that originated from this compendium pack are detected as magical. So you'll need to fix the rarity of these items if before you can use Detect Magic._
+  - _Note: Magic items are considered magical if the rarity is uncommon or higher. Mundane items should not have a rarity. Unfortunately, all mundane items in the system's item compendium are incorrectly given the common rarity, which means that all items that originated from this compendium pack would be detected as magical. Until this is fixed, common items are not considered magical to avoid a large number false positives._
 - **Detect Poison and Disease**
   - Detects all creatures that have a poisonous natural weapon attack or have the poisoned or diseased status effect.
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
