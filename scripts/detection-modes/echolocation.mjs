@@ -19,7 +19,7 @@ export class DetectionModeEcholocation extends DetectionModeBlindsight {
     _canDetect(visionSource, target) {
         // Echolocation doesn't work while deafened.
         const source = visionSource.object;
-        return !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF)
-            && super._canDetect(visionSource, target));
+        return !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF))
+            && super._canDetect(visionSource, target);
     }
 }
