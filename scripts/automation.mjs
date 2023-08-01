@@ -1,6 +1,9 @@
 import settings from "./settings.mjs";
 
+const RANGE_REGEX = /\b(\d+)\s+(?:feet|ft.?)\b/i;
+
 const effectMapping = new Map();
+const featMapping = new Map();
 
 function getInheritedDetectionModes(actor) {
     const modes = {};
@@ -17,8 +20,49 @@ function getInheritedDetectionModes(actor) {
         const mode = effectMapping.get(effect.name);
 
         if (mode) {
-            modes[mode.id] = mode.range;
+            if (mode[actor.type] === false) {
+                continue;
+            }
+
+            let range = mode.range;
+
+            if (range && typeof range !== "number") {
+                range = parseFloat(effect.description?.match(range)?.[1]);
+            }
+
+            if (range > 0 || mode.defaultRange) {
+                modes[mode.id] = Math.max(modes[mode.id] ?? 0, range || mode.defaultRange);
+            }
         }
+    }
+
+    for (const item of actor.items) {
+        if (item.type !== "feat") {
+            continue;
+        }
+
+        const mode = featMapping.get(item.name);
+
+        if (mode) {
+            if (mode[actor.type] === false) {
+                continue;
+            }
+
+            let range = mode.range;
+
+            if (range && typeof range !== "number") {
+                range = parseFloat(item.system.description.value?.match(range)?.[1]);
+            }
+
+            if (range > 0 || mode.defaultRange) {
+                modes[mode.id] = Math.max(modes[mode.id] ?? 0, range || mode.defaultRange);
+            }
+        }
+    }
+
+    if ("devilsSight_npc" in modes) {
+        modes.devilsSight = Math.max(modes.devilsSight ?? 0, modes[DetectionMode.BASIC_MODE_ID] ?? 0);
+        delete modes.devilsSight_npc;
     }
 
     if ("echolocation" in modes) {
@@ -186,7 +230,28 @@ Hooks.once("i18nInit", () => {
     ]) {
         effectMapping.set(name, {
             id: "detectMagic",
-            range: 30
+            range: RANGE_REGEX,
+            defaulRange: 30
+        });
+    }
+
+    for (const name of [
+        "Sense Magic",
+        game.i18n.localize("VISION5E.SenseMagic")
+    ]) {
+        effectMapping.set(name, {
+            id: "detectMagic",
+            range: RANGE_REGEX
+        });
+    }
+
+    for (const name of [
+        "Magic Awareness",
+        game.i18n.localize("VISION5E.MagicAwareness")
+    ]) {
+        effectMapping.set(name, {
+            id: "detectMagic",
+            range: 60
         });
     }
 
@@ -235,7 +300,8 @@ Hooks.once("i18nInit", () => {
         game.i18n.localize("VISION5E.Echolocation")
     ]) {
         effectMapping.set(name, {
-            id: "echolocation"
+            id: "echolocation",
+            range: 1
         });
     }
 
@@ -256,6 +322,58 @@ Hooks.once("i18nInit", () => {
         effectMapping.set(name, {
             id: "seeInvisibility",
             range: Infinity
+        });
+    }
+
+    for (const name of [
+        "Blindsense",
+        game.i18n.localize("VISION5E.Blindsense")
+    ]) {
+        featMapping.set(name, {
+            id: "blindsense",
+            range: RANGE_REGEX,
+            defaultRange: 10
+        });
+    }
+
+    for (const name of [
+        "Devil's Sight",
+        game.i18n.localize("VISION5E.DevilsSight")
+    ]) {
+        featMapping.set(name, {
+            id: "devilsSight_npc",
+            character: false,
+            range: 1
+        });
+    }
+
+    for (const name of [
+        "Ethereal Sight",
+        game.i18n.localize("VISION5E.EtherealSight")
+    ]) {
+        featMapping.set(name, {
+            id: "etherealSight",
+            range: RANGE_REGEX
+        });
+    }
+
+    for (const name of [
+        "Invocation: Devil's Sight",
+        game.i18n.localize("VISION5E.InvocationDevilsSight")
+    ]) {
+        featMapping.set(name, {
+            id: "devilsSight",
+            range: 120
+        });
+    }
+
+    for (const name of [
+        "Invocation: Witch Sight",
+        game.i18n.localize("VISION5E.InvocationWitchSight")
+    ]) {
+        featMapping.set(name, {
+            id: "witchSight",
+            range: 30
         });
     }
 });

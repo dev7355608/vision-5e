@@ -52,8 +52,9 @@ VisionSource.prototype._initializeVisionMode = function () {
     }
 
     // Call specific configuration for handling the blinded/deafened condition
-    if (this.data.blinded && this.detectionMode.type === DetectionMode.DETECTION_TYPES.SIGHT
-        || this.data.deafened && this.detectionMode.type === DetectionMode.DETECTION_TYPES.SOUND) {
+    if (this.detectionMode._applyBlindness?.(this) ?? (
+        this.data.blinded && this.detectionMode.type === DetectionMode.DETECTION_TYPES.SIGHT
+        || this.data.deafened && this.detectionMode.type === DetectionMode.DETECTION_TYPES.SOUND)) {
         this.visionMode = CONFIG.Canvas.visionModes.blindness;
         this.data.radius = this.data.externalRadius;
         this._configureColorAttributes(null);

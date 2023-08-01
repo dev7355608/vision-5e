@@ -9,7 +9,9 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 
 ---
 
+- **Blindsense**
 - **Blindsight**
+  - If the actor has the *Echolocation* or *Blind Senses* feat, Blindsight doesn't work while deafened.
   - _Note: Blindsight is blocked by total cover. There's no total cover wall restriction type. So Blindsight is blocked by sight-blocking walls, but doesn't go through proximity walls regardless of the distance to the wall. Therefore it is necessary to use proximity walls for glass windows._
 - **Darkvision**
   - Unless blinded Darkvision detects any creature that isn't invisible and doesn't have the `Umbral Sight` feat.
@@ -17,7 +19,7 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
 - **Detect Magic**
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
-  - _Note: Magic items are considered magical if the rarity is common or higher. Mundane items should not have a rarity. Unfortunately, all mundane items in the system's item compendium are incorrectly given the common rarity, which means that all items that originated from this compendium pack are detected as magical. So you'll need to fix the rarity of these items if before you can use Detect Magic._
+  - _Note: Magic items are considered magical if the rarity is uncommon or higher. Mundane items should not have a rarity. Unfortunately, all mundane items in the system's item compendium are incorrectly given the common rarity, which means that all items that originated from this compendium pack would be detected as magical. Until this is fixed, common items are not considered magical to avoid a large number false positives._
 - **Detect Poison and Disease**
   - Detects all creatures that have a poisonous natural weapon attack or have the poisoned or diseased status effect.
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
@@ -28,8 +30,8 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 - **Devil's Sight**
   - _Note: You need the [Limits](https://github.com/dev7355608/limits) module for magical darkness._
 - **Divine Sense**
-- **Echolocation**
-  - Detects the same things Blindsight does but doesn't work while deafened.
+- **Ethereal Sight**
+  - Allows detection of ethereal creatures.
 - **Ghostly Gaze**
   - Detects anything Darkvision would but isn't blocked by walls.
 - **Hearing**
@@ -43,6 +45,10 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 - **Truesight**
   - _Note: You need the [Limits](https://github.com/dev7355608/limits) module for magical darkness._
   - _Note: The original form of a shapechanger is not revealed nor highlighted with a special effect._
+- **Witch Sight**
+  - Allows detection of shapechangers.
+  - _Note: An actor is an shapechanger if it has the Shapechanger subtype or the Shapechanger feat._
+  - _Note: The original form of the shapechanger is not revealed._
 
 _Basic Sight_ no longer detects creatures that are illuminate by light sources, which is now handled by the _Light Perception_ detection mode. Light perception being a separate detection modes allows you to configure the range of light perception. _Basic Sight_ is renamed to _Darkvision_.
 
@@ -52,16 +58,17 @@ Detection modes of tokens are automatically configured based on the actor's sens
 
 A token gains ...
 
-- _Echolocation_ instead of _Blindsight_ if the actor has an active effect with the name `Echolocation`.
+- _Blindsense_ if the actor has a feat with the name `Blindsense`.
 - _Detect Evil and Good_ if the actor has an active effect with the name `Detect Evil and Good`.
-- _Detect Magic_ if the actor has an active effect with the name `Detect Magic`.
+- _Detect Magic_ if the actor has an active effect with the name `Detect Magic` or `Sense Magic`. An active effect named `Magic Awareness` grants 60 feet of Detect Magic.
 - _Detect Poison and Disease_ if the actor has an active effect with the name `Detect Poison and Disease`.
 - _Detect Thoughts_ if the actor has an active effect with the name `Detect Thoughts`.
-- _Devil's Sight_ if the actor has an active effect with the name `Devil's Sight`.
-  - _Note: Remove the effect that gives 120 feet Darkvision if it exists: Devil's Sight doesn't increase the range of Darkvision._
+- _Devil's Sight_ if the actor has a feat with the name `Invocation: Devil's Sight`. NPCs gain Devil's Sight equal to their Darkvision if they have the `Devil's Sight` feat.
 - _Divine Sense_ if the actor has an active effect with the name `Divine Sense`.
+- _Ethereal Sight_ if the actor has a feat with the name `Ethereal Sight` and its description contains the range in feet.
 - _Ghostly Gaze_ if the actor has an active effect with the name `Ghostly Gaze`.
 - _See Invisibility_ if the actor has an active effect with the name `See Invisibility`.
+- _Witch Sight_ if the actor has a feat with the name `Invocation: Witch Sight`.
 
 By default all tokens have hearing range of 30 feet. The default hearing range can be configured in the settings.
 

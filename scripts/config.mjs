@@ -1,3 +1,4 @@
+import { DetectionModeBlindsense } from "./detection-modes/blindsense.mjs";
 import { DetectionModeBlindsight } from "./detection-modes/blindsight.mjs";
 import { DetectionModeDarkvision } from "./detection-modes/darkvision.mjs";
 import { DetectionModeDetectEvilAndGood } from "./detection-modes/detect-evil-and-good.mjs";
@@ -7,12 +8,14 @@ import { DetectionModeDetectThoughts } from "./detection-modes/detect-thoughts.m
 import { DetectionModeDevilsSight } from "./detection-modes/devils-sight.mjs";
 import { DetectionModeDivineSense } from "./detection-modes/divine-sense.mjs";
 import { DetectionModeEcholocation } from "./detection-modes/echolocation.mjs";
+import { DetectionModeEtherealSight } from "./detection-modes/ethereral-sight.mjs";
 import { DetectionModeGhostlyGaze } from "./detection-modes/ghostly-gaze.mjs";
 import { DetectionModeHearing } from "./detection-modes/hearing.mjs";
 import { DetectionModeLightPerception } from "./detection-modes/light-perception.mjs";
 import { DetectionModeSeeInvisibility } from "./detection-modes/see-invisibility.mjs";
 import { DetectionModeTremorsense } from "./detection-modes/tremorsense.mjs";
 import { DetectionModeTruesight } from "./detection-modes/truesight.mjs";
+import { DetectionModeDetectWitchSight as DetectionModeWitchSight } from "./detection-modes/witch-sight.mjs";
 import { VisionModeBlindsight } from "./vision-modes/blindsight.mjs";
 import { VisionModeDetectEvilAndGood } from "./vision-modes/detect-evil-and-good.mjs";
 import { VisionModeDetectMagic } from "./vision-modes/detect-magic.mjs";
@@ -78,6 +81,7 @@ Hooks.on("applyTokenStatusEffect", (token, statusId, active) => {
 });
 
 Hooks.once("init", () => {
+    registerDetectionMode(new DetectionModeBlindsense());
     registerDetectionMode(new DetectionModeBlindsight());
     registerDetectionMode(new DetectionModeDarkvision());
     registerDetectionMode(new DetectionModeDetectEvilAndGood());
@@ -87,12 +91,14 @@ Hooks.once("init", () => {
     registerDetectionMode(new DetectionModeDevilsSight());
     registerDetectionMode(new DetectionModeDivineSense());
     registerDetectionMode(new DetectionModeEcholocation());
+    registerDetectionMode(new DetectionModeEtherealSight());
     registerDetectionMode(new DetectionModeGhostlyGaze());
     registerDetectionMode(new DetectionModeHearing());
     registerDetectionMode(new DetectionModeLightPerception());
     registerDetectionMode(new DetectionModeSeeInvisibility());
     registerDetectionMode(new DetectionModeTremorsense());
     registerDetectionMode(new DetectionModeTruesight());
+    registerDetectionMode(new DetectionModeWitchSight());
 
     renameVisionMode("darkvision", "DND5E.SenseDarkvision");
 
