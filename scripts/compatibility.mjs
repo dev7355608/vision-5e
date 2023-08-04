@@ -96,7 +96,7 @@ Hooks.once("init", () => {
     });
 });
 
-Hooks.once("setup", () => {
+Hooks.once("init", () => {
     if (!game.modules.get("dfreds-convenient-effects")?.active) {
         return;
     }
@@ -129,23 +129,31 @@ Hooks.once("setup", () => {
         }
     ];
 
-    const EffectDefinitions = game.dfreds.effects.constructor;
+    function addConditions() {
+        const EffectDefinitions = game.dfreds.effects.constructor;
 
-    EffectDefinitions.prototype.initialize = ((initialize) => function () {
-        this._conditions = this.conditions;
+        EffectDefinitions.prototype.initialize = ((initialize) => function () {
+            this._conditions = this.conditions;
 
-        for (const { id, name, icon } of customStatusEffects) {
-            this._conditions.push(this._effectHelpers.createActiveEffect({
-                name,
-                icon,
-                statuses: [id]
-            }));
-        }
+            for (const { id, name, icon } of customStatusEffects) {
+                this._conditions.push(this._effectHelpers.createActiveEffect({
+                    name,
+                    icon,
+                    statuses: [id]
+                }));
+            }
 
-        this._conditions.sort((e1, e2) => e1.name.localeCompare(e2.name, "en"));
+            this._conditions.sort((e1, e2) => e1.name.localeCompare(e2.name, "en"));
 
-        return initialize.call(this);
-    })(EffectDefinitions.prototype.initialize);
+            return initialize.call(this);
+        })(EffectDefinitions.prototype.initialize);
+    }
+
+    if (game.dfreds?.effects) {
+        addConditions();
+    } else {
+        Hooks.once("socketlib.ready", addConditions);
+    }
 
     game.settings.register(
         "vision-5e",
