@@ -1,13 +1,11 @@
 /**
- * The vision mode for Ghostly Gaze.
+ * The vision mode for Darkvision.
  */
-export class VisionModeGhostlyGaze extends VisionMode {
-    detectionMode = "ghostlyGaze";
-
+export class VisionModeDarkvision extends VisionMode {
     constructor() {
         super({
-            id: "ghostlyGaze",
-            label: "VISION5E.GhostlyGaze",
+            id: "darkvision",
+            label: "DND5E.SenseDarkvision",
             canvas: {
                 shader: ColorAdjustmentsSamplerShader,
                 uniforms: { contrast: 0, saturation: -1, exposure: 0 }

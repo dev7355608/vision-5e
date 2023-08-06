@@ -17,6 +17,7 @@ import { DetectionModeTremorsense } from "./detection-modes/tremorsense.mjs";
 import { DetectionModeTruesight } from "./detection-modes/truesight.mjs";
 import { DetectionModeDetectWitchSight as DetectionModeWitchSight } from "./detection-modes/witch-sight.mjs";
 import { VisionModeBlindsight } from "./vision-modes/blindsight.mjs";
+import { VisionModeDarkvision } from "./vision-modes/darkvision.mjs";
 import { VisionModeDetectEvilAndGood } from "./vision-modes/detect-evil-and-good.mjs";
 import { VisionModeDetectMagic } from "./vision-modes/detect-magic.mjs";
 import { VisionModeDetectPoisonAndDisease } from "./vision-modes/detect-poison-and-disease.mjs";
@@ -100,9 +101,8 @@ Hooks.once("init", () => {
     registerDetectionMode(new DetectionModeTruesight());
     registerDetectionMode(new DetectionModeWitchSight());
 
-    renameVisionMode("darkvision", "DND5E.SenseDarkvision");
-
     registerVisionMode(new VisionModeBlindsight());
+    registerVisionMode(new VisionModeDarkvision());
     registerVisionMode(new VisionModeDetectEvilAndGood());
     registerVisionMode(new VisionModeDetectMagic());
     registerVisionMode(new VisionModeDetectPoisonAndDisease());
