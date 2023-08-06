@@ -740,6 +740,7 @@ Object.defineProperties(Token.prototype, {
                 if (this.visible && this.renderable) {
                     token.updateTransform();
                     token.border?.render(renderer);
+                    token.tooltip?.render(renderer);
                     token.target?.render(renderer);
                 }
                 return render.call(this, renderer);
