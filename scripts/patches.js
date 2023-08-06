@@ -611,6 +611,7 @@ TokenDocument.prototype._prepareDetectionModes = function () {
 Object.defineProperties(Token.prototype, {
     isVisible: {
         get: ((isVisible) => function () {
+            const wasImpreciseVisible = this.impreciseVisible;
             this.detectionFilter = undefined;
             this.impreciseVisible = false;
             const visible = isVisible.call(this);
@@ -622,6 +623,7 @@ Object.defineProperties(Token.prototype, {
                 this.detectionFilter = DetectionModeLightPerception.getDetectionFilter();
                 this.impreciseVisible = false;
             }
+            if (wasImpreciseVisible !== this.impreciseVisible) this._refreshTarget();
             return visible;
         })(Object.getOwnPropertyDescriptor(Token.prototype, "isVisible").get),
         configurable: true,
@@ -646,7 +648,9 @@ Object.defineProperties(Token.prototype, {
 
             mesh.visible = false;
             mesh.alpha = 0;
-            mesh.eventMode = "none";
+            mesh.eventMode = "static";
+            mesh.cursor = "pointer";
+            mesh.hitArea = new PIXI.Rectangle();
 
             loadTexture(CONFIG.Token.documentClass.DEFAULT_ICON)
                 .then((texture) => {
@@ -659,10 +663,79 @@ Object.defineProperties(Token.prototype, {
 
                         mesh.width = width * s;
                         mesh.height = height * s;
-                        mesh.x = this.x + (w - mesh.width) / 2;
-                        mesh.y = this.y + (h - mesh.height) / 2;
+
+                        const dx = (w - mesh.width) / 2;
+                        const dy = (h - mesh.height) / 2;
+
+                        mesh.x = this.x + dx;
+                        mesh.y = this.y + dy;
+                        mesh.hitArea.x = -dx / s;
+                        mesh.hitArea.y = -dy / s;
+                        mesh.hitArea.width = w / s;
+                        mesh.hitArea.height = h / s;
                     }
                 });
+
+            const permissions = {
+                hoverIn: () => true,
+                hoverOut: () => true,
+                clickLeft: () => true,
+                clickLeft2: () => false,
+                clickRight: () => false,
+                clickRight2: () => true,
+                dragStart: () => false
+            };
+            const callbacks = {
+                hoverIn: (event) => {
+                    if (event.buttons & 0x01) return;
+                    this.layer._impreciseHover = this;
+                },
+                hoverOut: (event) => {
+                    if (this.layer._impreciseHover === this) {
+                        this.layer._impreciseHover = null;
+                    }
+                },
+                clickLeft: (event) => {
+                    event.stopPropagation();
+                    if (game.activeTool === "target") {
+                        this.setTarget(!this.isTargeted, { releaseOthers: !event.shiftKey });
+                        return;
+                    }
+                    const hud = this.layer.hud;
+                    if (hud) hud.clear();
+                    if (this.controlled) {
+                        if (event.shiftKey) this.release();
+                    }
+                    else this.control({ releaseOthers: !event.shiftKey });
+                },
+                clickLeft2: null,
+                clickRight: null,
+                clickRight2: (event) => {
+                    event.stopPropagation();
+                    if (this.isOwner && game.user.can("TOKEN_CONFIGURE")) return;
+                    this.setTarget(!this.targeted.has(game.user), { releaseOthers: !event.shiftKey });
+                },
+                dragLeftStart: null,
+                dragLeftMove: null,
+                dragLeftDrop: null,
+                dragLeftCancel: null,
+                dragRightStart: null,
+                dragRightMove: null,
+                dragRightDrop: null,
+                dragRightCancel: null,
+                longPress: null
+            };
+            const options = { target: null };
+            const mgr = new MouseInteractionManager(mesh, canvas.stage, permissions, callbacks, options);
+            mesh.mouseInteractionManager = mgr.activate();
+
+            mesh.render = ((render, token) => function (renderer) {
+                if (this.visible && this.renderable) {
+                    token.updateTransform();
+                    token.target?.render(renderer);
+                }
+                return render.call(this, renderer);
+            })(mesh.render, this);
 
             Object.defineProperty(this, "_impreciseMesh", {
                 value: mesh,
@@ -677,6 +750,16 @@ Object.defineProperties(Token.prototype, {
         enumerable: false
     },
 });
+
+Token.prototype._getBorderColor = ((_getBorderColor) => function (options) {
+    let color = _getBorderColor.call(this, options);
+
+    if (color !== null && this.impreciseVisible) {
+        color = CONFIG.Canvas.dispositionColors.INACTIVE;
+    }
+
+    return color;
+})(Token.prototype._getBorderColor);
 
 Token.prototype._renderDetectionFilter = function (renderer) {
     const filter = this.detectionFilter;
@@ -738,7 +821,8 @@ Hooks.on("tearDownTokenLayer", (layer) => {
 });
 
 Hooks.on("drawToken", (token) => {
-    token.layer._impreciseMeshes ??= token.layer.addChild(new PIXI.Container());
+    token.layer._impreciseMeshes ??= token.layer.addChildAt(new PIXI.Container(), token.layer.getChildIndex(token.layer.objects));
+    token.layer._impreciseMeshes.eventMode = "static";
     token.layer._impreciseMeshes.addChild(token._impreciseMesh);
 });
 
@@ -750,10 +834,59 @@ Hooks.on("refreshToken", (token) => {
 
     mesh.width = width * s;
     mesh.height = height * s;
-    mesh.x = token.x + (w - mesh.width) / 2;
-    mesh.y = token.y + (h - mesh.height) / 2;
+
+    const dx = (w - mesh.width) / 2;
+    const dy = (h - mesh.height) / 2;
+
+    mesh.x = token.x + dx;
+    mesh.y = token.y + dy;
+    mesh.hitArea.x = -dx / s;
+    mesh.hitArea.y = -dy / s;
+    mesh.hitArea.width = w / s;
+    mesh.hitArea.height = h / s;
 });
 
 Hooks.on("destroyToken", (token) => {
-    token._impreciseMesh.destroy();
+    if (token._impreciseMesh?.destroyed === false) {
+        token._impreciseMesh.destroy();
+    }
 });
+
+TokenLayer.prototype.targetObjects = function ({ x, y, width, height }, { releaseOthers = true } = {}) {
+    const user = game.user;
+
+    // Get the set of targeted tokens
+    const targets = this.placeables.filter(obj => {
+        if (!(obj.visible || obj.impreciseVisible)) return false;
+        let c = obj.center;
+        return Number.between(c.x, x, x + width) && Number.between(c.y, y, y + height);
+    });
+
+    // Maybe release other targets
+    if (releaseOthers) {
+        for (let t of user.targets) {
+            if (!targets.includes(t)) t.setTarget(false, { releaseOthers: false, groupSelection: true });
+        }
+    }
+
+    // Acquire targets for tokens which are not yet targeted
+    targets.forEach(t => {
+        if (!user.targets.has(t)) t.setTarget(true, { releaseOthers: false, groupSelection: true });
+    });
+
+    // Broadcast the target change
+    user.broadcastActivity({ targets: user.targets.ids });
+
+    // Return the number of targeted tokens
+    return user.targets.size;
+};
+
+ClientKeybindings._onTarget = function (context) {
+    if (!canvas.ready) return false;
+    const layer = canvas.activeLayer;
+    if (!(layer instanceof TokenLayer)) return false;
+    const hovered = layer.hover ?? layer._impreciseHover;
+    if (!hovered) return false;
+    hovered.setTarget(!hovered.isTargeted, { releaseOthers: !context.isShift });
+    return true;
+};
