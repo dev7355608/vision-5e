@@ -623,7 +623,10 @@ Object.defineProperties(Token.prototype, {
                 this.detectionFilter = DetectionModeLightPerception.getDetectionFilter();
                 this.impreciseVisible = false;
             }
-            if (wasImpreciseVisible !== this.impreciseVisible) this._refreshTarget();
+            if (wasImpreciseVisible !== this.impreciseVisible) {
+                this._refreshBorder();
+                this._refreshTarget();
+            }
             return visible;
         })(Object.getOwnPropertyDescriptor(Token.prototype, "isVisible").get),
         configurable: true,
@@ -688,12 +691,16 @@ Object.defineProperties(Token.prototype, {
             const callbacks = {
                 hoverIn: (event) => {
                     if (event.buttons & 0x01) return;
+                    this._impreciseHover = true;
                     this.layer._impreciseHover = this;
+                    this.renderFlags.set({ refreshState: true });
                 },
                 hoverOut: (event) => {
+                    this._impreciseHover = false;
                     if (this.layer._impreciseHover === this) {
                         this.layer._impreciseHover = null;
                     }
+                    this.renderFlags.set({ refreshState: true });
                 },
                 clickLeft: (event) => {
                     event.stopPropagation();
@@ -732,6 +739,7 @@ Object.defineProperties(Token.prototype, {
             mesh.render = ((render, token) => function (renderer) {
                 if (this.visible && this.renderable) {
                     token.updateTransform();
+                    token.border?.render(renderer);
                     token.target?.render(renderer);
                 }
                 return render.call(this, renderer);
@@ -751,7 +759,9 @@ Object.defineProperties(Token.prototype, {
     },
 });
 
-Token.prototype._getBorderColor = ((_getBorderColor) => function (options) {
+Token.prototype._getBorderColor = ((_getBorderColor) => function (options = {}) {
+    options.hover ??= this.hover || this._impreciseHover;
+
     let color = _getBorderColor.call(this, options);
 
     if (color !== null && this.impreciseVisible) {
@@ -826,7 +836,7 @@ Hooks.on("drawToken", (token) => {
     token.layer._impreciseMeshes.addChild(token._impreciseMesh);
 });
 
-Hooks.on("refreshToken", (token) => {
+Hooks.on("refreshToken", (token, flags) => {
     const mesh = token._impreciseMesh;
     const { w, h } = token;
     const { width, height } = mesh.texture;
@@ -844,6 +854,12 @@ Hooks.on("refreshToken", (token) => {
     mesh.hitArea.y = -dy / s;
     mesh.hitArea.width = w / s;
     mesh.hitArea.height = h / s;
+
+    if (flags.refreshVisibility && token.border) {
+        token.border.visible = (token.visible || token.impreciseVisible) && token.renderable
+            && (token.controlled || token.hover || token._impreciseHover || token.layer.highlightObjects)
+            && !((token.document.disposition === CONST.TOKEN_DISPOSITIONS.SECRET) && !token.isOwner);
+    }
 });
 
 Hooks.on("destroyToken", (token) => {
