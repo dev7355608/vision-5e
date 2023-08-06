@@ -599,7 +599,7 @@ TokenDocument.prototype._prepareDetectionModes = function () {
 
     const lightId = DetectionMode.LIGHT_MODE_ID;
     const lightMode = this.detectionModes.find(m => m.id === lightId);
-    if (!lightMode) this.detectionModes.push({ id: lightId, enabled: true, range: Infinity });
+    if (!lightMode) this.detectionModes.push({ id: lightId, enabled: true, range: 1e15 });
 
     const basicId = DetectionMode.BASIC_MODE_ID;
     const basicMode = this.detectionModes.find(m => m.id === basicId);

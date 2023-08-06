@@ -9,7 +9,7 @@ function getInheritedDetectionModes(actor) {
     const modes = {};
     const senses = actor.system.attributes.senses;
 
-    modes.lightPerception = Infinity;
+    modes.lightPerception = 1e15;
     modes[DetectionMode.BASIC_MODE_ID] = senses.darkvision;
     modes.seeAll = senses.truesight;
     modes.blindsight = senses.blindsight;
@@ -321,7 +321,7 @@ Hooks.once("i18nInit", () => {
     ]) {
         effectMapping.set(name, {
             id: "seeInvisibility",
-            range: Infinity
+            range: 1e15
         });
     }
 
@@ -408,7 +408,7 @@ Hooks.on("renderTokenConfig", (sheet, html) => {
                         </select>
                     </div>
                     <div class="detection-mode-range">
-                        <input type="number" value="${range !== Infinity ? range : ""}" disabled
+                        <input type="number" value="${range < 1e15 ? range : ""}" disabled
                             class="vision-5e--range" placeholder="&#xF534;">
                     </div>
                     <div class="detection-mode-enabled">
