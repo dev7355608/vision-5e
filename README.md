@@ -11,7 +11,7 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 
 - **Blindsense**
 - **Blindsight**
-  - If the actor has the *Echolocation* or *Blind Senses* feat, Blindsight doesn't work while deafened.
+  - If the actor has the _Echolocation_ or _Blind Senses_ feat, Blindsight doesn't work while deafened.
   - _Note: Blindsight is blocked by total cover. There's no total cover wall restriction type. So Blindsight is blocked by sight-blocking walls, but doesn't go through proximity walls regardless of the distance to the wall. Therefore it is necessary to use proximity walls for glass windows._
 - **Darkvision**
   - Unless blinded Darkvision detects any creature that isn't invisible and doesn't have the `Umbral Sight` feat.
@@ -63,7 +63,8 @@ A token gains ...
 - _Detect Magic_ if the actor has an active effect with the name `Detect Magic` or `Sense Magic`. An active effect named `Magic Awareness` grants 60 feet of Detect Magic.
 - _Detect Poison and Disease_ if the actor has an active effect with the name `Detect Poison and Disease`.
 - _Detect Thoughts_ if the actor has an active effect with the name `Detect Thoughts`.
-- _Devil's Sight_ if the actor has a feat with the name `Invocation: Devil's Sight`. NPCs gain Devil's Sight equal to their Darkvision if they have the `Devil's Sight` feat.
+- _Devil's Sight_ if the actor has a feat with the name `Invocation: Devil's Sight` or an active effect with the name `Devil's Sight`. NPCs gain Devil's Sight equal to their Darkvision if they have the `Devil's Sight` feat.
+  - _Note: Remove the effect that gives 120 feet Darkvision from the active effect if it exists: Devil's Sight doesn't increase the range of Darkvision._
 - _Divine Sense_ if the actor has an active effect with the name `Divine Sense`.
 - _Ethereal Sight_ if the actor has a feat with the name `Ethereal Sight` and its description contains the range in feet.
 - _Ghostly Gaze_ if the actor has an active effect with the name `Ghostly Gaze`.
