@@ -166,7 +166,7 @@ Hooks.once("init", () => {
         }
     );
 
-    Hooks.once("dfreds-convenient-effects.ready", async () => {
+    async function addStatusEffects() {
         if (!game.users.activeGM?.isSelf) {
             return;
         }
@@ -187,6 +187,14 @@ Hooks.once("init", () => {
             statusEffects.sort((a, b) => a.localeCompare(b, "en"));
             await game.settings.set("vision-5e", "compatibility.dfreds-convenient-effects", compatibility);
             ui.notifications.warn("Foundry must be reloaded to update token status effects.", { permanent: true });
+        }
+    }
+
+    Hooks.once("dfreds-convenient-effects.ready", () => {
+        if (game.ready) {
+            addStatusEffects();
+        } else {
+            Hooks.once("ready", addStatusEffects);
         }
     });
 });
