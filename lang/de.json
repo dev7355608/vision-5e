@@ -12,7 +12,7 @@
     "VISION5E.Ethereal": "Ätherisch",
     "VISION5E.EtherealSight": "Ätherische Sicht",
     "VISION5E.GhostlyGaze": "Geisterhafter Blick",
-    "VISION5E.Hearing": "Gehör",
+    "VISION5E.Hearing": "Hören",
     "VISION5E.Inaudible": "Lautlos",
     "VISION5E.InvocationDevilsSight": "Anrufung: Teufelssicht",
     "VISION5E.InvocationWitchSight": "Anrufung: Hexensicht",
@@ -24,5 +24,5 @@
     "VISION5E.SenseMagic": "Magie spüren",
     "VISION5E.WitchSight": "Hexensicht",
     "VISION5E.Settings.DefaultHearingRangeN": "Standard-Hörweite",
-    "VISION5E.Settings.DefaultHearingRangeL": "Legt fest, wie weit Spielfiguren standardmäßig Gehör haben. Erfordert Neuladen."
+    "VISION5E.Settings.DefaultHearingRangeL": "Legt fest, wie weit Spielfiguren standardmäßig hören können. Erfordert Neuladen."
 }
