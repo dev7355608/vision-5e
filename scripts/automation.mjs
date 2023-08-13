@@ -233,6 +233,48 @@ Hooks.on("deleteActiveEffect", (effect) => {
     }
 });
 
+Hooks.on("createItem", (item) => {
+    if (item.type !== "feat") {
+        return;
+    }
+
+    const parent = item.parent;
+
+    if (parent instanceof Actor) {
+        if (getFeat(item.name)) {
+            resetActiveTokens(parent);
+        }
+    }
+});
+
+Hooks.on("updateItem", (item, changes) => {
+    if (item.type !== "feat") {
+        return;
+    }
+
+    const parent = item.parent;
+
+    if (parent instanceof Actor) {
+        if (getFeat(item.name) || "name" in changes) {
+            resetActiveTokens(parent);
+        }
+    }
+});
+
+Hooks.on("deleteItem", (item) => {
+    if (item.type !== "feat") {
+        return;
+    }
+
+    const parent = item.parent;
+
+    if (parent instanceof Actor) {
+        if (getFeat(item.name)) {
+            resetActiveTokens(parent);
+        }
+    }
+});
+
 Hooks.once("init", () => {
     registerEffect([
         "Detect Evil and Good",
