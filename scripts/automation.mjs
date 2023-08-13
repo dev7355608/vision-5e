@@ -239,7 +239,8 @@ Hooks.once("init", () => {
         "Gutes und Böses entdecken"
     ], {
         id: "detectEvilAndGood",
-        range: 30
+        range: RANGE_REGEX,
+        defaultRange: 30
     });
 
     registerEffect([
@@ -248,7 +249,7 @@ Hooks.once("init", () => {
     ], {
         id: "detectMagic",
         range: RANGE_REGEX,
-        defaulRange: 30
+        defaultRange: 30
     });
 
     registerEffect([
@@ -272,7 +273,8 @@ Hooks.once("init", () => {
         "Gift und Krankheit entdecken"
     ], {
         id: "detectPoisonAndDisease",
-        range: 30
+        range: RANGE_REGEX,
+        defaultRange: 30
     });
 
     registerEffect([
@@ -280,7 +282,8 @@ Hooks.once("init", () => {
         "Gedanken wahrnehmen"
     ], {
         id: "detectThoughts",
-        range: 30
+        range: RANGE_REGEX,
+        defaultRange: 30
     });
 
     registerEffect([
