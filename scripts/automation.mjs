@@ -5,6 +5,26 @@ const RANGE_REGEX = /\b(\d+)\s+(?:feet|ft.?)\b/i;
 const effectMapping = new Map();
 const featMapping = new Map();
 
+function registerEffect(names, data) {
+    for (const name of names) {
+        effectMapping.set(name.toLowerCase(), data);
+    }
+}
+
+function getEffect(name) {
+    return effectMapping.get(name.toLowerCase());
+}
+
+function registerFeat(names, data) {
+    for (const name of names) {
+        featMapping.set(name.toLowerCase(), data);
+    }
+}
+
+function getFeat(name) {
+    return featMapping.get(name.toLowerCase());
+}
+
 function getInheritedDetectionModes(actor) {
     const modes = {};
     const senses = actor.system.attributes.senses;
@@ -17,7 +37,7 @@ function getInheritedDetectionModes(actor) {
     modes.hearing = settings.defaultHearingRange;
 
     for (const effect of actor.appliedEffects) {
-        const mode = effectMapping.get(effect.name);
+        const mode = getEffect(effect.name);
 
         if (mode) {
             if (mode[actor.type] === false) {
@@ -41,7 +61,7 @@ function getInheritedDetectionModes(actor) {
             continue;
         }
 
-        const mode = featMapping.get(item.name);
+        const mode = getFeat(item.name);
 
         if (mode) {
             if (mode[actor.type] === false) {
@@ -187,7 +207,7 @@ Hooks.on("createActiveEffect", (effect) => {
     const target = effect.target;
 
     if (target instanceof Actor) {
-        if (effectMapping.has(effect.name)) {
+        if (getEffect(effect.name)) {
             resetActiveTokens(target);
         }
     }
@@ -197,7 +217,7 @@ Hooks.on("updateActiveEffect", (effect, changes) => {
     const target = effect.target;
 
     if (target instanceof Actor) {
-        if (effectMapping.has(effect.name) || "name" in changes) {
+        if (getEffect(effect.name) || "name" in changes) {
             resetActiveTokens(target);
         }
     }
@@ -207,175 +227,143 @@ Hooks.on("deleteActiveEffect", (effect) => {
     const target = effect.target;
 
     if (target instanceof Actor) {
-        if (effectMapping.has(effect.name)) {
+        if (getEffect(effect.name)) {
             resetActiveTokens(target);
         }
     }
 });
 
-Hooks.once("i18nInit", () => {
-    for (const name of [
+Hooks.once("init", () => {
+    registerEffect([
         "Detect Evil and Good",
-        game.i18n.localize("VISION5E.DetectEvilAndGood")
-    ]) {
-        effectMapping.set(name, {
-            id: "detectEvilAndGood",
-            range: 30
-        });
-    }
+        "Gutes und Böses entdecken"
+    ], {
+        id: "detectEvilAndGood",
+        range: 30
+    });
 
-    for (const name of [
+    registerEffect([
         "Detect Magic",
-        game.i18n.localize("VISION5E.DetectMagic")
-    ]) {
-        effectMapping.set(name, {
-            id: "detectMagic",
-            range: RANGE_REGEX,
-            defaulRange: 30
-        });
-    }
+        "Magie entdecken"
+    ], {
+        id: "detectMagic",
+        range: RANGE_REGEX,
+        defaulRange: 30
+    });
 
-    for (const name of [
+    registerEffect([
         "Sense Magic",
-        game.i18n.localize("VISION5E.SenseMagic")
-    ]) {
-        effectMapping.set(name, {
-            id: "detectMagic",
-            range: RANGE_REGEX
-        });
-    }
+        "Magie spüren"
+    ], {
+        id: "detectMagic",
+        range: RANGE_REGEX
+    });
 
-    for (const name of [
+    registerEffect([
         "Magic Awareness",
-        game.i18n.localize("VISION5E.MagicAwareness")
-    ]) {
-        effectMapping.set(name, {
-            id: "detectMagic",
-            range: 60
-        });
-    }
+        "Magische Wahrnehmung"
+    ], {
+        id: "detectMagic",
+        range: 60
+    });
 
-    for (const name of [
+    registerEffect([
         "Detect Poison and Disease",
-        game.i18n.localize("VISION5E.DetectPoisonAndDisease")
-    ]) {
-        effectMapping.set(name, {
-            id: "detectPoisonAndDisease",
-            range: 30
-        });
-    }
+        "Gift und Krankheit entdecken"
+    ], {
+        id: "detectPoisonAndDisease",
+        range: 30
+    });
 
-    for (const name of [
+    registerEffect([
         "Detect Thoughts",
-        game.i18n.localize("VISION5E.DetectThoughts")
-    ]) {
-        effectMapping.set(name, {
-            id: "detectThoughts",
-            range: 30
-        });
-    }
+        "Gedanken wahrnehmen"
+    ], {
+        id: "detectThoughts",
+        range: 30
+    });
 
-    for (const name of [
+    registerEffect([
         "Devil's Sight",
-        game.i18n.localize("VISION5E.DevilsSight")
-    ]) {
-        effectMapping.set(name, {
-            id: "devilsSight",
-            range: 120
-        });
-    }
+        "Teufelssicht"
+    ], {
+        id: "devilsSight",
+        range: 120
+    });
 
-    for (const name of [
+    registerEffect([
         "Divine Sense",
-        game.i18n.localize("VISION5E.DivineSense")
-    ]) {
-        effectMapping.set(name, {
-            id: "divineSense",
-            range: 60
-        });
-    }
+        "Göttliches Gespür"
+    ], {
+        id: "divineSense",
+        range: 60
+    });
 
-    for (const name of [
+    registerEffect([
         "Echolocation",
-        game.i18n.localize("VISION5E.Echolocation")
-    ]) {
-        effectMapping.set(name, {
-            id: "echolocation",
-            range: 1
-        });
-    }
+        "Echolot"
+    ], {
+        id: "echolocation",
+        range: 1
+    });
 
-    for (const name of [
+    registerEffect([
         "Ghostly Gaze",
-        game.i18n.localize("VISION5E.GhostlyGaze")
-    ]) {
-        effectMapping.set(name, {
-            id: "ghostlyGaze",
-            range: 30
-        });
-    }
+        "Geisterhafter Blick"
+    ], {
+        id: "ghostlyGaze",
+        range: 30
+    });
 
-    for (const name of [
+    registerEffect([
         "See Invisibility",
-        game.i18n.localize("VISION5E.SeeInvisibility")
-    ]) {
-        effectMapping.set(name, {
-            id: "seeInvisibility",
-            range: 1e15
-        });
-    }
+        "Unsichtbares sehen"
+    ], {
+        id: "seeInvisibility",
+        range: 1e15
+    });
 
-    for (const name of [
+    registerFeat([
         "Blindsense",
-        game.i18n.localize("VISION5E.Blindsense")
-    ]) {
-        featMapping.set(name, {
-            id: "blindsense",
-            range: RANGE_REGEX,
-            defaultRange: 10
-        });
-    }
+        "Blindgespür"
+    ], {
+        id: "blindsense",
+        range: RANGE_REGEX,
+        defaultRange: 10
+    });
 
-    for (const name of [
+    registerFeat([
         "Devil's Sight",
-        game.i18n.localize("VISION5E.DevilsSight")
-    ]) {
-        featMapping.set(name, {
-            id: "devilsSight_npc",
-            character: false,
-            range: 1
-        });
-    }
+        "Teufelssicht"
+    ], {
+        id: "devilsSight_npc",
+        character: false,
+        range: 1
+    });
 
-    for (const name of [
+    registerFeat([
         "Ethereal Sight",
-        game.i18n.localize("VISION5E.EtherealSight")
-    ]) {
-        featMapping.set(name, {
-            id: "etherealSight",
-            range: RANGE_REGEX
-        });
-    }
+        "Ätherische Sicht"
+    ], {
+        id: "etherealSight",
+        range: RANGE_REGEX
+    });
 
-    for (const name of [
+    registerFeat([
         "Invocation: Devil's Sight",
-        game.i18n.localize("VISION5E.InvocationDevilsSight")
-    ]) {
-        featMapping.set(name, {
-            id: "devilsSight",
-            range: 120
-        });
-    }
+        "Anrufung: Teufelssicht"
+    ], {
+        id: "devilsSight",
+        range: 120
+    });
 
-    for (const name of [
+    registerFeat([
         "Invocation: Witch Sight",
-        game.i18n.localize("VISION5E.InvocationWitchSight")
-    ]) {
-        featMapping.set(name, {
-            id: "witchSight",
-            range: 30
-        });
-    }
+        "Anrufung: Hexensicht"
+    ], {
+        id: "witchSight",
+        range: 30
+    });
 });
 
 Hooks.on("renderTokenConfig", (sheet, html) => {
