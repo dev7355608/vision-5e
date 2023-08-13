@@ -287,14 +287,6 @@ Hooks.once("init", () => {
     });
 
     registerEffect([
-        "Devil's Sight",
-        "Teufelssicht"
-    ], {
-        id: "devilsSight",
-        range: 120
-    });
-
-    registerEffect([
         "Divine Sense",
         "Göttliches Gespür"
     ], {
