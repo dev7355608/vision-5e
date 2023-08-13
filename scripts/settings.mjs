@@ -27,6 +27,10 @@ Hooks.once("init", () => {
 });
 
 Hooks.on("renderSettingsConfig", (app, html) => {
+    if (!game.user.isGM) {
+        return;
+    }
+
     const defaultHearingRange = html[0].querySelector(`input[name="vision-5e.defaultHearingRange"]`);
 
     defaultHearingRange.value ||= 0;
