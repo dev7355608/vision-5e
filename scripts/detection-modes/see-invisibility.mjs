@@ -7,7 +7,7 @@ export class DetectionModeSeeInvisibility extends DetectionMode {
     constructor() {
         super({
             id: "seeInvisibility",
-            label: "DETECTION.SeeInvisibility",
+            label: "VISION5E.SeeInvisibility",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
             walls: false,
             angle: false
