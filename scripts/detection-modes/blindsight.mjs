@@ -7,6 +7,15 @@ export class DetectionModeBlindsight extends DetectionMode {
     useThreshold = false;
     priority = 500;
 
+    static #echolocationNames = new Set([
+        "Echolocation",
+        "Echolot",
+        "Écholocalisation", "Écholocation",
+        "Blind Senses",
+        "Blinde Sinne",
+        "Sens aveugles",
+    ].map(name => name.toLocaleLowerCase()));
+
     constructor(data = {}, options = {}) {
         super(foundry.utils.mergeObject({
             id: "blindsight",
@@ -32,13 +41,8 @@ export class DetectionModeBlindsight extends DetectionMode {
         if (source instanceof Token) {
             const actor = source.actor;
             if (actor && (actor.type === "character" || actor.type === "npc")) {
-                const localizedBlindSenses = game.i18n.localize("VISION5E.BlindSenses");
-                const localizedEcholocation = game.i18n.localize("VISION5E.Echolocation");
                 for (const item of actor.items) {
-                    if (item.type === "feat" && (item.name === "Blind Senses"
-                        || item.name === localizedBlindSenses
-                        || item.name === "Echolocation"
-                        || item.name === localizedEcholocation)) {
+                    if (item.type === "feat" && DetectionModeBlindsight.#echolocationNames.has(item.name.toLowerCase())) {
                         return false;
                     }
                 }
