@@ -31,8 +31,8 @@ Hooks.on("renderTokenHUD", (hud, html) => {
         visionModes.push(visionMode);
     }
 
-    if (!visionModes.find((m) => m.id === "darkvision")) {
-        visionModes.push(CONFIG.Canvas.visionModes.basic);
+    if (!visionModes.length) {
+        return;
     }
 
     visionModes.sort((a, b) => game.i18n.localize(a.label).localeCompare(game.i18n.localize(b.label), game.i18n.lang));
@@ -59,7 +59,7 @@ Hooks.on("renderTokenHUD", (hud, html) => {
         <div class="vision-5e vision-modes">
             ${visionModes.map(mode => `
             <div class="vision-5e vision-mode ${mode.id === token.document.sight.visionMode ? "active" : ""} flexrow" data-vision-mode="${mode.id}">
-                <span class="vision-5e vision-mode-label">${game.i18n.localize(mode.id !== "basic" ? mode.label : CONFIG.Canvas.visionModes.darkvision.label)}</span>
+                <span class="vision-5e vision-mode-label">${game.i18n.localize(mode.label)}</span>
             </div>`).join("")}
         </div>
     `);

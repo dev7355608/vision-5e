@@ -165,9 +165,9 @@ Hooks.once("init", () => {
 
                 this.sight.range = basicMode?.range ?? 0;
 
-                if (this.sight.visionMode === "darkvision" && this.sight.range === 0) {
+                if (this.sight.range === 0) {
                     this.sight.visionMode = "basic";
-                    foundry.utils.mergeObject(this.sight, CONFIG.Canvas.visionModes.darkvision.vision.defaults);
+                    foundry.utils.mergeObject(this.sight, CONFIG.Canvas.visionModes.basic.vision.defaults);
                 }
 
                 for (const mode of inheritedModes) {
