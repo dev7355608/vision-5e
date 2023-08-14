@@ -278,7 +278,8 @@ Hooks.on("deleteItem", (item) => {
 Hooks.once("init", () => {
     registerEffect([
         "Detect Evil and Good",
-        "Gutes und Böses entdecken"
+        "Gutes und Böses entdecken",
+        "Détection du mal et du bien",
     ], {
         id: "detectEvilAndGood",
         range: RANGE_REGEX,
@@ -286,8 +287,9 @@ Hooks.once("init", () => {
     });
 
     registerEffect([
-        "Detect Magic",
-        "Magie entdecken"
+        "Detect Magic", "Sense Magic",
+        "Magie entdecken", "Magie spüren",
+        "Détection de la magie", "Perception de la magie",
     ], {
         id: "detectMagic",
         range: RANGE_REGEX,
@@ -295,16 +297,9 @@ Hooks.once("init", () => {
     });
 
     registerEffect([
-        "Sense Magic",
-        "Magie spüren"
-    ], {
-        id: "detectMagic",
-        range: RANGE_REGEX
-    });
-
-    registerEffect([
         "Magic Awareness",
-        "Magische Wahrnehmung"
+        "Magische Wahrnehmung",
+        "Conscience magique"
     ], {
         id: "detectMagic",
         range: 60
@@ -312,7 +307,8 @@ Hooks.once("init", () => {
 
     registerEffect([
         "Detect Poison and Disease",
-        "Gift und Krankheit entdecken"
+        "Gift und Krankheit entdecken",
+        "Détection du poison et des maladies",
     ], {
         id: "detectPoisonAndDisease",
         range: RANGE_REGEX,
@@ -321,7 +317,8 @@ Hooks.once("init", () => {
 
     registerEffect([
         "Detect Thoughts",
-        "Gedanken wahrnehmen"
+        "Gedanken wahrnehmen",
+        "Détection des pensées"
     ], {
         id: "detectThoughts",
         range: RANGE_REGEX,
@@ -330,7 +327,8 @@ Hooks.once("init", () => {
 
     registerEffect([
         "Divine Sense",
-        "Göttliches Gespür"
+        "Göttliches Gespür",
+        "Perception divine", "Perception divine [Paladin]",
     ], {
         id: "divineSense",
         range: 60
@@ -338,7 +336,8 @@ Hooks.once("init", () => {
 
     registerEffect([
         "Echolocation",
-        "Echolot"
+        "Echolot",
+        "Écholocalisation", "Écholocation",
     ], {
         id: "echolocation",
         range: 1
@@ -346,7 +345,8 @@ Hooks.once("init", () => {
 
     registerEffect([
         "Ghostly Gaze",
-        "Geisterhafter Blick"
+        "Geisterhafter Blick",
+        "Regard fantomatique"
     ], {
         id: "ghostlyGaze",
         range: 30
@@ -354,7 +354,8 @@ Hooks.once("init", () => {
 
     registerEffect([
         "See Invisibility",
-        "Unsichtbares sehen"
+        "Unsichtbares sehen",
+        "Détection de l'invisibilité",
     ], {
         id: "seeInvisibility",
         range: 1e15
@@ -362,7 +363,8 @@ Hooks.once("init", () => {
 
     registerFeat([
         "Blindsense",
-        "Blindgespür"
+        "Blindgespür",
+        "Perception aveugle", "Perception aveugle [Roublard]"
     ], {
         id: "blindsense",
         range: RANGE_REGEX,
@@ -371,7 +373,9 @@ Hooks.once("init", () => {
 
     registerFeat([
         "Devil's Sight",
-        "Teufelssicht"
+        "Teufelssicht",
+        "Vision de diable", "Vision du diable",
+        "Vue de diable", "Vue du diable",
     ], {
         id: "devilsSight_npc",
         character: false,
@@ -380,7 +384,8 @@ Hooks.once("init", () => {
 
     registerFeat([
         "Ethereal Sight",
-        "Ätherische Sicht"
+        "Ätherische Sicht",
+        "Vision éthérée",
     ], {
         id: "etherealSight",
         range: RANGE_REGEX
@@ -388,7 +393,11 @@ Hooks.once("init", () => {
 
     registerFeat([
         "Invocation: Devil's Sight",
-        "Anrufung: Teufelssicht"
+        "Anrufung: Teufelssicht",
+        "Manifestation : Vision de diable", "Manifestation : Vision de diable [Occultiste]",
+        "Manifestation : Vision du diable", "Manifestation : Vision du diable [Occultiste]",
+        "Manifestation : Vue de diable", "Manifestation : Vue de diable [Occultiste]",
+        "Manifestation : Vue du diable", "Manifestation : Vue du diable [Occultiste]",
     ], {
         id: "devilsSight",
         range: 120
@@ -396,7 +405,9 @@ Hooks.once("init", () => {
 
     registerFeat([
         "Invocation: Witch Sight",
-        "Anrufung: Hexensicht"
+        "Anrufung: Hexensicht",
+        "Manifestation : Vision de sorcier", "Manifestation : Vision de sorcier [Occultiste]",
+        "Manifestation : Vision sorcière", "Manifestation : Vision sorcière [Occultiste]",
     ], {
         id: "witchSight",
         range: 30
