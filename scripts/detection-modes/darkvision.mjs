@@ -8,6 +8,12 @@ export class DetectionModeDarkvision extends DetectionModeBasicSight {
      */
     static friendlyUmbralSight = true;
 
+    static #umbralSightNames = new Set([
+        "Umbral Sight",
+        "Düstersicht",
+        "Vision des ombres",
+    ].map(name => name.toLocaleLowerCase()));
+
     constructor(data = {}, options = {}) {
         super(foundry.utils.mergeObject({
             id: DetectionMode.BASIC_MODE_ID,
@@ -26,11 +32,8 @@ export class DetectionModeDarkvision extends DetectionModeBasicSight {
             if (actor && (actor.type === "character" || actor.type === "npc")
                 && (this.constructor.friendlyUmbralSight
                     || visionSource.object.document.disposition !== target.document.disposition)) {
-                const localizedUmbralSight = game.i18n.localize("VISION5E.UmbralSight");
-
                 for (const item of actor.items) {
-                    if (item.type === "feat" && (item.name === "Umbral Sight"
-                        || item.name === localizedUmbralSight)) {
+                    if (item.type === "feat" && DetectionModeDarkvision.#umbralSightNames.has(item.name.toLowerCase())) {
                         return false;
                     }
                 }
