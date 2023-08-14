@@ -1,14 +1,14 @@
 {
   "VISION5E.Blindsense": "Perception aveugle",
   "VISION5E.BlindSenses": "Sens aveugles",
-  "VISION5E.Burrowing": "Fouissage",
+  "VISION5E.Burrowing": "Enfoui",
   "VISION5E.DetectEvilAndGood": "Détection du mal et du bien",
   "VISION5E.DetectMagic": "Détection de la magie",
   "VISION5E.DetectPoisonAndDisease": "Détection du poison et des maladies",
   "VISION5E.DetectThoughts": "Détection des pensées",
-  "VISION5E.DevilsSight": "Vision de diable",
+  "VISION5E.DevilsSight": "Vision du diable",
   "VISION5E.DivineSense": "Perception divine",
-  "VISION5E.Echolocation": "Écholocalisation",
+  "VISION5E.Echolocation": "Écholocation",
   "VISION5E.Ethereal": "Éthéré",
   "VISION5E.EtherealSight": "Vision éthérée",
   "VISION5E.GhostlyGaze": "Regard fantomatique",
@@ -24,5 +24,5 @@
   "VISION5E.UmbralSight": "Vision des ombres",
   "VISION5E.WitchSight": "Vision sorcière",
   "VISION5E.Settings.DefaultHearingRangeN": "Distance d'audition par défaut",
-  "VISION5E.Settings.DefaultHearingRangeL": "Configurez la distance jusqu'où les tokens peuvent entendre par défaut."
+  "VISION5E.Settings.DefaultHearingRangeL": "Configurez la distance jusqu'où les tokens peuvent entendre par défaut. Un redémarrage du monde est nécessaire."
 }
