@@ -6,6 +6,13 @@ export class DetectionModeDetectWitchSight extends DetectionMode {
     important = true;
     priority = -3000;
 
+    static #shapechangerNames = new Set([
+        "Shapechanger",
+        "Gestaltwandler",
+        "Métamorphe",
+    ].map(name => name.toLowerCase()));
+    static #shapechangerRegex = new RegExp(`\\b(?:${Array.from(this.#shapechangerNames).join("|")})\\b`, "i");
+
     constructor() {
         super({
             id: "witchSight",
@@ -30,14 +37,12 @@ export class DetectionModeDetectWitchSight extends DetectionMode {
         if (!actor) return false;
         const type = actor.type;
         if (type === "npc") {
-            const type = actor.system.details.type.subtype;
-            if (type?.match(/\b[Ss]hapechanger\b/)) return true;
+            const subtype = actor.system.details.type.subtype;
+            if (subtype.match(DetectionModeDetectWitchSight.#shapechangerRegex)) return true;
         }
         if (type === "npc" || type === "character") {
-            const localizedShapechanger = game.i18n.localize("VISION5E.Shapechanger");
             for (const item of actor.items) {
-                if (item.type === "feat" && (item.name === "Shapechanger"
-                    || item.name === localizedShapechanger)) {
+                if (item.type === "feat" && DetectionModeDetectWitchSight.#shapechangerNames.has(item.name.toLowerCase())) {
                     return true;
                 }
             }
