@@ -71,7 +71,9 @@ A token gains ...
 - _See Invisibility_ if the actor has an active effect with the name `See Invisibility`[\*](#translations).
 - _Witch Sight_ if the actor has a feat with the name `Invocation: Witch Sight`[\*](#translations).
 
-By default all tokens have hearing range of 30 feet. The default hearing range can be configured in the settings.
+By default all tokens have hearing range of 30 feet. The default hearing range can be configured in the module settings.
+
+If you use metric units, you need to change the units in the module settings.
 
 ---
 

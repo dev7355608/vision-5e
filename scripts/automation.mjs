@@ -1,11 +1,30 @@
 import settings from "./settings.mjs";
 
-const RANGE_REGEX = /\b(\d+)\s+(?:feet|ft.?)\b/i;
+const RANGE_REGEX = /\b([1-9]\d*)\b/i;
 
 const effectMapping = new Map();
 const featMapping = new Map();
 
+function feetToMeters(ft) {
+    return ft >= 1e15 ? 1e15 : ft * 3 / 10;
+}
+
+function convertRanges(data) {
+    if (settings.metric) {
+
+        if (typeof data.range === "number") {
+            data.range = feetToMeters(data.range);
+        }
+
+        if (typeof data.defaultRange === "number") {
+            data.defaultRange = feetToMeters(data.defaultRange);
+        }
+    }
+}
+
 function registerEffect(names, data) {
+    convertRanges(data);
+
     for (const name of names) {
         effectMapping.set(name.toLowerCase(), data);
     }
@@ -16,6 +35,8 @@ function getEffect(name) {
 }
 
 function registerFeat(names, data) {
+    convertRanges(data);
+
     for (const name of names) {
         featMapping.set(name.toLowerCase(), data);
     }

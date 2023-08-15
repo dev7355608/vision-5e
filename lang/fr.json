@@ -17,5 +17,6 @@
     "VISION5E.SeeInvisibility": "Détection de l'invisibilité",
     "VISION5E.WitchSight": "Vision sorcière",
     "VISION5E.Settings.DefaultHearingRangeN": "Distance d'audition par défaut",
-    "VISION5E.Settings.DefaultHearingRangeL": "Configurez la distance jusqu'où les tokens peuvent entendre par défaut. Un redémarrage du monde est nécessaire."
+    "VISION5E.Settings.DefaultHearingRangeL": "Configurez la distance jusqu'où les tokens peuvent entendre par défaut. Un redémarrage du monde est nécessaire.",
+    "VISION5E.Settings.UnitsL": "Configurez l'unité de longueur utilisée. Un redémarrage du monde est nécessaire."
 }
