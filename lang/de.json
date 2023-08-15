@@ -1,6 +1,5 @@
 {
     "VISION5E.Blindsense": "Blindgespür",
-    "VISION5E.BlindSenses": "Blinde Sinne",
     "VISION5E.Burrowing": "Grabend",
     "VISION5E.DetectEvilAndGood": "Gutes und Böses entdecken",
     "VISION5E.DetectMagic": "Magie entdecken",
@@ -14,14 +13,8 @@
     "VISION5E.GhostlyGaze": "Geisterhafter Blick",
     "VISION5E.Hearing": "Hören",
     "VISION5E.Inaudible": "Lautlos",
-    "VISION5E.InvocationDevilsSight": "Anrufung: Teufelssicht",
-    "VISION5E.InvocationWitchSight": "Anrufung: Hexensicht",
     "VISION5E.LightPerception": "Lichtwahrnehmung",
-    "VISION5E.MagicAwareness": "Magische Wahrnehmung",
     "VISION5E.SeeInvisibility": "Unsichtbares sehen",
-    "VISION5E.SenseMagic": "Magie spüren",
-    "VISION5E.Shapechanger": "Gestaltwandler",
-    "VISION5E.UmbralSight": "Düstersicht",
     "VISION5E.WitchSight": "Hexensicht",
     "VISION5E.Settings.DefaultHearingRangeN": "Standard-Hörweite",
     "VISION5E.Settings.DefaultHearingRangeL": "Legt fest, wie weit Spielfiguren standardmäßig hören können. Erfordert Neuladen."
