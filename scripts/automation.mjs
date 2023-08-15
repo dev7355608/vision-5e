@@ -85,11 +85,6 @@ function getInheritedDetectionModes(actor) {
         delete modes.devilsSight_npc;
     }
 
-    if ("echolocation" in modes) {
-        modes.echolocation = modes.blindsight;
-        delete modes.blindsight;
-    }
-
     return Object.entries(modes).filter(([id, range]) => id in CONFIG.Canvas.detectionModes
         && typeof range === "number" && (range > 0 || id === DetectionMode.BASIC_MODE_ID))
         .map(([id, range]) => ({ id, range, enabled: true }));
@@ -332,15 +327,6 @@ Hooks.once("init", () => {
     ], {
         id: "divineSense",
         range: 60
-    });
-
-    registerEffect([
-        "Echolocation",
-        "Echolot",
-        "Écholocalisation", "Écholocation",
-    ], {
-        id: "echolocation",
-        range: 1
     });
 
     registerEffect([
