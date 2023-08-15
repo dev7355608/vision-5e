@@ -11,10 +11,10 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 
 - **Blindsense**
 - **Blindsight**
-  - If the actor has the _Echolocation_ or _Blind Senses_ feat, Blindsight doesn't work while deafened.
+  - If the actor has the `Echolocation`[\*](#translations) or `Blind Senses`[\*](#translations) feat, Blindsight doesn't work while deafened.
   - _Note: Blindsight is blocked by total cover. There's no total cover wall restriction type. So Blindsight is blocked by sight-blocking walls, but doesn't go through proximity walls regardless of the distance to the wall. Therefore it is necessary to use proximity walls for glass windows._
 - **Darkvision**
-  - Unless blinded Darkvision detects any creature that isn't invisible and doesn't have the `Umbral Sight` feat.
+  - Unless blinded Darkvision detects any creature that isn't invisible and doesn't have the `Umbral Sight`[\*](#translations) feat.
 - **Detect Evil and Good**
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
 - **Detect Magic**
@@ -47,29 +47,29 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
   - _Note: The original form of a shapechanger is not revealed nor highlighted with a special effect._
 - **Witch Sight**
   - Allows detection of shapechangers.
-  - _Note: An actor is an shapechanger if it has the Shapechanger subtype or the Shapechanger feat._
+  - _Note: An actor is an shapechanger if it has the `Shapechanger`[\*](#translations) subtype or the `Shapechanger`[\*](#translations) feat._
   - _Note: The original form of the shapechanger is not revealed._
 
 _Basic Sight_ no longer detects creatures that are illuminate by light sources, which is now handled by the _Light Perception_ detection mode. Light perception being a separate detection modes allows you to configure the range of light perception. _Basic Sight_ is renamed to _Darkvision_.
 
 ---
 
-Detection modes of tokens are automatically configured based on the actor's senses. They are overridden by the token's detection modes though.
+Detection modes of tokens are automatically configured based on the actor's senses. They can be overridden by the token's detection modes though.
 
 A token gains ...
 
-- _Blindsense_ if the actor has a feat with the name `Blindsense`.
-- _Detect Evil and Good_ if the actor has an active effect with the name `Detect Evil and Good`.
-- _Detect Magic_ if the actor has an active effect with the name `Detect Magic` or `Sense Magic`. An active effect named `Magic Awareness` grants 60 feet of Detect Magic.
-- _Detect Poison and Disease_ if the actor has an active effect with the name `Detect Poison and Disease`.
-- _Detect Thoughts_ if the actor has an active effect with the name `Detect Thoughts`.
-- _Devil's Sight_ if the actor has a feat with the name `Invocation: Devil's Sight`. NPCs gain Devil's Sight equal to their Darkvision if they have the `Devil's Sight` feat.
+- _Blindsense_ if the actor has a feat with the name `Blindsense`[\*](#translations).
+- _Detect Evil and Good_ if the actor has an active effect with the name `Detect Evil and Good`[\*](#translations).
+- _Detect Magic_ if the actor has an active effect with the name `Detect Magic`[\*](#translations) or `Sense Magic`[\*](#translations). An active effect named `Magic Awareness`[\*](#translations) grants 60 feet of Detect Magic.
+- _Detect Poison and Disease_ if the actor has an active effect with the name `Detect Poison and Disease`[\*](#translations).
+- _Detect Thoughts_ if the actor has an active effect with the name `Detect Thoughts`[\*](#translations).
+- _Devil's Sight_ if the actor has a feat with the name `Invocation: Devil's Sight`[\*](#translations). NPCs gain Devil's Sight equal to their Darkvision if they have the `Devil's Sight`[\*](#translations) feat.
   - _Note: Remove the active effect that gives 120 feet Darkvision from the *Invocation: Devil's Sight* feat if it exists: Devil's Sight doesn't increase the range of Darkvision._
-- _Divine Sense_ if the actor has an active effect with the name `Divine Sense`.
-- _Ethereal Sight_ if the actor has a feat with the name `Ethereal Sight` and its description contains the range in feet.
-- _Ghostly Gaze_ if the actor has an active effect with the name `Ghostly Gaze`.
-- _See Invisibility_ if the actor has an active effect with the name `See Invisibility`.
-- _Witch Sight_ if the actor has a feat with the name `Invocation: Witch Sight`.
+- _Divine Sense_ if the actor has an active effect with the name `Divine Sense`[\*](#translations).
+- _Ethereal Sight_ if the actor has a feat with the name `Ethereal Sight`[\*](#translations) and its description contains the range in feet.
+- _Ghostly Gaze_ if the actor has an active effect with the name `Ghostly Gaze`[\*](#translations).
+- _See Invisibility_ if the actor has an active effect with the name `See Invisibility`[\*](#translations).
+- _Witch Sight_ if the actor has a feat with the name `Invocation: Witch Sight`[\*](#translations).
 
 By default all tokens have hearing range of 30 feet. The default hearing range can be configured in the settings.
 
@@ -98,3 +98,30 @@ If a token doesn't produce any sound, give it the _inaudible_ status effect, whi
 _Detect Evil and Good_, _Detect Magic_, _Detect Poison and Disease_, _Detect Thoughts_, _Divine Sense_, _Hearing_, and _Tremorsense_ are all imprecise senses. They do not reveal any information about the detected token except for size, location (position and elevation), and player targets.
 
 ![hud](images/imprecise.gif)
+
+---
+
+### Translations
+
+| English                     | _Source_                              | German                          | French                                                                                                                                      |
+| --------------------------- | ------------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Blind Senses`              | _Monster feat_                        | `Blinde Sinne`                  | `Sens aveugles`                                                                                                                             |
+| `Blindsense`                | _Rogue feat_                          | `Blindgespür`                   | `Perception aveugle`                                                                                                                        |
+| `Detect Evil and Good`      | _Spell_                               | `Gutes und Böses entdecken`     | `Détection du mal et du bien`                                                                                                               |
+| `Detect Magic`              | _Spell_                               | `Magie entdecken`               | `Détection de la magie`                                                                                                                     |
+| `Detect Poison and Disease` | _Spell_                               | `Gift und Krankheit entdecken`  | `Détection du poison et des maladies`                                                                                                       |
+| `Detect Thoughts`           | _Spell_                               | `Gedanken wahrnehmen`           | `Détection des pensées`                                                                                                                     |
+| `Divine Sense`              | _Paladin feat_                        | `Göttliches Gespür`             | `Perception divine`                                                                                                                         |
+| `Devil's Sight`             | _Monster feat_                        | `Teufelssicht`                  | `Vision de diable` / `Vision du diable` / `Vue de diable` / `Vue du diable`                                                                 |
+| `Echolocation`              | _Monster feat_                        | `Echolot`                       | `Écholocation` / `Écholocalisation`                                                                                                         |
+| `Ethereal Sight`            | _Monster feat_                        | `Ätherische Sicht`              | `Vision éthérée`                                                                                                                            |
+| `Invocation: Devil's Sight` | _Warlock invocation_                  | `Anrufung: Teufelssicht`        | `Manifestation : Vision de diable` / `Manifestation : Vision du diable` / `Manifestation : Vue de diable` / `Manifestation : Vue du diable` |
+| `Invocation: Ghostly Gaze`  | _Warlock invocation_                  | `Anrufung: Geisterhafter Blick` | `Manifestation : Regard fantomatique`                                                                                                       |
+| `Invocation: Witch Sight`   | _Warlock invocation_                  | `Anrufung: Hexensicht`          | `Manifestation : Vision de sorcier` / `Manifestation : Vision sorcière`                                                                     |
+| `Magic Awareness`           | _Barbarian (Path of Wild Magic) feat_ | `Magische Wahrnehmung`          | `Conscience magique`                                                                                                                        |
+| `See Invisibility`          | _Spell_                               | `Unsichtbares sehen`            | `Détection de l'invisibilité`                                                                                                               |
+| `Sense Magic`               | _Monster feat_                        | `Magie spüren`                  | `Détection de la magie` / `Perception de la magie`                                                                                          |
+| `Shapechanger`              | _Monster feat/subtype_                | `Gestaltwandler`                | `Métamorphe`                                                                                                                                |
+| `Umbral Sight`              | _Ranger (Gloomstalker) feat_          | `Düstersicht`                   | `Vision des ombres`                                                                                                                         |
+
+_Note: The class name in brackets in French feats is ignored. It can be present but doesn't have to be. It doesn't affect the automation._
