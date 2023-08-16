@@ -60,7 +60,7 @@ A token gains ...
 
 - _Blindsense_ if the actor has a feat with the name `Blindsense`[\*](#translations).
 - _Detect Evil and Good_ if the actor has an active effect with the name `Detect Evil and Good`[\*](#translations).
-- _Detect Magic_ if the actor has an active effect with the name `Detect Magic`[\*](#translations) or `Sense Magic`[\*](#translations). An active effect named `Magic Awareness`[\*](#translations) grants 60 feet of Detect Magic.
+- _Detect Magic_ if the actor has an active effect with the name `Detect Magic`[\*](#translations) or a feat with the name `Sense Magic`[\*](#translations). The description of the `Sense Magic`[\*](#translations) feat must contains the range. An active effect named `Magic Awareness`[\*](#translations) grants 60 feet of Detect Magic.
 - _Detect Poison and Disease_ if the actor has an active effect with the name `Detect Poison and Disease`[\*](#translations).
 - _Detect Thoughts_ if the actor has an active effect with the name `Detect Thoughts`[\*](#translations).
 - _Devil's Sight_ if the actor has a feat with the name `Invocation: Devil's Sight`[\*](#translations). NPCs gain Devil's Sight equal to their Darkvision if they have the `Devil's Sight`[\*](#translations) feat.

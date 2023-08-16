@@ -277,27 +277,16 @@ Hooks.once("init", () => {
         "Détection du mal et du bien",
     ], {
         id: "detectEvilAndGood",
-        range: RANGE_REGEX,
-        defaultRange: 30
+        range: 30
     });
 
     registerEffect([
-        "Detect Magic", "Sense Magic",
-        "Magie entdecken", "Magie spüren",
-        "Détection de la magie", "Perception de la magie",
+        "Detect Magic",
+        "Magie entdecken",
+        "Détection de la magie"
     ], {
         id: "detectMagic",
-        range: RANGE_REGEX,
-        defaultRange: 30
-    });
-
-    registerEffect([
-        "Magic Awareness",
-        "Magische Wahrnehmung",
-        "Conscience magique"
-    ], {
-        id: "detectMagic",
-        range: 60
+        range: 30
     });
 
     registerEffect([
@@ -306,8 +295,7 @@ Hooks.once("init", () => {
         "Détection du poison et des maladies",
     ], {
         id: "detectPoisonAndDisease",
-        range: RANGE_REGEX,
-        defaultRange: 30
+        range: 30
     });
 
     registerEffect([
@@ -316,8 +304,7 @@ Hooks.once("init", () => {
         "Détection des pensées"
     ], {
         id: "detectThoughts",
-        range: RANGE_REGEX,
-        defaultRange: 30
+        range: 30
     });
 
     registerEffect([
@@ -339,6 +326,15 @@ Hooks.once("init", () => {
     });
 
     registerEffect([
+        "Magic Awareness",
+        "Magische Wahrnehmung",
+        "Conscience magique"
+    ], {
+        id: "detectMagic",
+        range: 60
+    });
+
+    registerEffect([
         "See Invisibility",
         "Unsichtbares sehen",
         "Détection de l'invisibilité",
@@ -353,8 +349,7 @@ Hooks.once("init", () => {
         "Perception aveugle", "Perception aveugle [Roublard]"
     ], {
         id: "blindsense",
-        range: RANGE_REGEX,
-        defaultRange: 10
+        range: 10
     });
 
     registerFeat([
@@ -365,7 +360,7 @@ Hooks.once("init", () => {
     ], {
         id: "devilsSight_npc",
         character: false,
-        range: 1
+        range: 0.01
     });
 
     registerFeat([
@@ -397,6 +392,15 @@ Hooks.once("init", () => {
     ], {
         id: "witchSight",
         range: 30
+    });
+
+    registerFeat([
+        "Sense Magic",
+        "Magie spüren",
+        "Détection de la magie", "Perception de la magie",
+    ], {
+        id: "detectMagic",
+        range: RANGE_REGEX
     });
 });
 
