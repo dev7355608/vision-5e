@@ -330,9 +330,9 @@ Hooks.once("init", () => {
     });
 
     registerEffect([
-        "Ghostly Gaze",
-        "Geisterhafter Blick",
-        "Regard fantomatique"
+        "Invocation: Ghostly Gaze",
+        "Anrufung: Geisterhafter Blick",
+        "Manifestation : Regard fantomatique", "Manifestation : Regard fantomatique [Occultiste]",
     ], {
         id: "ghostlyGaze",
         range: 30
