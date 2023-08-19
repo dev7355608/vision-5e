@@ -177,6 +177,8 @@ Hooks.once("init", () => {
             const actor = this.actor;
 
             if (this.sight.enabled && actor && (actor.type === "character" || actor.type === "npc")) {
+                this.sight.visionMode = this._source.sight.visionMode;
+
                 const inheritedModes = getInheritedDetectionModes(actor);
                 const basicId = CONFIG.Canvas.visionModes[this.sight.visionMode]?.detectionMode
                     ?? DetectionMode.BASIC_MODE_ID;
@@ -186,9 +188,17 @@ Hooks.once("init", () => {
 
                 this.sight.range = basicMode?.range ?? 0;
 
-                if (this.sight.range === 0) {
-                    this.sight.visionMode = "basic";
-                    foundry.utils.mergeObject(this.sight, CONFIG.Canvas.visionModes.basic.vision.defaults);
+                if (this.sight.range === 0 || this.sight.visionMode === "basic") {
+                    const basicId = DetectionMode.BASIC_MODE_ID;
+                    const basicMode =
+                        this.detectionModes.find((m) => m.id === basicId)
+                        ?? inheritedModes.find((m) => m.id === basicId);
+
+                    this.sight.range = basicMode?.range ?? 0;
+                    this.sight.visionMode = "darkvision";
+                    foundry.utils.mergeObject(this.sight, this.sight.range > 0
+                        ? CONFIG.Canvas.visionModes.darkvision.vision.defaults
+                        : { attenuation: 0, contrast: 0, saturation: -1, brightness: 0 });
                 }
 
                 for (const mode of inheritedModes) {
