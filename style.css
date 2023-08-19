@@ -54,6 +54,10 @@ input[type="number"].vision-5e--range::placeholder {
     opacity: 1;
 }
 
+#token-hud .vision-5e.vision-mode.active:not([data-vision-mode="darkvision"]):hover {
+    text-decoration: line-through;
+}
+
 #token-hud .vision-5e.vision-mode-label {
     flex: 1;
     text-align: left;

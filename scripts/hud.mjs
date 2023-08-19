@@ -77,15 +77,13 @@ Hooks.on("renderTokenHUD", (hud, html) => {
         element => element.addEventListener("click", (event) => {
             event.preventDefault();
 
-            const visionMode = event.currentTarget.dataset.visionMode;
-            const update = { sight: { visionMode } };
+            const target = event.currentTarget
+            const visionMode = target.classList.contains("active")
+                ? visionModes.find((m) => m.id === "darkvision") ? "darkvision" : "basic"
+                : target.dataset.visionMode;
+            const update = { sight: { visionMode, range: 0 } };
 
             foundry.utils.mergeObject(update.sight, CONFIG.Canvas.visionModes[visionMode].vision.defaults);
-
-            if (visionMode === "basic") {
-                foundry.utils.mergeObject(update.sight, CONFIG.Canvas.visionModes.darkvision.vision.defaults);
-            }
-
             token.document.update(update);
             hud.clear();
         })
