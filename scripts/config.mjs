@@ -114,6 +114,7 @@ Hooks.once("init", () => {
     registerVisionMode(new VisionModeTremorsense());
     registerVisionMode(new VisionModeTruesight());
 
+    const initializeVision = () => canvas.perception.update({ initializeVision: true });
     const refreshVision = () => canvas.perception.update({ refreshVision: true });
 
     registerSpecialStatusEffect("BURROW", "burrow", (token) => {
@@ -128,7 +129,7 @@ Hooks.once("init", () => {
     registerSpecialStatusEffect("DEAF", "deaf", refreshVision);
     registerSpecialStatusEffect("DISEASE", "disease", refreshVision);
     registerSpecialStatusEffect("FLY", "fly", refreshVision);
-    registerSpecialStatusEffect("ETHEREAL", "ethereal", refreshVision);
+    registerSpecialStatusEffect("ETHEREAL", "ethereal", initializeVision);
     registerSpecialStatusEffect("INAUDIBLE", "inaudible", refreshVision);
     registerSpecialStatusEffect("POISON", "poison", refreshVision);
 
@@ -165,6 +166,31 @@ VisionSource.prototype._initialize = ((_initialize) => function (data) {
 
     _initialize.call(this, data);
 })(VisionSource.prototype._initialize);
+
+
+Hooks.on("initializeVisionSources", () => {
+    const object = canvas.effects.visibility.visionModeData.source?.object;
+
+    if (object instanceof Token && object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
+        const lightingOptions = foundry.utils.deepClone(canvas.effects.visibility.visionModeData.activeLightingOptions);
+
+        canvas.effects.resetPostProcessingFilters();
+
+        for (const layer of ["background", "illumination", "coloration"]) {
+            const options = lightingOptions[layer];
+
+            if (!options.postProcessingModes.includes("SATURATION")) {
+                options.postProcessingModes.push("SATURATION");
+            }
+
+            options.uniforms.saturation = -1;
+
+            canvas.effects.activatePostProcessingFilters(layer, options.postProcessingModes, options.uniforms);
+        }
+
+        canvas.effects.visibility.visionModeData.activeLightingOptions = lightingOptions;
+    }
+});
 
 Hooks.once("i18nInit", () => {
     function sort(modes) {
