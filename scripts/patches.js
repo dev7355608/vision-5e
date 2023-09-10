@@ -907,3 +907,106 @@ ClientKeybindings._onTarget = function (context) {
     hovered.setTarget(!hovered.isTargeted, { releaseOthers: !context.isShift });
     return true;
 };
+
+ClockwiseSweepPolygon.prototype._executeSweep = ((_executeSweep) => function () {
+    _executeSweep.call(this);
+
+    this._closePoints();
+})(ClockwiseSweepPolygon.prototype._executeSweep);
+
+ClockwiseSweepPolygon.prototype._getInternalEdgeCollisions = function (ray, internalEdges) {
+    const collisions = [];
+    const A = ray.A;
+    const B = ray.B;
+    for (let edge of internalEdges) {
+        const x = foundry.utils.lineLineIntersection(A, B, edge.A, edge.B);
+        if (!x) continue;
+
+        const c = PolygonVertex.fromPoint(x);
+        c.attachEdge(edge, 0);
+        // Use the unrounded intersection point
+        c.x = x.x;
+        c.y = x.y;
+        c._d2 = Math.pow(c.x - A.x, 2) + Math.pow(c.y - A.y, 2);
+        c.isInternal = true;
+
+        collisions.push(c);
+    }
+
+    return collisions;
+};
+
+ClockwiseSweepPolygon.prototype.addPoint = function ({ x, y }) {
+    const points = this.points;
+    const m = points.length;
+
+    if (m >= 4) {
+        let x3 = points[m - 4];
+        let y3 = points[m - 3];
+        let x2 = points[m - 2];
+        let y2 = points[m - 1];
+        let x1 = x;
+        let y1 = y;
+
+        if (Math.abs(x1 - x2) > Math.abs(y1 - y2)) {
+            if ((x1 > x2) !== (x1 < x3)) {
+                if ((x2 > x1) === (x2 < x3)) {
+                    [x1, y1, x2, y2] = [x2, y2, x1, y1];
+                } else {
+                    [x1, y1, x2, y2, x3, y3] = [x3, y3, x1, y1, x2, y2];
+                }
+            }
+        } else if ((y1 > y2) !== (y1 < y3)) {
+            if ((y2 > y1) === (y2 < y3)) {
+                [x1, y1, x2, y2] = [x2, y2, x1, y1];
+            } else {
+                [x1, y1, x2, y2, x3, y3] = [x3, y3, x1, y1, x2, y2];
+            }
+        }
+
+        const a = y2 - y3;
+        const b = x3 - x2;
+        const c = (a * (x1 - x2)) + (b * (y1 - y2));
+
+        if ((c * c) / ((a * a) + (b * b)) >= 0.0625) {
+            points.push(x, y);
+        } else {
+            const dx = points[m - 4] - x;
+            const dy = points[m - 3] - y;
+
+            points.length -= 2;
+
+            if ((dx * dx) + (dy * dy) >= 0.0625) {
+                points.push(x, y);
+            }
+        }
+    } else if (m === 2) {
+        const dx = points[m - 2] - x;
+        const dy = points[m - 1] - y;
+
+        if ((dx * dx) + (dy * dy) >= 0.0625) {
+            points.push(x, y);
+        }
+    } else {
+        points.push(x, y);
+    }
+};
+
+ClockwiseSweepPolygon.prototype._closePoints = function () {
+    const points = this.points;
+
+    if (points.length < 6) {
+        points.length = 0;
+        return;
+    }
+
+    const [x1, y1, x2, y2] = points;
+
+    this.addPoint({ x: x1, y: y1 });
+    this.addPoint({ x: x2, y: y2 });
+
+    const m = points.length;
+
+    [points[0], points[1], points[2], points[3]] = [points[m - 4], points[m - 3], points[m - 2], points[m - 1]];
+    points.length -= 4;
+};
