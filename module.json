@@ -8,7 +8,7 @@
       "email": "dev7355608@gmail.com"
     }
   ],
-  "version": "1.10.2",
+  "version": "1.10.3",
   "compatibility": {
     "minimum": "11.299",
     "verified": "11.308"
@@ -57,8 +57,8 @@
   },
   "url": "https://github.com/dev7355608/vision-5e",
   "manifest": "https://github.com/dev7355608/vision-5e/releases/latest/download/module.json",
-  "download": "https://github.com/dev7355608/vision-5e/releases/download/v1.10.1/module.zip",
-  "changelog": "https://github.com/dev7355608/vision-5e/releases/tag/v1.10.1",
+  "download": "https://github.com/dev7355608/vision-5e/releases/download/v1.10.3/module.zip",
+  "changelog": "https://github.com/dev7355608/vision-5e/releases/tag/v1.10.3",
   "bugs": "https://github.com/dev7355608/vision-5e/issues",
   "readme": "https://raw.githubusercontent.com/dev7355608/vision-5e/main/README.md",
   "license": "https://raw.githubusercontent.com/dev7355608/vision-5e/main/LICENSE"
