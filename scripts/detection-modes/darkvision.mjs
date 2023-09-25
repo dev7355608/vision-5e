@@ -1,3 +1,5 @@
+import { createNameRegExp } from "../utils.js";
+
 /**
  * The detection mode for Darkvision.
  */
@@ -8,11 +10,11 @@ export class DetectionModeDarkvision extends DetectionModeBasicSight {
      */
     static friendlyUmbralSight = true;
 
-    static #umbralSightNames = new Set([
-        "Umbral Sight",
-        "Düstersicht",
-        "Vision des ombres",
-    ].map(name => name.toLocaleLowerCase()));
+    static #umbralSightRegex = createNameRegExp({
+        en: "Umbral Sight",
+        de: "Düstersicht",
+        fr: "Vision des ombres",
+    });
 
     constructor(data = {}, options = {}) {
         super(foundry.utils.mergeObject({
@@ -33,7 +35,7 @@ export class DetectionModeDarkvision extends DetectionModeBasicSight {
                 && (this.constructor.friendlyUmbralSight
                     || visionSource.object.document.disposition !== target.document.disposition)) {
                 for (const item of actor.items) {
-                    if (item.type === "feat" && DetectionModeDarkvision.#umbralSightNames.has(item.name.toLowerCase())) {
+                    if (item.type === "feat" && DetectionModeDarkvision.#umbralSightRegex.test(item.name)) {
                         return false;
                     }
                 }

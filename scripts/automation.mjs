@@ -1,4 +1,5 @@
 import settings from "./settings.mjs";
+import { getLowerCaseNameSet } from "./utils.js";
 
 const RANGE_REGEX = /\b([1-9]\d*)\b/i;
 
@@ -11,7 +12,6 @@ function feetToMeters(ft) {
 
 function convertRanges(data) {
     if (settings.metric) {
-
         if (typeof data.range === "number") {
             data.range = feetToMeters(data.range);
         }
@@ -22,11 +22,13 @@ function convertRanges(data) {
     }
 }
 
-function registerEffect(names, data) {
+function registerEffect(dictonary, data) {
     convertRanges(data);
 
-    for (const name of names) {
-        effectMapping.set(name.toLowerCase(), data);
+    for (const name of getLowerCaseNameSet(dictonary)) {
+        console.assert(!effectMapping.has(name));
+
+        effectMapping.set(name, data);
     }
 }
 
@@ -34,11 +36,13 @@ function getEffect(name) {
     return effectMapping.get(name.toLowerCase());
 }
 
-function registerFeat(names, data) {
+function registerFeat(dictonary, data) {
     convertRanges(data);
 
-    for (const name of names) {
-        featMapping.set(name.toLowerCase(), data);
+    for (const name of getLowerCaseNameSet(dictonary)) {
+        console.assert(!featMapping.has(name));
+
+        featMapping.set(name, data);
     }
 }
 
@@ -101,9 +105,9 @@ function getInheritedDetectionModes(actor) {
         }
     }
 
-    if ("devilsSight_npc" in modes) {
-        modes.devilsSight = Math.max(modes.devilsSight ?? 0, modes[DetectionMode.BASIC_MODE_ID] ?? 0);
-        delete modes.devilsSight_npc;
+    if ("_devilsSight" in modes) {
+        modes.devilsSight = Math.max(modes.devilsSight ?? 0, actor.type === "npc" ? modes[DetectionMode.BASIC_MODE_ID] ?? 0 : modes._devilsSight ?? 0);
+        delete modes._devilsSight;
     }
 
     return Object.entries(modes).filter(([id, range]) => id in CONFIG.Canvas.detectionModes
@@ -302,134 +306,164 @@ Hooks.on("deleteItem", (item) => {
 });
 
 Hooks.once("init", () => {
-    registerEffect([
-        "Detect Evil and Good",
-        "Gutes und Böses entdecken",
-        "Détection du mal et du bien",
-    ], {
+    registerEffect({
+        en: "Detect Evil and Good",
+        de: "Gutes und Böses entdecken",
+        fr: "Détection du mal et du bien",
+    }, {
         id: "detectEvilAndGood",
         range: 30
     });
 
-    registerEffect([
-        "Detect Magic",
-        "Magie entdecken",
-        "Détection de la magie"
-    ], {
+    registerEffect({
+        en: "Detect Magic",
+        de: "Magie entdecken",
+        fr: "Détection de la magie",
+    }, {
         id: "detectMagic",
         range: 30
     });
 
-    registerEffect([
-        "Detect Poison and Disease",
-        "Gift und Krankheit entdecken",
-        "Détection du poison et des maladies",
-    ], {
+    registerEffect({
+        en: "Detect Poison and Disease",
+        de: "Gift und Krankheit entdecken",
+        fr: "Détection du poison et des maladies",
+    }, {
         id: "detectPoisonAndDisease",
         range: 30
     });
 
-    registerEffect([
-        "Detect Thoughts",
-        "Gedanken wahrnehmen",
-        "Détection des pensées"
-    ], {
+    registerEffect({
+        en: "Detect Thoughts",
+        de: "Gedanken wahrnehmen",
+        fr: "Détection des pensées",
+    }, {
         id: "detectThoughts",
         range: 30
     });
 
-    registerEffect([
-        "Divine Sense",
-        "Göttliches Gespür",
-        "Perception divine", "Perception divine [Paladin]",
-    ], {
+    registerEffect({
+        en: "Divine Sense",
+        de: "Göttliches Gespür",
+        fr: ["Perception divine", ["", " [Paladin]"]],
+    }, {
         id: "divineSense",
         range: 60
     });
 
-    registerEffect([
-        "Invocation: Ghostly Gaze",
-        "Anrufung: Geisterhafter Blick",
-        "Manifestation : Regard fantomatique", "Manifestation : Regard fantomatique [Occultiste]",
-    ], {
+    registerEffect({
+        en: [
+            [["Eldritch ", ""], "Invocation", ["s", ""], ": Ghostly Gaze"],
+            "Eldritch Adept: Ghostly Gaze",
+            "Ghostly Gaze",
+        ],
+        de: [
+            [["Schauerliche ", ""], "Anrufung", ["en", ""], ": Geisterhafter Blick"],
+            "Schauerlicher Adept: Geisterhafter Blick",
+            "Geisterhafter Blick",
+        ],
+        fr: [
+            [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], "Regard fantomatique", ["", " [Occultiste]"]],
+            [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], "Regard fantomatique", ["", " [Occultiste]"]],
+            "Adepte occulte: Regard fantomatique",
+            "Regard fantomatique",
+        ],
+    }, {
         id: "ghostlyGaze",
         range: 30
     });
 
-    registerEffect([
-        "Magic Awareness",
-        "Magische Wahrnehmung",
-        "Conscience magique"
-    ], {
+    registerEffect({
+        en: "Magic Awareness",
+        de: "Magische Wahrnehmung",
+        fr: "Conscience magique",
+    }, {
         id: "detectMagic",
         range: 60
     });
 
-    registerEffect([
-        "See Invisibility",
-        "Unsichtbares sehen",
-        "Détection de l'invisibilité",
-    ], {
+    registerEffect({
+        en: "See Invisibility",
+        de: "Unsichtbares sehen",
+        fr: ["Détection de l", ["'", "’"], "invisibilité"],
+    }, {
         id: "seeInvisibility",
         range: 1e15
     });
 
-    registerFeat([
-        "Blindsense",
-        "Blindgespür",
-        "Perception aveugle", "Perception aveugle [Roublard]"
-    ], {
+    registerFeat({
+        en: "Blindsense",
+        de: "Blindgespür",
+        fr: ["Perception aveugle", ["", " [Roublard]"]],
+    }, {
         id: "blindsense",
         range: 10
     });
 
-    registerFeat([
-        "Devil's Sight",
-        "Teufelssicht",
-        "Vision de diable", "Vision du diable",
-        "Vue de diable", "Vue du diable",
-    ], {
-        id: "devilsSight_npc",
-        character: false,
-        range: 0.01
+    registerFeat({
+        en: ["Devil", ["'", "’"], "s Sight"],
+        de: "Teufelssicht",
+        fr: [["Vision", "Vue"], " ", ["de", "du"], " diable"],
+    }, {
+        id: "_devilsSight",
+        range: 120
     });
 
-    registerFeat([
-        "Ethereal Sight",
-        "Ätherische Sicht",
-        "Vision éthérée",
-    ], {
+    registerFeat({
+        en: "Ethereal Sight",
+        de: "Ätherische Sicht",
+        fr: [["Vision", "Vue"], " éthérée"],
+    }, {
         id: "etherealSight",
         range: RANGE_REGEX
     });
 
-    registerFeat([
-        "Invocation: Devil's Sight",
-        "Anrufung: Teufelssicht",
-        "Manifestation : Vision de diable", "Manifestation : Vision de diable [Occultiste]",
-        "Manifestation : Vision du diable", "Manifestation : Vision du diable [Occultiste]",
-        "Manifestation : Vue de diable", "Manifestation : Vue de diable [Occultiste]",
-        "Manifestation : Vue du diable", "Manifestation : Vue du diable [Occultiste]",
-    ], {
+    registerFeat({
+        en: [
+            [["Eldritch ", ""], "Invocation", ["s", ""], ": Devil", ["'", "’"], "s Sight"],
+            ["Eldritch Adept: Devil", ["'", "’"], "s Sight"],
+        ],
+        de: [
+            [["Schauerliche ", ""], "Anrufung", ["en", ""], ": Teufelssicht"],
+            "Schauerlicher Adept: Teufelssicht",
+        ],
+        fr: [
+            [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable", ["", " [Occultiste]"]],
+            [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable", ["", " [Occultiste]"]],
+            ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable"],
+        ],
+    }, {
         id: "devilsSight",
         range: 120
     });
 
-    registerFeat([
-        "Invocation: Witch Sight",
-        "Anrufung: Hexensicht",
-        "Manifestation : Vision de sorcier", "Manifestation : Vision de sorcier [Occultiste]",
-        "Manifestation : Vision sorcière", "Manifestation : Vision sorcière [Occultiste]",
-    ], {
+    registerFeat({
+        en: [
+            [["Eldritch ", ""], "Invocation", ["s", ""], ": Witch Sight"],
+            "Eldritch Adept: Witch Sight",
+            "Witch Sight",
+        ],
+        de: [
+            [["Schauerliche ", ""], "Anrufung", ["en", ""], ": Hexensicht"],
+            "Schauerlicher Adept: Hexensicht",
+            "Hexensicht",
+        ],
+        fr: [
+            [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"], ["", " [Occultiste]"]],
+            [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"], ["", " [Occultiste]"]],
+            ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
+            [["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
+        ]
+    }, {
         id: "witchSight",
         range: 30
     });
 
-    registerFeat([
-        "Sense Magic",
-        "Magie spüren",
-        "Détection de la magie", "Perception de la magie",
-    ], {
+    registerFeat({
+        fr: "Sense Magic",
+        de: "Magie spüren",
+        fr: [["Détection", "Perception"], " de la magie"],
+    }, {
         id: "detectMagic",
         range: RANGE_REGEX
     });

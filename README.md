@@ -16,12 +16,13 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 - **Darkvision**
   - Unless blinded Darkvision detects any creature that isn't invisible and doesn't have the `Umbral Sight`[\*](#translations) feat.
 - **Detect Evil and Good**
+  - _Note: PCs do not have a creature type like NPCs. The following races are detected: `Centaur`[\*](#translations), `Changeling`[\*](#translations), `Fairy`[\*](#translations), `Hexblood`[\*](#translations), and `Saytr`[\*](#translations)._
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
 - **Detect Magic**
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
   - _Note: Magic items are considered magical if the rarity is uncommon or higher. Mundane items should not have a rarity. Unfortunately, all mundane items in the system's item compendium are incorrectly given the common rarity, which means that all items that originated from this compendium pack would be detected as magical. Until this is fixed, common items are not considered magical to avoid a large number false positives._
 - **Detect Poison and Disease**
-  - Detects all creatures that have a poisonous natural weapon attack or have the poisoned or diseased status effect.
+  - Detects all creatures that have a poisonous natural weapon attack or have the _poisoned_ or _diseased_ status effect.
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
   - _Note: Some poisonous creatures might not be detected, because the Versatile Damage of the natural weapon attack is missing the `[poison]` flavor, which you'll need to fix yourself._
 - **Detect Thoughts**
@@ -63,13 +64,13 @@ A token gains ...
 - _Detect Magic_ if the actor has an active effect with the name `Detect Magic`[\*](#translations) or a feat with the name `Sense Magic`[\*](#translations). The description of the `Sense Magic`[\*](#translations) feat must contains the range. An active effect named `Magic Awareness`[\*](#translations) grants 60 feet of Detect Magic.
 - _Detect Poison and Disease_ if the actor has an active effect with the name `Detect Poison and Disease`[\*](#translations).
 - _Detect Thoughts_ if the actor has an active effect with the name `Detect Thoughts`[\*](#translations).
-- _Devil's Sight_ if the actor has a feat with the name `Invocation: Devil's Sight`[\*](#translations). NPCs gain Devil's Sight equal to their Darkvision if they have the `Devil's Sight`[\*](#translations) feat.
+- _Devil's Sight_ if the actor has a feat with the name `Devil's Sight`[\*](#translations), `Invocation: Devil's Sight`, `Invocations: Devil's Sight`, `Eldritch Invocation: Devil's Sight`, `Eldritch Invocations: Devil's Sight`, or `Eldritch Adept: Devil's Sight`. NPCs gain _Devil's Sight_ equal to their _Darkvision_ if they have the `Devil's Sight`[\*](#translations) feat.
   - _Note: Remove the active effect that gives 120 feet Darkvision from the *Invocation: Devil's Sight* feat if it exists: Devil's Sight doesn't increase the range of Darkvision._
 - _Divine Sense_ if the actor has an active effect with the name `Divine Sense`[\*](#translations).
 - _Ethereal Sight_ if the actor has a feat with the name `Ethereal Sight`[\*](#translations) and its description contains the range in feet.
-- _Ghostly Gaze_ if the actor has an active effect with the name `Invocation: Ghostly Gaze`[\*](#translations).
+- _Ghostly Gaze_ if the actor has an active effect with the name `Ghostly Gaze`[\*](#translations), `Invocation: Ghostly Gaze`, `Invocations: Ghostly Gaze`, `Eldritch Invocation: Ghostly Gaze`, `Eldritch Invocations: Ghostly Gaze`, or `Eldritch Adept: Ghostly Gaze`.
 - _See Invisibility_ if the actor has an active effect with the name `See Invisibility`[\*](#translations).
-- _Witch Sight_ if the actor has a feat with the name `Invocation: Witch Sight`[\*](#translations).
+- _Witch Sight_ if the actor has a feat with the name `Witch Sight`[\*](#translations), `Invocation: Witch Sight`, `Invocations: Witch Sight`, `Eldritch Invocation: Witch Sight`, `Eldritch Invocations: Witch Sight`, or `Eldritch Adept: Witch Sight`.
 
 By default all tokens have hearing range of 30 feet. The default hearing range can be configured in the module settings.
 
@@ -105,25 +106,37 @@ _Detect Evil and Good_, _Detect Magic_, _Detect Poison and Disease_, _Detect Tho
 
 ### Translations
 
-| English                     | _Source_                              | German                          | French                                                                                                                                      |
-| --------------------------- | ------------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Blind Senses`              | _Monster feat_                        | `Blinde Sinne`                  | `Sens aveugles`                                                                                                                             |
-| `Blindsense`                | _Rogue feat_                          | `Blindgespür`                   | `Perception aveugle`                                                                                                                        |
-| `Detect Evil and Good`      | _Spell_                               | `Gutes und Böses entdecken`     | `Détection du mal et du bien`                                                                                                               |
-| `Detect Magic`              | _Spell_                               | `Magie entdecken`               | `Détection de la magie`                                                                                                                     |
-| `Detect Poison and Disease` | _Spell_                               | `Gift und Krankheit entdecken`  | `Détection du poison et des maladies`                                                                                                       |
-| `Detect Thoughts`           | _Spell_                               | `Gedanken wahrnehmen`           | `Détection des pensées`                                                                                                                     |
-| `Divine Sense`              | _Paladin feat_                        | `Göttliches Gespür`             | `Perception divine`                                                                                                                         |
-| `Devil's Sight`             | _Monster feat_                        | `Teufelssicht`                  | `Vision de diable` / `Vision du diable` / `Vue de diable` / `Vue du diable`                                                                 |
-| `Echolocation`              | _Monster feat_                        | `Echolot`                       | `Écholocation` / `Écholocalisation`                                                                                                         |
-| `Ethereal Sight`            | _Monster feat_                        | `Ätherische Sicht`              | `Vision éthérée`                                                                                                                            |
-| `Invocation: Devil's Sight` | _Warlock invocation_                  | `Anrufung: Teufelssicht`        | `Manifestation : Vision de diable` / `Manifestation : Vision du diable` / `Manifestation : Vue de diable` / `Manifestation : Vue du diable` |
-| `Invocation: Ghostly Gaze`  | _Warlock invocation_                  | `Anrufung: Geisterhafter Blick` | `Manifestation : Regard fantomatique`                                                                                                       |
-| `Invocation: Witch Sight`   | _Warlock invocation_                  | `Anrufung: Hexensicht`          | `Manifestation : Vision de sorcier` / `Manifestation : Vision sorcière`                                                                     |
-| `Magic Awareness`           | _Barbarian (Path of Wild Magic) feat_ | `Magische Wahrnehmung`          | `Conscience magique`                                                                                                                        |
-| `See Invisibility`          | _Spell_                               | `Unsichtbares sehen`            | `Détection de l'invisibilité`                                                                                                               |
-| `Sense Magic`               | _Monster feat_                        | `Magie spüren`                  | `Détection de la magie` / `Perception de la magie`                                                                                          |
-| `Shapechanger`              | _Monster feat/subtype_                | `Gestaltwandler`                | `Métamorphe`                                                                                                                                |
-| `Umbral Sight`              | _Ranger (Gloomstalker) feat_          | `Düstersicht`                   | `Vision des ombres`                                                                                                                         |
+| English                     | _Source_                              | German                         | French                                                                      |
+| --------------------------- | ------------------------------------- | ------------------------------ | --------------------------------------------------------------------------- |
+| `Blind Senses`              | _Monster feat_                        | `Blinde Sinne`                 | `Sens aveugles`                                                             |
+| `Blindsense`                | _Rogue feat_                          | `Blindgespür`                  | `Perception aveugle`                                                        |
+| `Centaur`                   | _Race_                                | `Zentaur`                      | `Centaure`                                                                  |
+| `Changeling`                | _Race_                                | `Wechselbalg`                  | `Changelin`                                                                 |
+| `Detect Evil and Good`      | _Spell_                               | `Gutes und Böses entdecken`    | `Détection du mal et du bien`                                               |
+| `Detect Magic`              | _Spell_                               | `Magie entdecken`              | `Détection de la magie`                                                     |
+| `Detect Poison and Disease` | _Spell_                               | `Gift und Krankheit entdecken` | `Détection du poison et des maladies`                                       |
+| `Detect Thoughts`           | _Spell_                               | `Gedanken wahrnehmen`          | `Détection des pensées`                                                     |
+| `Devil's Sight`             | _Warlock invocation_ / _Monster feat_ | `Teufelssicht`                 | `Vision de diable` / `Vision du diable` / `Vue de diable` / `Vue du diable` |
+| `Divine Sense`              | _Paladin feat_                        | `Göttliches Gespür`            | `Perception divine`                                                         |
+| `Echolocation`              | _Monster feat_                        | `Echolot`                      | `Écholocation` / `Écholocalisation`                                         |
+| `Eldritch Adept`            | _Feat_                                | `Schauerlicher Adept`          | `Adepte occulte`                                                            |
+| `Eldritch Invocation`       | _Warlock feat_                        | `Schauerliche Anrufung`        | `Invocation occultes` / `Manifestation occultes`                            |
+| `Ethereal Sight`            | _Monster feat_                        | `Ätherische Sicht`             | `Vision éthérée` / `Vue éthérée`                                            |
+| `Fairy`                     | _Race_                                | `Fee`                          | `Fée`                                                                       |
+| `Ghostly Gaze`              | _Warlock invocation_                  | `Geisterhafter Blick`          | `Regard fantomatique`                                                       |
+| `Hexblood`                  | _Race_                                | `Hexblut`                      | `Sang maudit`                                                               |
+| `Magic Awareness`           | _Barbarian (Path of Wild Magic) feat_ | `Magische Wahrnehmung`         | `Conscience magique`                                                        |
+| `Satyr`                     | _Race_                                | `Satyr`                        | `Satyre`                                                                    |
+| `See Invisibility`          | _Spell_                               | `Unsichtbares sehen`           | `Détection de l'invisibilité`                                               |
+| `Sense Magic`               | _Monster feat_                        | `Magie spüren`                 | `Détection de la magie` / `Perception de la magie`                          |
+| `Shapechanger`              | _Monster feat/subtype_                | `Gestaltwandler`               | `Métamorphe`                                                                |
+| `Umbral Sight`              | _Ranger (Gloomstalker) feat_          | `Düstersicht`                  | `Vision des ombres`                                                         |
+| `Witch Sight`               | _Warlock invocation_                  | `Hexensicht`                   | `Vision de sorcier` / `Vision sorcière` / `Vue de sorcier` / `Vue sorcière` |
 
-_Note: The class name in brackets in French feats is ignored. It can be present but doesn't have to be. It doesn't affect the automation._
+_Note: The automation is not case-sensitive._
+
+_Note: You may use `'` or `’` for apostrophes._
+
+_Note: In French the colon (`:`) is preceded by a space, but it isn't required in order for the automation to detect the feat. For example, both `Manifestation : Regard fantomatique` and `Manifestation: Regard fantomatique` work._
+
+_Note: French feats can have the class name in brackets in their names (for example `[Occultiste]`). It may be present but doesn't have to be. It doesn't affect the automation._

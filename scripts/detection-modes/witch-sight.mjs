@@ -1,3 +1,5 @@
+import { createNameRegExp } from "../utils.js";
+
 /**
  * The detection mode for Witch Sight.
  */
@@ -6,12 +8,19 @@ export class DetectionModeDetectWitchSight extends DetectionMode {
     important = true;
     priority = -3000;
 
-    static #shapechangerNames = new Set([
-        "Shapechanger",
-        "Gestaltwandler",
-        "Métamorphe",
-    ].map(name => name.toLowerCase()));
-    static #shapechangerRegex = new RegExp(`\\b(?:${Array.from(this.#shapechangerNames).join("|")})\\b`, "i");
+    static #shapechangerRegex1;
+    static #shapechangerRegex2;
+
+    static {
+        const shapechangerDictonary = {
+            en: "Shapechanger",
+            de: "Gestaltwandler",
+            fr: "Métamorphe",
+        };
+
+        this.#shapechangerRegex1 = createNameRegExp(shapechangerDictonary, true);
+        this.#shapechangerRegex2 = createNameRegExp(shapechangerDictonary, false);
+    }
 
     constructor() {
         super({
@@ -38,11 +47,11 @@ export class DetectionModeDetectWitchSight extends DetectionMode {
         const type = actor.type;
         if (type === "npc") {
             const subtype = actor.system.details.type.subtype;
-            if (subtype.match(DetectionModeDetectWitchSight.#shapechangerRegex)) return true;
+            if (DetectionModeDetectWitchSight.#shapechangerRegex2.test(subtype)) return true;
         }
         if (type === "npc" || type === "character") {
             for (const item of actor.items) {
-                if (item.type === "feat" && DetectionModeDetectWitchSight.#shapechangerNames.has(item.name.toLowerCase())) {
+                if (item.type === "feat" && DetectionModeDetectWitchSight.#shapechangerRegex1.test(item.name)) {
                     return true;
                 }
             }

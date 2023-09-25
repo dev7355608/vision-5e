@@ -1,3 +1,5 @@
+import { createNameRegExp } from "../utils.js";
+
 /**
  * The detection mode for Blindsight.
  */
@@ -7,14 +9,11 @@ export class DetectionModeBlindsight extends DetectionMode {
     useThreshold = false;
     priority = 500;
 
-    static #echolocationNames = new Set([
-        "Echolocation",
-        "Echolot",
-        "Écholocalisation", "Écholocation",
-        "Blind Senses",
-        "Blinde Sinne",
-        "Sens aveugles",
-    ].map(name => name.toLocaleLowerCase()));
+    static #echolocationRegex = createNameRegExp({
+        en: ["Echolocation", "Blind Senses"],
+        de: ["Echolot", "Blinde Sinne"],
+        fr: ["Écholocalisation", "Écholocation", "Sens aveugles"],
+    });
 
     constructor(data = {}, options = {}) {
         super(foundry.utils.mergeObject({
@@ -42,7 +41,7 @@ export class DetectionModeBlindsight extends DetectionMode {
             const actor = source.actor;
             if (actor && (actor.type === "character" || actor.type === "npc")) {
                 for (const item of actor.items) {
-                    if (item.type === "feat" && DetectionModeBlindsight.#echolocationNames.has(item.name.toLowerCase())) {
+                    if (item.type === "feat" && DetectionModeBlindsight.#echolocationRegex.test(item.name)) {
                         return false;
                     }
                 }

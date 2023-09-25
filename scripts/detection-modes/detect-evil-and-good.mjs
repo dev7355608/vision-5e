@@ -1,9 +1,16 @@
+import { createNameRegExp } from "../utils.js";
 import { DetectionModeDetect } from "./detect.mjs";
 
 /**
  * The detection mode for Detect Evil and Good.
  */
 export class DetectionModeDetectEvilAndGood extends DetectionModeDetect {
+    static #racesRegex = createNameRegExp({
+        en: ["Centaur", "Changeling", "Fairy", "Hexblood", "Satyr"],
+        de: ["Zentaur", "Wechselbalg", "Fee", "Hexblut", "Satyr"],
+        fr: ["Centaure", "Changelin", "Fée", "Sang maudit", "Satyre"],
+    });
+
     constructor() {
         super({
             id: "detectEvilAndGood",
@@ -26,11 +33,7 @@ export class DetectionModeDetectEvilAndGood extends DetectionModeDetect {
         const type = actor.type;
         if (type === "character") {
             const race = actor.system.details.race;
-            return race === "Centaur"
-                || race === "Changeling"
-                || race === "Fairy"
-                || race === "Hexblood"
-                || race === "Satyr";
+            return DetectionModeDetectEvilAndGood.#racesRegex.test(race);
         }
         if (type === "npc") {
             const type = actor.system.details.type.value;
