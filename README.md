@@ -104,6 +104,32 @@ _Detect Evil and Good_, _Detect Magic_, _Detect Poison and Disease_, _Detect Tho
 
 ---
 
+### Active Effects
+
+| Sense                     | Attribute Key                                     |
+| ------------------------- | ------------------------------------------------- |
+| Blind Sense               | `ATL.detectionModes.bindsense.range`              |
+| Blindsight                | `system.attributes.senses.blindsight`             |
+| Darkvision                | `system.attributes.senses.darkvision`             |
+| Detect Evil and Good      | `ATL.detectionModes.detectEvilAndGood.range`      |
+| Detect Magic              | `ATL.detectionModes.detectMagic.range`            |
+| Detect Poison and Disease | `ATL.detectionModes.detectPoisonAndDisease.range` |
+| Detect Thoughts           | `ATL.detectionModes.detectThoughts.range`         |
+| Devil's Sight             | `ATL.detectionModes.devilsSight.range`            |
+| Divine Sense              | `ATL.detectionModes.divineSense.range`            |
+| Ethereal Sight            | `ATL.detectionModes.etherealSight.range`          |
+| Ghostly Gaze              | `ATL.detectionModes.ghostlyGaze.range`            |
+| Hearing                   | `ATL.detectionModes.hearing.range`                |
+| Light Perception          | `ATL.detectionModes.lightPerception.range`        |
+| See Invisibility          | `ATL.detectionModes.seeInvisibility.range`        |
+| Tremorsense               | `system.attributes.senses.tremorsense`            |
+| Truesight                 | `system.attributes.senses.truesight`              |
+| Witch Sight               | `ATL.detectionModes.witchSight.range`             |
+
+_Note: Attribute keys starting with `ATL.` require the [Active Token Effects](https://foundryvtt.com/packages/ATL) module._
+
+---
+
 ### Translations
 
 | English                     | _Source_                              | German                         | French                                                                      |
