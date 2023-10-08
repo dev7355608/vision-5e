@@ -10,12 +10,6 @@ export class DetectionModeDarkvision extends DetectionModeBasicSight {
      */
     static friendlyUmbralSight = true;
 
-    static #umbralSightRegex = createNameRegExp({
-        en: "Umbral Sight",
-        de: "Düstersicht",
-        fr: "Vision des ombres",
-    });
-
     constructor(data = {}, options = {}) {
         super(foundry.utils.mergeObject({
             id: DetectionMode.BASIC_MODE_ID,
@@ -35,7 +29,7 @@ export class DetectionModeDarkvision extends DetectionModeBasicSight {
                 && (this.constructor.friendlyUmbralSight
                     || visionSource.object.document.disposition !== target.document.disposition)) {
                 for (const item of actor.items) {
-                    if (item.type === "feat" && DetectionModeDarkvision.#umbralSightRegex.test(item.name)) {
+                    if (item.type === "feat" && UMBRAL_SIGHT_FEAT.test(item.name)) {
                         return false;
                     }
                 }
@@ -51,3 +45,9 @@ export class DetectionModeDarkvision extends DetectionModeBasicSight {
                 && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))));
     }
 }
+
+const UMBRAL_SIGHT_FEAT = createNameRegExp({
+    en: "Umbral Sight",
+    de: "Düstersicht",
+    fr: "Vision des ombres",
+});

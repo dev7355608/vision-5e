@@ -1,3 +1,5 @@
+import { createNameRegExp } from "../utils.js";
+
 /**
  * The detection mode for Divine Sense.
  */
@@ -36,7 +38,16 @@ export class DetectionModeDivineSense extends DetectionMode {
             return true;
         }
         const actor = target.actor;
-        if (!(actor && actor.type === "npc")) return false;
+        if (!actor) return false;
+        if (actor.type === "character") {
+            for (const item of actor.items) {
+                if (item.type === "feat" && HOLLOW_ONE_FEAT.test(item.name)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (actor.type !== "npc") return false;
         const type = actor.system.details.type.value;
         return type === "celestial"
             || type === "fiend"
@@ -60,3 +71,18 @@ export class DetectionModeDivineSense extends DetectionMode {
         );
     }
 }
+
+export const HOLLOW_ONE_FEAT = createNameRegExp({
+    en: [
+        [["Supernatural Gift"], ["s", ""], ":", "Hollow One"],
+        "Hollow One",
+    ],
+    de: [
+        [["Übernatürliche Gabe"], ["n", ""], ":", "Leerwandler"],
+        "Leerwandler",
+    ],
+    fr: [
+        [["Don surnaturel", "Dons surnaturels"], [":", " : "], "Celui-qui-est-creux"],
+        "Celui-qui-est-creux",
+    ],
+});

@@ -16,7 +16,8 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 - **Darkvision**
   - Unless blinded Darkvision detects any creature that isn't invisible and doesn't have the `Umbral Sight`[\*](#translations) feat.
 - **Detect Evil and Good**
-  - _Note: PCs do not have a creature type like NPCs. The following races are detected: `Centaur`[\*](#translations), `Changeling`[\*](#translations), `Fairy`[\*](#translations), `Hexblood`[\*](#translations), and `Saytr`[\*](#translations)._
+  - Detects aberrations, celestials, elementals, feys, fiends, undeads, and PCs with the `Hollow One`[\*](#translations), `Supernatural Gift: Hollow One`, or `Supernatural Gifts: Hollow One` feat.
+  - _Note: In dnd5e 2.3.1 and before PCs do not have a creature type like NPCs, and so only the following PC races are detected: `Centaur`[\*](#translations), `Changeling`[\*](#translations), `Fairy`[\*](#translations), `Hexblood`[\*](#translations), and `Saytr`[\*](#translations)._
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
 - **Detect Magic**
   - _Note: Restricted by any sight-blocking wall, because there's no way to know what material the wall is made of or how thick it is._
@@ -31,6 +32,7 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 - **Devil's Sight**
   - _Note: You need the [Limits](https://github.com/dev7355608/limits) module for magical darkness._
 - **Divine Sense**
+  - Detects celestials, fiends, undead, and PCs with the `Hollow One`[\*](#translations), `Supernatural Gift: Hollow One`, or `Supernatural Gifts: Hollow One` feat.
 - **Ethereal Sight**
   - Allows detection of ethereal creatures.
 - **Ghostly Gaze**
@@ -151,11 +153,13 @@ _Note: Attribute keys starting with `ATL.` require the [Active Token Effects](ht
 | `Fairy`                     | _Race_                                | `Fee`                          | `Fée`                                                                       |
 | `Ghostly Gaze`              | _Warlock invocation_                  | `Geisterhafter Blick`          | `Regard fantomatique`                                                       |
 | `Hexblood`                  | _Race_                                | `Hexblut`                      | `Sang maudit`                                                               |
+| `Hollow One`                | _Supernatural Gift_                   | `Leerwandler`                  | `Celui-qui-est-creux`                                                       |
 | `Magic Awareness`           | _Barbarian (Path of Wild Magic) feat_ | `Magische Wahrnehmung`         | `Conscience magique`                                                        |
 | `Satyr`                     | _Race_                                | `Satyr`                        | `Satyre`                                                                    |
 | `See Invisibility`          | _Spell_                               | `Unsichtbares sehen`           | `Détection de l'invisibilité`                                               |
 | `Sense Magic`               | _Monster feat_                        | `Magie spüren`                 | `Détection de la magie` / `Perception de la magie`                          |
 | `Shapechanger`              | _Monster feat/subtype_                | `Gestaltwandler`               | `Métamorphe`                                                                |
+| `Supernatural Gift`         | _Character Creation Option_           | `Übernatürliche Gabe`          | `Don surnaturel`                                                            |
 | `Umbral Sight`              | _Ranger (Gloomstalker) feat_          | `Düstersicht`                  | `Vision des ombres`                                                         |
 | `Witch Sight`               | _Warlock invocation_                  | `Hexensicht`                   | `Vision de sorcier` / `Vision sorcière` / `Vue de sorcier` / `Vue sorcière` |
 

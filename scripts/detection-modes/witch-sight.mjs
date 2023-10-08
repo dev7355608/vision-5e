@@ -8,20 +8,6 @@ export class DetectionModeDetectWitchSight extends DetectionMode {
     important = true;
     priority = -3000;
 
-    static #shapechangerRegex1;
-    static #shapechangerRegex2;
-
-    static {
-        const shapechangerDictonary = {
-            en: "Shapechanger",
-            de: "Gestaltwandler",
-            fr: "Métamorphe",
-        };
-
-        this.#shapechangerRegex1 = createNameRegExp(shapechangerDictonary, true);
-        this.#shapechangerRegex2 = createNameRegExp(shapechangerDictonary, false);
-    }
-
     constructor() {
         super({
             id: "witchSight",
@@ -47,11 +33,11 @@ export class DetectionModeDetectWitchSight extends DetectionMode {
         const type = actor.type;
         if (type === "npc") {
             const subtype = actor.system.details.type.subtype;
-            if (DetectionModeDetectWitchSight.#shapechangerRegex2.test(subtype)) return true;
+            if (SHAPECHANGER_SUBTYPE.test(subtype)) return true;
         }
         if (type === "npc" || type === "character") {
             for (const item of actor.items) {
-                if (item.type === "feat" && DetectionModeDetectWitchSight.#shapechangerRegex1.test(item.name)) {
+                if (item.type === "feat" && SHAPECHANGER_FEAT.test(item.name)) {
                     return true;
                 }
             }
@@ -134,3 +120,11 @@ export class DetectionModeDetectWitchSight extends DetectionMode {
         }
     }
 }
+
+const shapechanger = {
+    en: "Shapechanger",
+    de: "Gestaltwandler",
+    fr: "Métamorphe",
+};
+const SHAPECHANGER_FEAT = createNameRegExp(shapechanger, true);
+const SHAPECHANGER_SUBTYPE = createNameRegExp(shapechanger, false);
