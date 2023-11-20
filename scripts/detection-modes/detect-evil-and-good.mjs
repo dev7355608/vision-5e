@@ -25,25 +25,19 @@ export class DetectionModeDetectEvilAndGood extends DetectionModeDetect {
         if (!super._canDetect(visionSource, target)) return false;
         const actor = target.actor;
         if (!actor) return false;
-        const type = actor.type;
-        if (type === "character") {
+        const isCharacter = actor.type === "character";
+        if (!isCharacter && actor.type !== "npc") return false;
+        const type = actor.system.details.type?.value;
+        if (type === "aberration" || type === "celestial" || type === "elemental"
+            || type === "fey" || type === "fiend" || type === "undead") return true;
+        if (isCharacter) {
             const race = actor.system.details.race;
-            if (EVIL_OR_GOOD_RACES.test(race)) return true;
+            if (typeof race === "string" && EVIL_OR_GOOD_RACES.test(race)) return true;
             for (const item of actor.items) {
                 if (item.type === "feat" && HOLLOW_ONE_FEAT.test(item.name)) {
                     return true;
                 }
             }
-            return false;
-        }
-        if (type === "npc") {
-            const type = actor.system.details.type.value;
-            return type === "aberration"
-                || type === "celestial"
-                || type === "elemental"
-                || type === "fey"
-                || type === "fiend"
-                || type === "undead";
         }
         return false;
     }

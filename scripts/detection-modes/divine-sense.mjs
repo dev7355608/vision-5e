@@ -39,19 +39,18 @@ export class DetectionModeDivineSense extends DetectionMode {
         }
         const actor = target.actor;
         if (!actor) return false;
-        if (actor.type === "character") {
+        const isCharacter = actor.type === "character";
+        if (!isCharacter && actor.type !== "npc") return false;
+        const type = actor.system.details.type?.value;
+        if (type === "celestial" || type === "fiend" || type === "undead") return true;
+        if (isCharacter) {
             for (const item of actor.items) {
                 if (item.type === "feat" && HOLLOW_ONE_FEAT.test(item.name)) {
                     return true;
                 }
             }
-            return false;
         }
-        if (actor.type !== "npc") return false;
-        const type = actor.system.details.type.value;
-        return type === "celestial"
-            || type === "fiend"
-            || type === "undead";
+        return false;
     }
 
     /** @override */

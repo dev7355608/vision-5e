@@ -31,15 +31,12 @@ export class DetectionModeDetectWitchSight extends DetectionMode {
         const actor = target.actor;
         if (!actor) return false;
         const type = actor.type;
-        if (type === "npc") {
-            const subtype = actor.system.details.type.subtype;
-            if (SHAPECHANGER_SUBTYPE.test(subtype)) return true;
-        }
-        if (type === "npc" || type === "character") {
-            for (const item of actor.items) {
-                if (item.type === "feat" && SHAPECHANGER_FEAT.test(item.name)) {
-                    return true;
-                }
+        if (type !== "npc" && type !== "character") return false;
+        const subtype = actor.system.details.type?.subtype;
+        if (typeof subtype === "string" && SHAPECHANGER_SUBTYPE.test(subtype)) return true;
+        for (const item of actor.items) {
+            if (item.type === "feat" && SHAPECHANGER_FEAT.test(item.name)) {
+                return true;
             }
         }
         return false;
