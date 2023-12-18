@@ -122,6 +122,7 @@ const shapechanger = {
     en: "Shapechanger",
     de: "Gestaltwandler",
     fr: "Métamorphe",
+    es: "Cambiaformas",
 };
 const SHAPECHANGER_FEAT = createNameRegExp(shapechanger, true);
 const SHAPECHANGER_SUBTYPE = createNameRegExp(shapechanger, false);

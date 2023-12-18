@@ -86,4 +86,5 @@ const ECHOLOCATION_OR_BLIND_SENSES_FEAT = createNameRegExp({
     en: ["Echolocation", "Blind Senses"],
     de: ["Echolot", "Blinde Sinne"],
     fr: ["Écholocalisation", "Écholocation", "Sens aveugles"],
+    es: ["Ecolocalización", "Sentidos de ciego"],
 });

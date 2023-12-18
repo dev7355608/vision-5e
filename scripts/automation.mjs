@@ -310,6 +310,7 @@ Hooks.once("init", () => {
         en: "Detect Evil and Good",
         de: "Gutes und Böses entdecken",
         fr: "Détection du mal et du bien",
+        es: "Detectar el bien y el mal",
     }, {
         id: "detectEvilAndGood",
         range: 30
@@ -319,6 +320,7 @@ Hooks.once("init", () => {
         en: "Detect Magic",
         de: "Magie entdecken",
         fr: "Détection de la magie",
+        es: "Detectar magia",
     }, {
         id: "detectMagic",
         range: 30
@@ -328,6 +330,7 @@ Hooks.once("init", () => {
         en: "Detect Poison and Disease",
         de: "Gift und Krankheit entdecken",
         fr: "Détection du poison et des maladies",
+        es: "Detectar venenos y enfermedades",
     }, {
         id: "detectPoisonAndDisease",
         range: 30
@@ -337,6 +340,7 @@ Hooks.once("init", () => {
         en: "Detect Thoughts",
         de: "Gedanken wahrnehmen",
         fr: "Détection des pensées",
+        es: "Detectar pensamientos",
     }, {
         id: "detectThoughts",
         range: 30
@@ -346,6 +350,7 @@ Hooks.once("init", () => {
         en: "Divine Sense",
         de: "Göttliches Gespür",
         fr: ["Perception divine", ["", " [Paladin]"]],
+        es: "Sentidos divinos",
     }, {
         id: "divineSense",
         range: 60
@@ -368,6 +373,11 @@ Hooks.once("init", () => {
             "Adepte occulte: Regard fantomatique",
             "Regard fantomatique",
         ],
+        es: [
+            [["Invocación sobrenatural", "Invocaciones sobrenaturales"], ": Mirada fantasmal"],
+            "Adepto sobrenatural: Mirada fantasmal",
+            "Mirada fantasmal",
+        ],
     }, {
         id: "ghostlyGaze",
         range: 30
@@ -377,6 +387,7 @@ Hooks.once("init", () => {
         en: "Magic Awareness",
         de: "Magische Wahrnehmung",
         fr: "Conscience magique",
+        es: "Conciencia mágica",
     }, {
         id: "detectMagic",
         range: 60
@@ -386,6 +397,7 @@ Hooks.once("init", () => {
         en: "See Invisibility",
         de: "Unsichtbares sehen",
         fr: ["Détection de l", ["'", "’"], "invisibilité"],
+        es: "Ver invisibilidad"
     }, {
         id: "seeInvisibility",
         range: 1e15
@@ -395,6 +407,7 @@ Hooks.once("init", () => {
         en: "Blindsense",
         de: "Blindgespür",
         fr: ["Perception aveugle", ["", " [Roublard]"]],
+        es: "Sentir sin ver",
     }, {
         id: "blindsense",
         range: 10
@@ -404,6 +417,7 @@ Hooks.once("init", () => {
         en: ["Devil", ["'", "’"], "s Sight"],
         de: "Teufelssicht",
         fr: [["Vision", "Vue"], " ", ["de", "du"], " diable"],
+        es: "Vista del diablo"
     }, {
         id: "_devilsSight",
         range: 120
@@ -413,6 +427,7 @@ Hooks.once("init", () => {
         en: "Ethereal Sight",
         de: "Ätherische Sicht",
         fr: [["Vision", "Vue"], " éthérée"],
+        es: "Visión etérea",
     }, {
         id: "etherealSight",
         range: RANGE_REGEX
@@ -431,6 +446,10 @@ Hooks.once("init", () => {
             [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable", ["", " [Occultiste]"]],
             [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable", ["", " [Occultiste]"]],
             ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable"],
+        ],
+        es: [
+            [["Invocación sobrenatural", "Invocaciones sobrenaturales"], ": Vista del diablo"],
+            ["Adepto sobrenatural: Vista del diablo"],
         ],
     }, {
         id: "devilsSight",
@@ -453,6 +472,11 @@ Hooks.once("init", () => {
             [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"], ["", " [Occultiste]"]],
             ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
             [["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
+        ],
+        es: [
+            [["Invocación sobrenatural", "Invocaciones sobrenaturales"], ": Visión bruja"],
+            "Adepto sobrenatural: Visión bruja",
+            "Visión bruja",
         ]
     }, {
         id: "witchSight",
@@ -463,6 +487,7 @@ Hooks.once("init", () => {
         fr: "Sense Magic",
         de: "Magie spüren",
         fr: [["Détection", "Perception"], " de la magie"],
+        es: "Sentir magia"
     }, {
         id: "detectMagic",
         range: RANGE_REGEX
