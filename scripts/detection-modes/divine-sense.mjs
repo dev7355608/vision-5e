@@ -73,15 +73,15 @@ export class DetectionModeDivineSense extends DetectionMode {
 
 export const HOLLOW_ONE_FEAT = createNameRegExp({
     en: [
-        [["Supernatural Gift"], ["s", ""], ":", "Hollow One"],
+        [["Supernatural Gift"], ["s", ""], ": Hollow One"],
         "Hollow One",
     ],
     de: [
-        [["Übernatürliche Gabe"], ["n", ""], ":", "Leerwandler"],
+        [["Übernatürliche Gabe"], ["n", ""], ":", ["Leerwandler", "Hollow One"]],
         "Leerwandler",
     ],
     fr: [
-        [["Don surnaturel", "Dons surnaturels"], [":", " : "], "Celui-qui-est-creux"],
+        [["Don surnaturel", "Dons surnaturels"], [": ", " : "], ["Celui-qui-est-creux", "Hollow One"]],
         "Celui-qui-est-creux",
     ],
 });
