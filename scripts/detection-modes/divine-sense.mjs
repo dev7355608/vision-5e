@@ -77,7 +77,7 @@ export const HOLLOW_ONE_FEAT = createNameRegExp({
         "Hollow One",
     ],
     de: [
-        [["Übernatürliche Gabe"], ["n", ""], ":", ["Leerwandler", "Hollow One"]],
+        [["Übernatürliche Gabe"], ["n", ""], ": ", ["Leerwandler", "Hollow One"]],
         "Leerwandler",
     ],
     fr: [
