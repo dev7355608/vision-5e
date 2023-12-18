@@ -320,6 +320,7 @@ Hooks.once("init", () => {
         en: "Detect Magic",
         de: "Magie entdecken",
         fr: "Détection de la magie",
+        es: "Detectar magia",
     }, {
         id: "detectMagic",
         range: 30
@@ -372,8 +373,8 @@ Hooks.once("init", () => {
             "Adepte occulte: Regard fantomatique",
             "Regard fantomatique",
         ],
-        de: [
-            [["Sobrenatural ", ""], "invocación", ["es", ""], ": Mirada fantasmal"],
+        es: [
+            [["Invocación sobrenatural", "Invocaciones sobrenaturales"], ": Mirada fantasmal"],
             "Adepto sobrenatural: Mirada fantasmal",
             "Mirada fantasmal",
         ],
@@ -447,7 +448,7 @@ Hooks.once("init", () => {
             ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable"],
         ],
         es: [
-            [["Sobrenatural ", ""], "invocación", ["es", ""], ":Vista del diablo"],
+            [["Invocación sobrenatural", "Invocaciones sobrenaturales"], ": Vista del diablo"],
             ["Adepto sobrenatural: Vista del diablo"],
         ],
     }, {
@@ -473,7 +474,7 @@ Hooks.once("init", () => {
             [["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
         ],
         es: [
-            [["Sobrenatural ", ""], "invocación", ["es", ""], ": Visión Bruja"],
+            [["Invocación sobrenatural", "Invocaciones sobrenaturales"], ": Visión bruja"],
             "Adepto sobrenatural: Visión bruja",
             "Visión bruja",
         ]
