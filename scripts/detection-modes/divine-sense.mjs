@@ -85,7 +85,7 @@ export const HOLLOW_ONE_FEAT = createNameRegExp({
         "Celui-qui-est-creux",
     ],
     es: [
-        [["Don supernatural", "Dones supernaturales"], ": Hollow One"],
-        "Hollow One",
+        [["Don supernatural", "Dones supernaturales"], ": ", ["Aquel que está vacío", "Hollow One"]],
+        "Aquel que está vacío",
     ],
 });
