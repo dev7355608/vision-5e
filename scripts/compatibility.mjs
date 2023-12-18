@@ -34,6 +34,16 @@ Hooks.once("init", () => {
 });
 
 Hooks.once("init", () => {
+    if (!game.modules.get("house-divided")?.active) {
+        return;
+    }
+
+    Hooks.on("canvasInit", () => {
+        PrimaryCanvasGroup.BACKGROUND_ELEVATION = ["rRY9Y8jNBkPbmcUl", "9fjzcw7xLMsg9dYX"].includes(canvas.scene?.id) ? 0 : -Infinity;
+    });
+});
+
+Hooks.once("init", () => {
     if (!game.modules.get("stealthy")?.active) {
         return;
     }
