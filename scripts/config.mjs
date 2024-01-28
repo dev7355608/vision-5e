@@ -168,12 +168,19 @@ VisionSource.prototype._initialize = ((_initialize) => function (data) {
     _initialize.call(this, data);
 })(VisionSource.prototype._initialize);
 
-
 Hooks.on("initializeVisionSources", () => {
-    const object = canvas.effects.visibility.visionModeData.source?.object;
+    const visionModeData = canvas.effects.visibility.visionModeData;
+    const object = visionModeData.source?.object;
 
     if (object instanceof Token && object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
-        const lightingOptions = foundry.utils.deepClone(canvas.effects.visibility.visionModeData.activeLightingOptions);
+        foundry.utils.mergeObject(canvas.effects.visibility.lightingVisibility, {
+            background: VisionMode.LIGHTING_VISIBILITY.DISABLED,
+            illumination: VisionMode.LIGHTING_VISIBILITY.DISABLED,
+            coloration: VisionMode.LIGHTING_VISIBILITY.DISABLED,
+            any: false
+        });
+
+        const lightingOptions = foundry.utils.deepClone(visionModeData.activeLightingOptions);
 
         canvas.effects.resetPostProcessingFilters();
 
@@ -189,7 +196,7 @@ Hooks.on("initializeVisionSources", () => {
             canvas.effects.activatePostProcessingFilters(layer, options.postProcessingModes, options.uniforms);
         }
 
-        canvas.effects.visibility.visionModeData.activeLightingOptions = lightingOptions;
+        visionModeData.activeLightingOptions = lightingOptions;
     }
 });
 
