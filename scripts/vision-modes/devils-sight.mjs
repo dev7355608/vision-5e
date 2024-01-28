@@ -3,6 +3,7 @@
  */
 export class VisionModeDevilsSight extends VisionMode {
     detectionMode = "devilsSight";
+    neutralIfGlobalLight = true;
 
     constructor() {
         super({

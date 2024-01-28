@@ -61,6 +61,12 @@ VisionSource.prototype._initializeVisionMode = function () {
         foundry.utils.mergeObject(this.data, this.visionMode.vision.defaults);
     }
 
+    if (canvas.effects.illumination.globalLight && this.visionMode.neutralIfGlobalLight === true) {
+        this.visionMode = CONFIG.Canvas.visionModes.basic;
+        this._configureColorAttributes(null);
+        foundry.utils.mergeObject(this.data, this.visionMode.vision.defaults);
+    }
+
     if (!this.visionMode.perceivesLight) this.data.lightRadius = 0;
 
     const deactivateHandler = ((previousVM?.id !== this.visionMode.id) && previousVM);
@@ -142,6 +148,12 @@ Object.defineProperties(VisionMode.prototype, {
         },
         configurable: true,
         enumerable: false
+    },
+    neutralIfGlobalLight: {
+        value: false,
+        configurable: true,
+        enumerable: false,
+        writable: true
     }
 });
 

@@ -2,6 +2,8 @@
  * The vision mode for Darkvision.
  */
 export class VisionModeDarkvision extends VisionMode {
+    neutralIfGlobalLight = true;
+
     constructor() {
         super({
             id: "darkvision",

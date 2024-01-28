@@ -3,6 +3,7 @@
  */
 export class VisionModeGhostlyGaze extends VisionMode {
     detectionMode = "ghostlyGaze";
+    neutralIfGlobalLight = true;
 
     constructor() {
         super({
