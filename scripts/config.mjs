@@ -154,7 +154,8 @@ Hooks.once("init", () => {
     CONFIG.Token.objectClass = class Token5e extends CONFIG.Token.objectClass {
         /** @override */
         get emitsLight() {
-            return super.emitsLight && !this.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW);
+            return super.emitsLight && !this.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
+                && !this.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL);
         }
     };
 });
