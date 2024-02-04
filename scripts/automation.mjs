@@ -475,7 +475,7 @@ Hooks.once("init", () => {
         ],
         es: [
             [["Invocación sobrenatural", "Invocaciones sobrenaturales"], ": Vista del diablo"],
-            ["Adepto sobrenatural: Vista del diablo"],
+            "Adepto sobrenatural: Vista del diablo",
         ],
     }, {
         id: "devilsSight",
@@ -510,7 +510,7 @@ Hooks.once("init", () => {
     });
 
     registerFeat({
-        fr: "Sense Magic",
+        en: "Sense Magic",
         de: "Magie spüren",
         fr: [["Détection", "Perception"], " de la magie"],
         es: "Sentir magia"
