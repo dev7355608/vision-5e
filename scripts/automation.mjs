@@ -59,7 +59,13 @@ function getInheritedDetectionModes(actor) {
     modes.seeAll = senses.truesight;
     modes.blindsight = senses.blindsight;
     modes.feelTremor = senses.tremorsense;
-    modes.hearing = settings.defaultHearingRange;
+    if (settings.defaultHearingRangeFormula) {
+        let vRoll = new Roll(settings.defaultHearingRangeFormula, {actor});
+		vRoll.evaluate({async: false});
+		modes.hearing = vRoll.total;
+    } else {
+        modes.hearing = settings.defaultHearingRange;
+    }
 
     for (const effect of actor.appliedEffects) {
         const mode = getEffect(effect.name);

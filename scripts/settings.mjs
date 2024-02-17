@@ -35,6 +35,20 @@ Hooks.once("init", () => {
         }
     );
 
+    game.settings.register(
+        "vision-5e",
+        "defaultHearingRangeFormula",
+        {
+            name: "VISION5E.Settings.DefaultHearingRangeFormulaN",
+            hint: "VISION5E.Settings.DefaultHearingRangeFormulaL",
+            scope: "world",
+            config: true,
+            requiresReload: true,
+            type: String,
+            default: ''
+        }
+    );
+
     const defaultHearingRange = game.settings.get("vision-5e", "defaultHearingRange") || 0;
 
     if (!Number.isNaN(defaultHearingRange)) {
@@ -42,7 +56,7 @@ Hooks.once("init", () => {
     } else {
         settings.defaultHearingRange = 0;
     }
-
+    settings.defaultHearingRangeFormula = game.settings.get("vision-5e", "defaultHearingRangeFormula") || '';
     settings.metric = game.settings.get("vision-5e", "units") === "m";
 });
 
