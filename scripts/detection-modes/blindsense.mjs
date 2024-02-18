@@ -30,10 +30,15 @@ export class DetectionModeBlindsense extends DetectionMode {
 
     /** @override */
     _canDetect(visionSource, target) {
+        if (!(target instanceof Token)) return false;
+        const actor = target.actor;
+        if (!actor || actor.type !== "character" && actor.type !== "npc") return false;
         const source = visionSource.object;
-        return !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF))
-            && !(target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-                && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))));
+        if (source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW))) return false;
+        if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))) return false;
+        return true;
     }
 }

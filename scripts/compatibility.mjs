@@ -1,3 +1,4 @@
+import { DetectionModeBlindsense } from "./detection-modes/blindsense.mjs";
 import { DetectionModeDarkvision } from "./detection-modes/darkvision.mjs";
 import { DetectionModeHearing } from "./detection-modes/hearing.mjs";
 import { DetectionModeTremorsense } from "./detection-modes/tremorsense.mjs";
@@ -224,7 +225,7 @@ Hooks.once("init", () => {
         return !(data && data.enabled && data.type !== "merchant");
     };
 
-    for (const detectionModeClass of [DetectionModeHearing, DetectionModeTremorsense]) {
+    for (const detectionModeClass of [DetectionModeBlindsense, DetectionModeHearing, DetectionModeTremorsense]) {
         detectionModeClass.prototype._canDetect = wrap(detectionModeClass.prototype._canDetect);
     }
 });
