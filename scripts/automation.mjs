@@ -52,20 +52,14 @@ function getFeat(name) {
 
 function getInheritedDetectionModes(actor) {
     const modes = {};
-    const senses = actor.system.attributes.senses;
+    const senses = actor[SENSES];
 
     modes.lightPerception = 1e15;
     modes[DetectionMode.BASIC_MODE_ID] = senses.darkvision;
     modes.seeAll = senses.truesight;
     modes.blindsight = senses.blindsight;
     modes.feelTremor = senses.tremorsense;
-    if (settings.defaultHearingRangeFormula) {
-        let vRoll = new Roll(settings.defaultHearingRangeFormula, {actor});
-		vRoll.evaluate({async: false});
-		modes.hearing = vRoll.total;
-    } else {
-        modes.hearing = settings.defaultHearingRange;
-    }
+    modes.hearing = senses.hearing;
 
     for (const effect of actor.appliedEffects) {
         const mode = getEffect(effect.name);
@@ -156,9 +150,9 @@ const resetActiveTokens = (() => {
     };
 })();
 
-Hooks.once("init", () => {
-    const SENSES = Symbol("senses");
+const SENSES = Symbol("vision-5e.senses");
 
+Hooks.once("init", () => {
     CONFIG.Actor.documentClass = class Actor5e extends CONFIG.Actor.documentClass {
         /** @override */
         prepareData() {
@@ -168,15 +162,41 @@ Hooks.once("init", () => {
                 return;
             }
 
-            const senses = this[SENSES] ??= {};
+            let hearing;
+            if (typeof settings.defaultHearingRange === "string") {
+                const roll = new Roll(settings.defaultHearingRange, this.getRollData({ deterministic: true }));
+                roll.evaluate({ async: false });
+                hearing = roll.total;
+            } else {
+                hearing = settings.defaultHearingRange;
+            }
 
-            for (const [key, value] of Object.entries(this.system.attributes.senses)) {
-                if (senses[key] !== value) {
-                    this[SENSES] = { ...this.system.attributes.senses };
-                    resetActiveTokens(this);
+            const senses = this.system.attributes.senses;
+            const newSenses = {
+                blindsight: Math.max(senses.blindsight ?? 0, 0),
+                darkvision: Math.max(senses.darkvision ?? 0, 0),
+                tremorsense: Math.max(senses.tremorsense ?? 0, 0),
+                truesight: Math.max(senses.truesight ?? 0, 0),
+                hearing: Math.max(hearing ?? 0, 0),
+            };
+            const oldSenses = this[SENSES] ??= {
+                blindsight: 0,
+                darkvision: 0,
+                tremorsense: 0,
+                truesight: 0,
+                hearing: 0
+            };
+            let changed = false;
 
-                    break;
+            for (const [key, value] of Object.entries(newSenses)) {
+                if (oldSenses[key] !== value) {
+                    oldSenses[key] = value;
+                    changed = true;
                 }
+            }
+
+            if (changed) {
+                resetActiveTokens(this);
             }
         }
     };
