@@ -73,20 +73,8 @@ export class DetectionModeDetectMagic extends DetectionModeDetect {
         const actor = target.actor;
         if (!actor) return false;
 
-        const isMagical = item => {
-            const type = item.type;
-            return (type === "consumable"
-                || type === "container"
-                || type === "equipment"
-                || type === "loot"
-                || type === "tool"
-                || type === "weapon")
-                && !!item.system.rarity && item.system.rarity !== "common"
-                || type === "weapon" && item.system.properties.mgc;
-        };
-
         // Does the target carry a magical item?
-        if (actor.items.some(isMagical)) {
+        if (actor.items.some(isMagicItem)) {
             return true;
         }
 
@@ -94,7 +82,7 @@ export class DetectionModeDetectMagic extends DetectionModeDetect {
         for (const effect of actor.appliedEffects) {
             const item = effect.origin && !effect.origin.startsWith("Compendium.")
                 ? fromUuidSync(effect.origin) : null;
-            if (item instanceof Item && (item.type === "spell" || isMagical(item))) {
+            if (item instanceof Item && (item.type === "spell" || isMagicItem(item))) {
                 return true;
             }
         }
@@ -102,3 +90,30 @@ export class DetectionModeDetectMagic extends DetectionModeDetect {
         return false;
     }
 }
+
+function isMagicItem(item) {
+    const type = item.type;
+    return (type === "consumable"
+        || type === "container"
+        || type === "equipment"
+        || type === "loot"
+        || type === "weapon"
+        || type === "tool") && item.system.properties.has("mgc");
+}
+
+Hooks.once("init", () => {
+    if (foundry.utils.isNewerVersion(game.system.version, 3)) {
+        return;
+    }
+
+    isMagicItem = (item) => {
+        const type = item.type;
+        return (type === "consumable"
+            || type === "container"
+            || type === "equipment"
+            || type === "loot"
+            || type === "weapon"
+            || type === "tool") && !!item.system.rarity && item.system.rarity !== "common"
+            || type === "weapon" && item.system.properties.mgc;
+    };
+});

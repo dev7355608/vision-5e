@@ -1,3 +1,4 @@
+import { statusEffectIds } from "./config.mjs";
 import { DetectionModeBlindsense } from "./detection-modes/blindsense.mjs";
 import { DetectionModeDarkvision } from "./detection-modes/darkvision.mjs";
 import { DetectionModeHearing } from "./detection-modes/hearing.mjs";
@@ -114,27 +115,27 @@ Hooks.once("init", () => {
 
     const customStatusEffects = [
         {
-            id: "burrow",
+            id: statusEffectIds.burrow,
             name: "Burrowing",
             icon: "modules/vision-5e/icons/burrow.svg"
         },
         {
-            id: "disease",
+            id: statusEffectIds.disease,
             name: "Diseased",
             icon: "icons/svg/biohazard.svg"
         },
         {
-            id: "ethereal",
+            id: statusEffectIds.ethereal,
             name: "Ethereal",
             icon: "modules/vision-5e/icons/ethereal.svg"
         },
         {
-            id: "fly",
+            id: statusEffectIds.fly,
             name: "Flying",
             icon: "icons/svg/wing.svg"
         },
         {
-            id: "inaudible",
+            id: statusEffectIds.inaudible,
             name: "Inaudible",
             icon: "modules/vision-5e/icons/inaudible.svg"
         }

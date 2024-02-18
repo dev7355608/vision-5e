@@ -66,13 +66,11 @@ export function registerStatusEffect(id, name, icon, index) {
     }
 }
 
+export const statusEffectIds = {};
+
 const specialStatusEffectsHooks = new Map();
 
 export function registerSpecialStatusEffect(key, statusId, hook) {
-    if (key in CONFIG.specialStatusEffects && CONFIG.specialStatusEffects[key] !== statusId) {
-        throw new Error();
-    }
-
     CONFIG.specialStatusEffects[key] = statusId;
     specialStatusEffectsHooks.set(statusId, hook);
 }
@@ -117,7 +115,19 @@ Hooks.once("init", () => {
     const initializeVision = () => canvas.perception.update({ initializeVision: true });
     const refreshVision = () => canvas.perception.update({ refreshVision: true });
 
-    registerSpecialStatusEffect("BURROW", "burrow", (token) => {
+    for (const id of ["burrow", "deaf", "disease", "ethereal", "fly", "inaudible", "poison"]) {
+        statusEffectIds[id] = id;
+    }
+
+    if (foundry.utils.isNewerVersion(game.system.version, 3)) {
+        statusEffectIds.burrow = "burrowing";
+        statusEffectIds.deaf = "deafened";
+        statusEffectIds.disease = "diseased";
+        statusEffectIds.fly = "flying";
+        statusEffectIds.poison = "poisoned";
+    }
+
+    registerSpecialStatusEffect("BURROW", statusEffectIds.burrow, (token) => {
         // Workaround for #9687 (pre 11.304)
         if (token.parent !== token.layer.objects) {
             return;
@@ -126,12 +136,12 @@ Hooks.once("init", () => {
         token.updateLightSource();
         canvas.perception.update({ initializeVision: true });
     });
-    registerSpecialStatusEffect("DEAF", "deaf", refreshVision);
-    registerSpecialStatusEffect("DISEASE", "disease", refreshVision);
-    registerSpecialStatusEffect("FLY", "fly", refreshVision);
-    registerSpecialStatusEffect("ETHEREAL", "ethereal", initializeVision);
-    registerSpecialStatusEffect("INAUDIBLE", "inaudible", refreshVision);
-    registerSpecialStatusEffect("POISON", "poison", refreshVision);
+    registerSpecialStatusEffect("DEAF", statusEffectIds.deaf, refreshVision);
+    registerSpecialStatusEffect("DISEASE", statusEffectIds.disease, refreshVision);
+    registerSpecialStatusEffect("ETHEREAL", statusEffectIds.ethereal, initializeVision);
+    registerSpecialStatusEffect("FLY", statusEffectIds.fly, refreshVision);
+    registerSpecialStatusEffect("INAUDIBLE", statusEffectIds.inaudible, refreshVision);
+    registerSpecialStatusEffect("POISON", statusEffectIds.poison, refreshVision);
 
     registerStatusEffect(
         CONFIG.specialStatusEffects.BURROW,
