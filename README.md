@@ -74,7 +74,7 @@ A token gains ...
 - _See Invisibility_ if the actor has an active effect with the name `See Invisibility`[\*](#translations).
 - _Witch Sight_ if the actor has a feat with the name `Witch Sight`[\*](#translations), `Invocation: Witch Sight`, `Invocations: Witch Sight`, `Eldritch Invocation: Witch Sight`, `Eldritch Invocations: Witch Sight`, or `Eldritch Adept: Witch Sight`.
 
-By default all tokens have hearing range of 30 feet. The default hearing range can be configured in the module settings.
+By default all tokens have hearing range of 15 + 2.5 * (*Passive Perception* - 10) feet (`15 + 2.5 * (@skills.prc.passive - 10)`). The default hearing range can be configured in the module settings.
 
 If you use metric units, you need to change the units in the module settings.
 
