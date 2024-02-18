@@ -7,6 +7,12 @@
 
 Additional and improved Vision/Detection modes for D&D 5e including automatic vision management based on the actor's senses and active effects.
 
+The automation detects relevant feats and effects that affect the creatures senses by their name (supported are English, German, French, and Spanish translations). No configuration is required to get started unless
+- ... you use *meters* instead of *feet*, or
+- ... you want to change the default hearing range formula or turn it off by default.
+
+You can configure the units and default hearing range in the settings.
+
 ---
 
 - **Blindsense**
