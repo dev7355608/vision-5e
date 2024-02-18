@@ -30,15 +30,17 @@ Hooks.once("init", () => {
             scope: "world",
             config: true,
             requiresReload: true,
-            type: Number,
-            default: 30
+            type: String,
+            default: "15 + 2.5 * (@skills.prc.passive - 10)"
         }
     );
 
-    const defaultHearingRange = game.settings.get("vision-5e", "defaultHearingRange") || 0;
+    const defaultHearingRange = game.settings.get("vision-5e", "defaultHearingRange");
 
-    if (!Number.isNaN(defaultHearingRange)) {
-        settings.defaultHearingRange = defaultHearingRange
+    if (!Number.isNaN(Number(defaultHearingRange))) {
+        settings.defaultHearingRange = Number(defaultHearingRange);
+    } else if (typeof defaultHearingRange === "string" && defaultHearingRange.trim() !== "") {
+        settings.defaultHearingRange = defaultHearingRange.trim();
     } else {
         settings.defaultHearingRange = 0;
     }
@@ -61,7 +63,6 @@ Hooks.on("renderSettingsConfig", (app, html) => {
     defaultHearingRange.placeholder = "0";
     defaultHearingRange.dataset.units = units;
 
-    html[0].querySelector(`[data-setting-id="vision-5e.defaultHearingRange"]`).classList.add("slim");
     html[0].querySelector(`[data-setting-id="vision-5e.defaultHearingRange"] label`)
         .insertAdjacentHTML("beforeend", ` <span class="units">(${units})</span>`);
     html[0].querySelector(`select[name="vision-5e.units"]`).addEventListener("change", (event) => {
