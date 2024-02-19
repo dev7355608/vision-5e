@@ -337,6 +337,7 @@ Hooks.once("init", () => {
         de: "Gutes und Böses entdecken",
         fr: "Détection du mal et du bien",
         es: "Detectar el bien y el mal",
+        pt_BR:"Detectar o Bem e o Mal",
     }, {
         id: "detectEvilAndGood",
         range: 30
