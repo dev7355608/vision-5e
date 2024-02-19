@@ -123,6 +123,7 @@ const shapechanger = {
     de: "Gestaltwandler",
     fr: "Métamorphe",
     es: "Cambiaformas",
+    pt_BR: "Metamorfo",
 };
 const SHAPECHANGER_FEAT = createNameRegExp(shapechanger, true);
 const SHAPECHANGER_SUBTYPE = createNameRegExp(shapechanger, false);
