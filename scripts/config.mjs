@@ -195,6 +195,48 @@ VisionSource.prototype._initialize = ((_initialize) => function (data) {
     _initialize.call(this, data);
 })(VisionSource.prototype._initialize);
 
+CanvasVisibility.prototype.refreshVisibility = ((refreshVisibility) => {
+    return function () {
+        if (this.vision?.children.length) {
+            this.vision.etherealLight ??= this.vision.addChild(new PIXI.LegacyGraphics());
+            this.vision.etherealLight.clear();
+            this.vision.etherealLight.beginFill(0xff0000);
+            this.vision.etherealLight.preview ??= this.vision.etherealLight.addChild(new PIXI.LegacyGraphics());
+            this.vision.etherealLight.preview.clear();
+            this.vision.etherealLight.preview.beginFill(0xff0000);
+            for (const visionSource of canvas.effects.visionSources) {
+                if (!visionSource.active) continue;
+                const object = visionSource.object;
+                if (!(object instanceof Token)) continue;
+                if (!object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) continue;
+                if (!visionSource.data.blinded && !visionSource.isPreview) {
+                    this.vision.etherealLight.drawShape(visionSource.light);
+                } else {
+                    this.vision.etherealLight.preview.drawShape(visionSource.light);
+                }
+            }
+            this.vision.etherealLight.endFill();
+            this.vision.etherealLight.preview.endFill();
+        }
+
+        refreshVisibility.call(this);
+    };
+})(CanvasVisibility.prototype.refreshVisibility);
+
+FogManager.prototype.commit = ((commit) => {
+    return function () {
+        if (this.vision?.etherealLight) {
+            this.vision.etherealLight.preview.visible = false;
+        }
+
+        commit.call(this);
+
+        if (this.vision?.etherealLight) {
+            this.vision.etherealLight.preview.visible = true;
+        }
+    };
+})(FogManager.prototype.commit);
+
 VisionSource.prototype._getPolygonConfiguration = ((_getPolygonConfiguration) => function () {
     const config = _getPolygonConfiguration.call(this);
 
@@ -244,6 +286,15 @@ Hooks.on("initializeVisionSources", () => {
         }
 
         visionModeData.activeLightingOptions = lightingOptions;
+    }
+});
+
+Hooks.on("lightingRefresh", () => {
+    const visionModeData = canvas.effects.visibility.visionModeData;
+    const object = visionModeData.source?.object;
+
+    if (object instanceof Token && object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
+        canvas.effects.illumination.backgroundColor = canvas.colors.ambientBrightest;
     }
 });
 

@@ -92,15 +92,12 @@ Object.defineProperties(VisionSource.prototype, {
 });
 
 VisionSource.prototype._createRestrictedPolygon = function () {
+    const config = this._getPolygonConfiguration();
     const origin = { x: this.data.x, y: this.data.y };
-    const radius = this.data.radius || this.data.externalRadius;
+    const radius = this.disabled ? 0 : Math.min(this.data.radius || this.data.externalRadius, config.radius);
     const density = PIXI.Circle.approximateVertexDensity(radius);
-    const config = {
-        ...this._getPolygonConfiguration(),
-        radius,
-        density
-    };
-    if (this.disabled) config.radius = 0;
+    config.radius = radius;
+    config.density = density;
     let create = false;
     let { sourceType, useThreshold, wallDirectionMode } = this.detectionMode;
     const type = this.detectionMode.walls ? (sourceType ?? config.type) : "universal";
