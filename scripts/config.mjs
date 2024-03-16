@@ -147,7 +147,10 @@ Hooks.once("init", () => {
     registerSpecialStatusEffect("BURROW", statusEffectIds.burrow, initializeVisionAndLight);
     registerSpecialStatusEffect("DEAF", statusEffectIds.deaf, initializeVision);
     registerSpecialStatusEffect("DISEASE", statusEffectIds.disease, refreshVision);
-    registerSpecialStatusEffect("ETHEREAL", statusEffectIds.ethereal, initializeVisionAndLight);
+    registerSpecialStatusEffect("ETHEREAL", statusEffectIds.ethereal, (token) => {
+        initializeVisionAndLight(token);
+        token.renderFlags.set({ refreshMesh: true, refreshShader: true });
+    });
     registerSpecialStatusEffect("FLY", statusEffectIds.fly, refreshVision);
     registerSpecialStatusEffect("HOVER", statusEffectIds.hover, refreshVision);
     registerSpecialStatusEffect("INAUDIBLE", statusEffectIds.inaudible, refreshVision);
@@ -179,6 +182,14 @@ Hooks.once("init", () => {
         get emitsLight() {
             return super.emitsLight && !this.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
                 && !this.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL);
+        }
+
+        /** @override */
+        _refreshShader() {
+            super._refreshShader();
+            if (this.mesh && this.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
+                this.mesh.setShaderClass(TokenInvisibilitySamplerShader);
+            }
         }
     };
 });
