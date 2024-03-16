@@ -21,7 +21,8 @@ export class DetectionModeDetect extends DetectionMode {
         const source = visionSource.object;
         return !(source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)))
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)))
             && !(target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
                 || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
                 && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)));
