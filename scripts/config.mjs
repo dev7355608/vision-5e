@@ -118,6 +118,15 @@ Hooks.once("init", () => {
 
     const initializeVision = () => canvas.perception.update({ initializeVision: true });
     const refreshVision = () => canvas.perception.update({ refreshVision: true });
+    const initializeVisionAndLight = (token) => {
+        // Workaround for #9687 (pre 11.304)
+        if (token.parent !== token.layer.objects) {
+            return;
+        }
+
+        token.updateLightSource();
+        canvas.perception.update({ initializeVision: true });
+    };
 
     for (const id of ["burrow", "deaf", "disease", "ethereal", "fly", "hover", "inaudible", "petrified", "poison", "sleep", "unconscious"]) {
         statusEffectIds[id] = id;
@@ -134,25 +143,17 @@ Hooks.once("init", () => {
         statusEffectIds.unconscious = "unconscious";
     }
 
-    registerSpecialStatusEffect("BURROW", statusEffectIds.burrow, (token) => {
-        // Workaround for #9687 (pre 11.304)
-        if (token.parent !== token.layer.objects) {
-            return;
-        }
-
-        token.updateLightSource();
-        canvas.perception.update({ initializeVision: true });
-    });
-    registerSpecialStatusEffect("DEAF", statusEffectIds.deaf, refreshVision);
+    registerSpecialStatusEffect("BURROW", statusEffectIds.burrow, initializeVisionAndLight);
+    registerSpecialStatusEffect("DEAF", statusEffectIds.deaf, initializeVision);
     registerSpecialStatusEffect("DISEASE", statusEffectIds.disease, refreshVision);
-    registerSpecialStatusEffect("ETHEREAL", statusEffectIds.ethereal, initializeVision);
+    registerSpecialStatusEffect("ETHEREAL", statusEffectIds.ethereal, initializeVisionAndLight);
     registerSpecialStatusEffect("FLY", statusEffectIds.fly, refreshVision);
     registerSpecialStatusEffect("HOVER", statusEffectIds.hover, refreshVision);
     registerSpecialStatusEffect("INAUDIBLE", statusEffectIds.inaudible, refreshVision);
-    registerSpecialStatusEffect("PETRIFIED", statusEffectIds.petrified, refreshVision);
+    registerSpecialStatusEffect("PETRIFIED", statusEffectIds.petrified, initializeVision);
     registerSpecialStatusEffect("POISON", statusEffectIds.poison, refreshVision);
-    registerSpecialStatusEffect("SLEEP", statusEffectIds.sleep, refreshVision);
-    registerSpecialStatusEffect("UNCONSCIOUS", statusEffectIds.unconscious, refreshVision);
+    registerSpecialStatusEffect("SLEEP", statusEffectIds.sleep, initializeVision);
+    registerSpecialStatusEffect("UNCONSCIOUS", statusEffectIds.unconscious, initializeVision);
 
     registerStatusEffect(
         CONFIG.specialStatusEffects.BURROW,
