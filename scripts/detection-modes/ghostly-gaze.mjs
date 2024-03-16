@@ -29,6 +29,7 @@ export class DetectionModeGhostlyGaze extends DetectionModeDarkvision {
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)))
             && !(target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE)
                 || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+                && !(target.actor?.type === "npc" && target.actor.system.details.type?.value === "undead")
                 && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))));
     }
 }

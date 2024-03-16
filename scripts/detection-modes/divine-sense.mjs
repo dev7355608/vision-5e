@@ -38,6 +38,7 @@ export class DetectionModeDivineSense extends DetectionMode {
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)))
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            && !(target.actor?.type === "npc" && target.actor.system.details.type?.value === "undead")
             && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))) {
             return false;
         }
