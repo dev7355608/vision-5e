@@ -35,7 +35,7 @@ export class DetectionModeDivineSense extends DetectionMode {
         if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))) {
-            return true;
+            return false;
         }
         const actor = target.actor;
         if (!actor) return false;
