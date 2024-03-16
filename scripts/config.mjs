@@ -1,3 +1,4 @@
+import settings from "./settings.mjs";
 import { DetectionModeBlindsense } from "./detection-modes/blindsense.mjs";
 import { DetectionModeBlindsight } from "./detection-modes/blindsight.mjs";
 import { DetectionModeDarkvision } from "./detection-modes/darkvision.mjs";
@@ -193,6 +194,26 @@ VisionSource.prototype._initialize = ((_initialize) => function (data) {
 
     _initialize.call(this, data);
 })(VisionSource.prototype._initialize);
+
+VisionSource.prototype._getPolygonConfiguration = ((_getPolygonConfiguration) => function () {
+    const config = _getPolygonConfiguration.call(this);
+
+    if (this.object instanceof Token && this.object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
+        config.radius = Math.min(config.radius, this.object.getLightRadius(settings.metric ? 18 : 60));
+    }
+
+    return config;
+})(VisionSource.prototype._getPolygonConfiguration);
+
+DetectionMode.prototype._testRange = ((_testRange) => function (visionSource, mode, target, test) {
+    let originalRange = mode.range;
+    const source = visionSource.object;
+    const ethereal = source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL);
+    if (ethereal) mode.range = Math.min(originalRange, settings.metric ? 18 : 60);
+    const result = _testRange.call(this, visionSource, mode, target, test);
+    if (ethereal) mode.range = originalRange;
+    return result;
+})(DetectionMode.prototype._testRange);
 
 Hooks.on("initializeVisionSources", () => {
     const visionModeData = canvas.effects.visibility.visionModeData;
