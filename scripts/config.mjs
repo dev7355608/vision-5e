@@ -52,6 +52,10 @@ export function registerStatusEffect(id, name, icon, index) {
 
     const statusEffect = { id, name, icon };
 
+    if (foundry.utils.isNewerVersion(game.system.id, 3)) {
+        statusEffect._id = dnd5e.utils.staticID(id);
+    }
+
     Object.defineProperty(statusEffect, "label", {
         get() { return this.name; },
         set(value) { this.name = value; },
@@ -115,7 +119,7 @@ Hooks.once("init", () => {
     const initializeVision = () => canvas.perception.update({ initializeVision: true });
     const refreshVision = () => canvas.perception.update({ refreshVision: true });
 
-    for (const id of ["burrow", "deaf", "disease", "ethereal", "fly", "inaudible", "poison"]) {
+    for (const id of ["burrow", "deaf", "disease", "ethereal", "fly", "hover", "inaudible", "petrified", "poison", "sleep", "unconscious"]) {
         statusEffectIds[id] = id;
     }
 
@@ -124,7 +128,10 @@ Hooks.once("init", () => {
         statusEffectIds.deaf = "deafened";
         statusEffectIds.disease = "diseased";
         statusEffectIds.fly = "flying";
+        statusEffectIds.hover = "hovering";
         statusEffectIds.poison = "poisoned";
+        statusEffectIds.sleep = "sleeping";
+        statusEffectIds.unconscious = "unconscious";
     }
 
     registerSpecialStatusEffect("BURROW", statusEffectIds.burrow, (token) => {
@@ -140,8 +147,12 @@ Hooks.once("init", () => {
     registerSpecialStatusEffect("DISEASE", statusEffectIds.disease, refreshVision);
     registerSpecialStatusEffect("ETHEREAL", statusEffectIds.ethereal, initializeVision);
     registerSpecialStatusEffect("FLY", statusEffectIds.fly, refreshVision);
+    registerSpecialStatusEffect("HOVER", statusEffectIds.hover, refreshVision);
     registerSpecialStatusEffect("INAUDIBLE", statusEffectIds.inaudible, refreshVision);
+    registerSpecialStatusEffect("PETRIFIED", statusEffectIds.petrified, refreshVision);
     registerSpecialStatusEffect("POISON", statusEffectIds.poison, refreshVision);
+    registerSpecialStatusEffect("SLEEP", statusEffectIds.sleep, refreshVision);
+    registerSpecialStatusEffect("UNCONSCIOUS", statusEffectIds.unconscious, refreshVision);
 
     registerStatusEffect(
         CONFIG.specialStatusEffects.BURROW,
@@ -172,7 +183,11 @@ Hooks.once("init", () => {
 
 VisionSource.prototype._initialize = ((_initialize) => function (data) {
     if (this.object instanceof Token) {
-        data.blinded ||= this.object.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW);
+        const token = this.object.document;
+        data.blinded ||= token.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
+            || token.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
+            || token.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)
+            || token.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP);
     }
 
     _initialize.call(this, data);

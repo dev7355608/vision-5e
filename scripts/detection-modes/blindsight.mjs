@@ -47,7 +47,10 @@ export class DetectionModeBlindsight extends DetectionMode {
     /** @override */
     _canDetect(visionSource, target) {
         const source = visionSource.object;
-        return !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF) && !this.#ignoreDeafness(visionSource))
+        return !(source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF) && !this.#ignoreDeafness(visionSource)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)))
             && !(target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
                 || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
                 && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))));

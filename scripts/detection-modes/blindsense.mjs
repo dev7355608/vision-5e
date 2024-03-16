@@ -35,6 +35,9 @@ export class DetectionModeBlindsense extends DetectionMode {
         if (!actor || actor.type !== "character" && actor.type !== "npc") return false;
         const source = visionSource.object;
         if (source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW))) return false;
         if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)

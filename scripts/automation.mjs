@@ -164,7 +164,7 @@ Hooks.once("init", () => {
 
             let hearing;
             if (typeof settings.defaultHearingRange === "string") {
-                const roll = new Roll(settings.defaultHearingRange, this.getRollData({ deterministic: true }));
+                const roll = Roll.create(settings.defaultHearingRange, this.getRollData({ deterministic: true }));
                 roll.evaluate({ async: false });
                 hearing = roll.total;
             } else {
