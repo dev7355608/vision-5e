@@ -7,8 +7,9 @@
 
 Additional and improved Vision/Detection modes for D&D 5e including automatic vision management based on the actor's senses and active effects.
 
-The automation detects relevant feats and effects that affect the creatures senses by their name (supported are English, German, French, and Spanish translations). No configuration is required to get started unless
-- ... you use *meters* instead of *feet*, or
+The automation detects relevant feats and effects that affect the creatures senses by their name (supported are English, German, French, Spanish, and Portuguese (Brazil) translations). No configuration is required to get started unless
+
+- ... you use _meters_ instead of _feet_, or
 - ... you want to change the default hearing range formula or turn it off by default.
 
 You can configure the units and default hearing range in the settings.
@@ -140,34 +141,34 @@ _Note: Attribute keys starting with `ATL.` require the [Active Token Effects](ht
 
 ### Translations
 
-| English                     | _Source_                              | German                         | French                                                                      | Spanish                           |
-| --------------------------- | ------------------------------------- | ------------------------------ | --------------------------------------------------------------------------- | --------------------------------- |
-| `Blind Senses`              | _Monster feat_                        | `Blinde Sinne`                 | `Sens aveugles`                                                             | `Sentidos de ciego`               |
-| `Blindsense`                | _Rogue feat_                          | `Blindgespür`                  | `Perception aveugle`                                                        | `Sentir sin ver`                  |
-| `Centaur`                   | _Race_                                | `Zentaur`                      | `Centaure`                                                                  | `Centauro`                        |
-| `Changeling`                | _Race_                                | `Wechselbalg`                  | `Changelin`                                                                 | `Replicante`                      |
-| `Detect Evil and Good`      | _Spell_                               | `Gutes und Böses entdecken`    | `Détection du mal et du bien`                                               | `Detectar el bien y el mal`       |
-| `Detect Magic`              | _Spell_                               | `Magie entdecken`              | `Détection de la magie`                                                     | `Detectar magia`                  |
-| `Detect Poison and Disease` | _Spell_                               | `Gift und Krankheit entdecken` | `Détection du poison et des maladies`                                       | `Detectar venenos y enfermedades` |
-| `Detect Thoughts`           | _Spell_                               | `Gedanken wahrnehmen`          | `Détection des pensées`                                                     | `Detectar pensamientos`           |
-| `Devil's Sight`             | _Warlock invocation_ / _Monster feat_ | `Teufelssicht`                 | `Vision de diable` / `Vision du diable` / `Vue de diable` / `Vue du diable` | `Vista del diablo`                |
-| `Divine Sense`              | _Paladin feat_                        | `Göttliches Gespür`            | `Perception divine`                                                         | `Sentidos divinos`                |
-| `Echolocation`              | _Monster feat_                        | `Echolot`                      | `Écholocation` / `Écholocalisation`                                         | `Ecolocalización`                 |
-| `Eldritch Adept`            | _Feat_                                | `Schauerlicher Adept`          | `Adepte occulte`                                                            | `Adepto sobrenatural`             |
-| `Eldritch Invocation`       | _Warlock feat_                        | `Schauerliche Anrufung`        | `Invocation occulte` / `Manifestation occulte`                              | `Invocación sobrenatural`         |
-| `Ethereal Sight`            | _Monster feat_                        | `Ätherische Sicht`             | `Vision éthérée` / `Vue éthérée`                                            | `Visión etérea`                   |
-| `Fairy`                     | _Race_                                | `Fee`                          | `Fée`                                                                       | `Hada`                            |
-| `Ghostly Gaze`              | _Warlock invocation_                  | `Geisterhafter Blick`          | `Regard fantomatique`                                                       | `Mirada fantasmal`                |
-| `Hexblood`                  | _Race_                                | `Hexblut`                      | `Sang maudit`                                                               | `Sangre maléfica`                 |
-| `Hollow One`                | _Supernatural Gift_                   | `Leerwandler`                  | `Celui-qui-est-creux`                                                       | `Aquel que está vacío`            |
-| `Magic Awareness`           | _Barbarian (Path of Wild Magic) feat_ | `Magische Wahrnehmung`         | `Conscience magique`                                                        | `Conciencia mágica`               |
-| `Satyr`                     | _Race_                                | `Satyr`                        | `Satyre`                                                                    | `Sátiro`                          |
-| `See Invisibility`          | _Spell_                               | `Unsichtbares sehen`           | `Détection de l'invisibilité`                                               | `Ver invisibilidad`               |
-| `Sense Magic`               | _Monster feat_                        | `Magie spüren`                 | `Détection de la magie` / `Perception de la magie`                          | `Sentir magia`                    |
-| `Shapechanger`              | _Monster feat/subtype_                | `Gestaltwandler`               | `Métamorphe`                                                                | `Cambiaformas`                    |
-| `Supernatural Gift`         | _Character Creation Option_           | `Übernatürliche Gabe`          | `Don surnaturel`                                                            | `Don supernatural`                |
-| `Umbral Sight`              | _Ranger (Gloomstalker) feat_          | `Düstersicht`                  | `Vision des ombres`                                                         | `Visión en la umbra`              |
-| `Witch Sight`               | _Warlock invocation_                  | `Hexensicht`                   | `Vision de sorcier` / `Vision sorcière` / `Vue de sorcier` / `Vue sorcière` | `Visión bruja`                    |
+| English                     | _Source_                              | German                         | French                                                                      | Spanish                           | Portuguese (Brazil)                               |
+| --------------------------- | ------------------------------------- | ------------------------------ | --------------------------------------------------------------------------- | --------------------------------- | ------------------------------------------------- |
+| `Blind Senses`              | _Monster feat_                        | `Blinde Sinne`                 | `Sens aveugles`                                                             | `Sentidos de ciego`               | `Percepção às cegas`                              |
+| `Blindsense`                | _Rogue feat_                          | `Blindgespür`                  | `Perception aveugle`                                                        | `Sentir sin ver`                  | `Sentido cego` / `Sentido às cegas`               |
+| `Centaur`                   | _Race_                                | `Zentaur`                      | `Centaure`                                                                  | `Centauro`                        | `Centauro`                                        |
+| `Changeling`                | _Race_                                | `Wechselbalg`                  | `Changelin`                                                                 | `Replicante`                      | `Transmorfo`                                      |
+| `Detect Evil and Good`      | _Spell_                               | `Gutes und Böses entdecken`    | `Détection du mal et du bien`                                               | `Detectar el bien y el mal`       | `Detectar o bem e o mal` / `Detectar o bem e mal` |
+| `Detect Magic`              | _Spell_                               | `Magie entdecken`              | `Détection de la magie`                                                     | `Detectar magia`                  | `Detectar magia`                                  |
+| `Detect Poison and Disease` | _Spell_                               | `Gift und Krankheit entdecken` | `Détection du poison et des maladies`                                       | `Detectar venenos y enfermedades` | `Detectar veneno e doença`                        |
+| `Detect Thoughts`           | _Spell_                               | `Gedanken wahrnehmen`          | `Détection des pensées`                                                     | `Detectar pensamientos`           | `Detectar pensamentos`                            |
+| `Devil's Sight`             | _Warlock invocation_ / _Monster feat_ | `Teufelssicht`                 | `Vision de diable` / `Vision du diable` / `Vue de diable` / `Vue du diable` | `Vista del diablo`                | `Visão diabólica` / `Visão do diabo`              |
+| `Divine Sense`              | _Paladin feat_                        | `Göttliches Gespür`            | `Perception divine`                                                         | `Sentidos divinos`                | `Sentido divino`                                  |
+| `Echolocation`              | _Monster feat_                        | `Echolot`                      | `Écholocation` / `Écholocalisation`                                         | `Ecolocalización`                 | `Ecolocalização`                                  |
+| `Eldritch Adept`            | _Feat_                                | `Schauerlicher Adept`          | `Adepte occulte`                                                            | `Adepto sobrenatural`             | `Adepto místico`                                  |
+| `Eldritch Invocation`       | _Warlock feat_                        | `Schauerliche Anrufung`        | `Invocation occulte` / `Manifestation occulte`                              | `Invocación sobrenatural`         | `Invocação mística`                               |
+| `Ethereal Sight`            | _Monster feat_                        | `Ätherische Sicht`             | `Vision éthérée` / `Vue éthérée`                                            | `Visión etérea`                   | `Visão etérea`                                    |
+| `Fairy`                     | _Race_                                | `Fee`                          | `Fée`                                                                       | `Hada`                            | `Fada`                                            |
+| `Ghostly Gaze`              | _Warlock invocation_                  | `Geisterhafter Blick`          | `Regard fantomatique`                                                       | `Mirada fantasmal`                | `Olhar fantasmagórico`                            |
+| `Hexblood`                  | _Race_                                | `Hexblut`                      | `Sang maudit`                                                               | `Sangre maléfica`                 | `Sangre maléfica`                                 |
+| `Hollow One`                | _Supernatural Gift_                   | `Leerwandler`                  | `Celui-qui-est-creux`                                                       | `Aquel que está vacío`            | `Oco`                                             |
+| `Magic Awareness`           | _Barbarian (Path of Wild Magic) feat_ | `Magische Wahrnehmung`         | `Conscience magique`                                                        | `Conciencia mágica`               | `Percepção mágica` / `Vestígios mágicos`          |
+| `Satyr`                     | _Race_                                | `Satyr`                        | `Satyre`                                                                    | `Sátiro`                          | `Sátiro`                                          |
+| `See Invisibility`          | _Spell_                               | `Unsichtbares sehen`           | `Détection de l'invisibilité`                                               | `Ver invisibilidad`               | `Ver invisibilidade` / `Ver o invisível`          |
+| `Sense Magic`               | _Monster feat_                        | `Magie spüren`                 | `Détection de la magie` / `Perception de la magie`                          | `Sentir magia`                    | `Sentir magia`                                    |
+| `Shapechanger`              | _Monster feat/subtype_                | `Gestaltwandler`               | `Métamorphe`                                                                | `Cambiaformas`                    | `Metamorfo`                                       |
+| `Supernatural Gift`         | _Character Creation Option_           | `Übernatürliche Gabe`          | `Don surnaturel`                                                            | `Don supernatural`                | `Presente sobrenatural`                           |
+| `Umbral Sight`              | _Ranger (Gloomstalker) feat_          | `Düstersicht`                  | `Vision des ombres`                                                         | `Visión en la umbra`              | `Visão umbral`                                    |
+| `Witch Sight`               | _Warlock invocation_                  | `Hexensicht`                   | `Vision de sorcier` / `Vision sorcière` / `Vue de sorcier` / `Vue sorcière` | `Visión bruja`                    | `Visão da bruxa`                                  |
 
 _Note: The automation is not case-sensitive._
 

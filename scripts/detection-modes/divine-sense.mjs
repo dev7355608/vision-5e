@@ -89,7 +89,7 @@ export const HOLLOW_ONE_FEAT = createNameRegExp({
         "Aquel que está vacío",
     ],
     pt_BR: [
-        [["Presente Sobrenatural", "Presentes Sorenaturais"], ": " , ["Oco", "Hollow One"]],
+        [["Presente Sobrenatural", "Presentes Sobrenaturais"], ": " , ["Oco", "Hollow One"]],
         "Oco",
     ],
 });
