@@ -337,7 +337,7 @@ Hooks.once("init", () => {
         de: "Gutes und Böses entdecken",
         fr: "Détection du mal et du bien",
         es: "Detectar el bien y el mal",
-        pt_BR: ["Detectar o Bem e", [" o", ""], " Mal"],
+        "pt-BR": ["Detectar o Bem e", [" o", ""], " Mal"],
     }, {
         id: "detectEvilAndGood",
         range: 30
@@ -348,7 +348,7 @@ Hooks.once("init", () => {
         de: "Magie entdecken",
         fr: "Détection de la magie",
         es: "Detectar magia",
-        pt_BR: "Detectar Magia",
+        "pt-BR": "Detectar Magia",
     }, {
         id: "detectMagic",
         range: 30
@@ -359,7 +359,7 @@ Hooks.once("init", () => {
         de: "Gift und Krankheit entdecken",
         fr: "Détection du poison et des maladies",
         es: "Detectar venenos y enfermedades",
-        pt_BR: "Detectar Veneno e Doença",
+        "pt-BR": "Detectar Veneno e Doença",
     }, {
         id: "detectPoisonAndDisease",
         range: 30
@@ -370,7 +370,7 @@ Hooks.once("init", () => {
         de: "Gedanken wahrnehmen",
         fr: "Détection des pensées",
         es: "Detectar pensamientos",
-        pt_BR: "Detectar Pensamentos",
+        "pt-BR": "Detectar Pensamentos",
     }, {
         id: "detectThoughts",
         range: 30
@@ -381,7 +381,7 @@ Hooks.once("init", () => {
         de: "Göttliches Gespür",
         fr: ["Perception divine", ["", " [Paladin]"]],
         es: "Sentidos divinos",
-        pt_BR: "Sentido Divino",
+        "pt-BR": "Sentido Divino",
     }, {
         id: "divineSense",
         range: 60
@@ -409,7 +409,7 @@ Hooks.once("init", () => {
             "Adepto sobrenatural: Mirada fantasmal",
             "Mirada fantasmal",
         ],
-        pt_BR: [
+        "pt-BR": [
             ["Invocação", [" Mística", ""], ": Olhar Fantasmagórico"],
             ["Invocações", [" Místicas", ""], ": Olhar Fantasmagórico"],
             "Adepto Místico: Olhar Fantasmagórico",
@@ -425,7 +425,7 @@ Hooks.once("init", () => {
         de: "Magische Wahrnehmung",
         fr: "Conscience magique",
         es: "Conciencia mágica",
-        pt_BR: ["Percepção Mágica", "Vestígios Mágicos"],
+        "pt-BR": ["Percepção Mágica", "Vestígios Mágicos"],
     }, {
         id: "detectMagic",
         range: 60
@@ -436,7 +436,7 @@ Hooks.once("init", () => {
         de: "Unsichtbares sehen",
         fr: ["Détection de l", ["'", "’"], "invisibilité"],
         es: "Ver invisibilidad",
-        pt_BR: ["Ver o Invisível", "Ver Invisibilidade"],
+        "pt-BR": ["Ver o Invisível", "Ver Invisibilidade"],
     }, {
         id: "seeInvisibility",
         range: 1e15
@@ -447,7 +447,7 @@ Hooks.once("init", () => {
         de: "Blindgespür",
         fr: ["Perception aveugle", ["", " [Roublard]"]],
         es: "Sentir sin ver",
-        pt_BR: ["Sentido às Cegas", "Sentido Cego"],
+        "pt-BR": ["Sentido às Cegas", "Sentido Cego"],
     }, {
         id: "blindsense",
         range: 10
@@ -458,7 +458,7 @@ Hooks.once("init", () => {
         de: "Teufelssicht",
         fr: [["Vision", "Vue"], " ", ["de", "du"], " diable"],
         es: "Vista del diablo",
-        pt_BR: ["Visão do Diabo", "Visão Diabólica"],
+        "pt-BR": ["Visão do Diabo", "Visão Diabólica"],
     }, {
         id: "_devilsSight",
         range: 120
@@ -469,7 +469,7 @@ Hooks.once("init", () => {
         de: "Ätherische Sicht",
         fr: [["Vision", "Vue"], " éthérée"],
         es: "Visión etérea",
-        pt_BR: "Visão Etérea",
+        "pt-BR": "Visão Etérea",
     }, {
         id: "etherealSight",
         range: RANGE_REGEX
@@ -493,7 +493,7 @@ Hooks.once("init", () => {
             [["Invocación sobrenatural", "Invocaciones sobrenaturales"], ": Vista del diablo"],
             "Adepto sobrenatural: Vista del diablo",
         ],
-        pt_BR: [
+        "pt-BR": [
             ["Invocação", [" Mística", ""], ": ", ["Visão do Diabo", "Visão Diabólica"]],
             ["Invocações", [" Místicas", ""], ": ", ["Visão do Diabo", "Visão Diabólica"]],
             ["Adepto Místico: ", ["Visão do Diabo", "Visão Diabólica"]],
@@ -525,7 +525,7 @@ Hooks.once("init", () => {
             "Adepto sobrenatural: Visión bruja",
             "Visión bruja",
         ],
-        pt_BR: [
+        "pt-BR": [
             ["Invocação", [" Mística", ""], ": Visão da Bruxa"],
             ["Invocações", [" Místicas", ""], ": Visão da Bruxa"],
             "Adepto Místico: Visão da Bruxa",
@@ -541,7 +541,7 @@ Hooks.once("init", () => {
         de: "Magie spüren",
         fr: [["Détection", "Perception"], " de la magie"],
         es: "Sentir magia",
-        pt_BR: "Sentir Magia",
+        "pt-BR": "Sentir Magia",
     }, {
         id: "detectMagic",
         range: RANGE_REGEX

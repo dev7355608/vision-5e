@@ -51,5 +51,5 @@ const UMBRAL_SIGHT_FEAT = createNameRegExp({
     de: "Düstersicht",
     fr: "Vision des ombres",
     es: "Visión en la umbra",
-    pt_BR: "Visão Umbral",
+    "pt-BR": "Visão Umbral",
 });
