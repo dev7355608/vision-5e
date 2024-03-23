@@ -33,10 +33,18 @@ export class DetectionModeBlindsight extends DetectionMode {
         const source = visionSource.object;
         if (source instanceof Token) {
             const actor = source.actor;
-            if (actor && (actor.type === "character" || actor.type === "npc")) {
-                for (const item of actor.items) {
-                    if (item.type === "feat" && ECHOLOCATION_OR_BLIND_SENSES_FEAT.test(item.name)) {
-                        return false;
+            if (actor) {
+                if (actor.type === "character") {
+                    for (const item of actor.items) {
+                        if (item.type === "feat" && ECHOLOCATION_FEAT.test(item.name)) {
+                            return false;
+                        }
+                    }
+                } else if (actor.type === "npc") {
+                    for (const item of actor.items) {
+                        if (item.type === "feat" && (ECHOLOCATION_FEAT.test(item.name) || BLIND_SENSES_FEAT.test(item.name))) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -86,10 +94,18 @@ export class DetectionModeBlindsight extends DetectionMode {
     }
 }
 
-const ECHOLOCATION_OR_BLIND_SENSES_FEAT = createNameRegExp({
-    en: ["Echolocation", "Blind Senses"],
-    de: ["Echolot", "Blinde Sinne"],
-    fr: ["Écholocalisation", "Écholocation", "Sens aveugles"],
-    es: ["Ecolocalización", "Sentidos de ciego"],
-    "pt-BR": ["Ecolocalização", "Sentido Cego"],
+const ECHOLOCATION_FEAT = createNameRegExp({
+    en: "Echolocation",
+    de: "Echolot",
+    fr: ["Écholocalisation", "Écholocation"],
+    es: "Ecolocalización",
+    "pt-BR": "Ecolocalização",
+});
+
+const BLIND_SENSES_FEAT = createNameRegExp({
+    en: "Blind Senses",
+    de: "Blinde Sinne",
+    fr: "Sens aveugles",
+    es: "Sentidos de ciego",
+    "pt-BR": "Sentido Cego",
 });
