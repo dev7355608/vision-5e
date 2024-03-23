@@ -458,7 +458,7 @@ Hooks.once("init", () => {
         de: "Teufelssicht",
         fr: [["Vision", "Vue"], " ", ["de", "du"], " diable"],
         es: "Vista del diablo",
-        "pt-BR": ["Visão do Diabo", "Visão Diabólica"],
+        "pt-BR": ["Visão Diabólica", "Visão do Diabo"],
     }, {
         id: "_devilsSight",
         range: 120
