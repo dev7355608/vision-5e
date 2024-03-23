@@ -405,7 +405,8 @@ Hooks.once("init", () => {
             "Regard fantomatique",
         ],
         es: [
-            [["Invocación sobrenatural", "Invocaciones sobrenaturales"], ": Mirada fantasmal"],
+            ["Invocación", [" sobrenatural", ""], ": Mirada fantasmal"],
+            ["Invocaciones", [" sobrenaturales", ""], ": Mirada fantasmal"],
             "Adepto sobrenatural: Mirada fantasmal",
             "Mirada fantasmal",
         ],
@@ -490,7 +491,8 @@ Hooks.once("init", () => {
             ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable"],
         ],
         es: [
-            [["Invocación sobrenatural", "Invocaciones sobrenaturales"], ": Vista del diablo"],
+            ["Invocación", [" sobrenatural", ""], ": Vista del diablo"],
+            ["Invocaciones", [" sobrenaturales", ""], ": Vista del diablo"],
             "Adepto sobrenatural: Vista del diablo",
         ],
         "pt-BR": [
@@ -521,7 +523,8 @@ Hooks.once("init", () => {
             [["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
         ],
         es: [
-            [["Invocación sobrenatural", "Invocaciones sobrenaturales"], ": Visión bruja"],
+            ["Invocación", [" sobrenatural", ""], ": Visión bruja"],
+            ["Invocaciones", [" sobrenaturales", ""], ": Visión bruja"],
             "Adepto sobrenatural: Visión bruja",
             "Visión bruja",
         ],
