@@ -48,4 +48,5 @@ const EVIL_OR_GOOD_RACES = createNameRegExp({
     de: ["Zentaur", "Wechselbalg", "Fee", "Hexblut", "Satyr"],
     fr: ["Centaure", "Changelin", "Fée", "Sang maudit", "Satyre"],
     es: ["Centauro", "Replicante", "Hada", "Sangre maléfica", "Sátiro"],
+    "pt-BR": ["Centauro", "Transmorfo", "Fada", "Sangue Maldito", "Sátiro"],
 });

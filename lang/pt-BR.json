@@ -1,0 +1,22 @@
+{
+    "VISION5E.Blindsense": "Sentido Cego",
+    "VISION5E.Burrowing": "Escavando",
+    "VISION5E.DetectEvilAndGood": "Detectar o Bem e o Mal",
+    "VISION5E.DetectMagic": "Detectar Magia",
+    "VISION5E.DetectPoisonAndDisease": "Detectar Veneno e Doença",
+    "VISION5E.DetectThoughts": "Detectar Pensamentos",
+    "VISION5E.DevilsSight": "Visão Diabólica",
+    "VISION5E.DivineSense": "Sentido Divino",
+    "VISION5E.Echolocation": "Ecolocalização",
+    "VISION5E.Ethereal": "Etéreo",
+    "VISION5E.EtherealSight": "Visão Etérea",
+    "VISION5E.GhostlyGaze": "Olhar Fantasmagórico",
+    "VISION5E.Hearing": "Audição",
+    "VISION5E.Inaudible": "Inaudível",
+    "VISION5E.LightPerception": "Percepção da Luz",
+    "VISION5E.SeeInvisibility": "Ver o Invisível",
+    "VISION5E.WitchSight": "Visão de Bruxa",
+    "VISION5E.Settings.DefaultHearingRangeN": "Alcance de Audição Padrão",
+    "VISION5E.Settings.DefaultHearingRangeL": "Configure o quão longe tokens podem ouvir por padrão. Requer que o mundo seja reiniciado.",
+    "VISION5E.Settings.UnitsL": "Configure qual unidade de medida é usada. Requer que o mundo seja reiniciado."
+}
