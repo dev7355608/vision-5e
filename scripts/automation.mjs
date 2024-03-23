@@ -447,7 +447,7 @@ Hooks.once("init", () => {
         de: "Blindgespür",
         fr: ["Perception aveugle", ["", " [Roublard]"]],
         es: "Sentir sin ver",
-        "pt-BR": ["Sentido às Cegas", "Sentido Cego"],
+        "pt-BR": "Sentido Cego",
     }, {
         id: "blindsense",
         range: 10
