@@ -425,7 +425,7 @@ Hooks.once("init", () => {
         de: "Magische Wahrnehmung",
         fr: "Conscience magique",
         es: "Conciencia mágica",
-        "pt-BR": ["Percepção Mágica", "Vestígios Mágicos"],
+        "pt-BR": "Percepção Mágica",
     }, {
         id: "detectMagic",
         range: 60
