@@ -436,7 +436,7 @@ Hooks.once("init", () => {
         de: "Unsichtbares sehen",
         fr: ["Détection de l", ["'", "’"], "invisibilité"],
         es: "Ver invisibilidad",
-        "pt-BR": ["Ver o Invisível", "Ver Invisibilidade"],
+        "pt-BR": "Ver o Invisível",
     }, {
         id: "seeInvisibility",
         range: 1e15
