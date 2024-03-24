@@ -938,13 +938,31 @@ Hooks.on("destroyToken", (token) => {
     }
 });
 
+Token.prototype._onClickLeft = ((_onClickLeft) => function (event) {
+    const tool = game.activeTool;
+    if (tool === "target") {
+        event.stopPropagation();
+        if ((this.document.disposition === CONST.TOKEN_DISPOSITIONS.SECRET) && !this.isOwner) return;
+        return this.setTarget(!this.isTargeted, { releaseOthers: !event.shiftKey });
+    }
+    _onClickLeft.call(this, event);
+})(PlaceableObject.prototype._onClickLeft);
+
+Token.prototype._onClickRight2 = ((_onClickRight2) => function (event) {
+    if (!this._propagateRightClick(event)) event.stopPropagation();
+    if (this.isOwner && game.user.can("TOKEN_CONFIGURE")) return _onClickRight2.call(this, event);
+    if ((this.document.disposition === CONST.TOKEN_DISPOSITIONS.SECRET) && !this.isOwner) return;
+    return this.setTarget(!this.targeted.has(game.user), { releaseOthers: !event.shiftKey });
+})(PlaceableObject.prototype._onClickRight2);
+
 TokenLayer.prototype.targetObjects = function ({ x, y, width, height }, { releaseOthers = true } = {}) {
     const user = game.user;
 
     // Get the set of targeted tokens
-    const targets = this.placeables.filter(obj => {
-        if (!(obj.visible || obj.impreciseVisible)) return false;
-        let c = obj.center;
+    const targets = this.placeables.filter(t => {
+        if (!(t.visible || t.impreciseVisible)) return false;
+        if ((t.document.disposition === CONST.TOKEN_DISPOSITIONS.SECRET) && !t.isOwner) return false;
+        const c = t.center;
         return Number.between(c.x, x, x + width) && Number.between(c.y, y, y + height);
     });
 
@@ -973,6 +991,7 @@ ClientKeybindings._onTarget = function (context) {
     if (!(layer instanceof TokenLayer)) return false;
     const hovered = layer.hover ?? layer._impreciseHover;
     if (!hovered) return false;
+    if ((hovered.document.disposition === CONST.TOKEN_DISPOSITIONS.SECRET) && !hovered.isOwner) return false;
     hovered.setTarget(!hovered.isTargeted, { releaseOthers: !context.isShift });
     return true;
 };
