@@ -623,14 +623,35 @@ Object.defineProperties(Token.prototype, {
             const wasImpreciseVisible = this.impreciseVisible;
             this.detectionFilter = undefined;
             this.impreciseVisible = false;
-            const visible = isVisible.call(this);
-            if (visible
-                && canvas.effects.visibility.tokenVision
-                && canvas.effects.visionSources.has(this.sourceId)
-                && this.vision.active
-                && this.vision.detectionMode?.imprecise) {
-                this.detectionFilter = DetectionModeLightPerception.getDetectionFilter();
-                this.impreciseVisible = false;
+            let visible = isVisible.call(this);
+            if (canvas.effects.visibility.tokenVision) {
+                let overrideFilter = false;
+                if (visible) {
+                    const isVisionSource = this.vision.active && canvas.effects.visionSources.has(this.sourceId);
+                    if (isVisionSource) {
+                        if (this.vision.detectionMode?.imprecise) {
+                            overrideFilter = true;
+                        }
+                    } else if (this.controlled) {
+                        if ((!game.user.isGM || canvas.effects.visionSources.some(s => s.active))
+                            && !canvas.effects.visibility.testVisibility(this.center, { tolerance: Math.min(this.w, this.h) / 4, object: this })) {
+                            overrideFilter = true;
+                        }
+                    } else {
+                        if (!game.user.isGM && !canvas.effects.visionSources.some(s => s.active)) {
+                            overrideFilter = true;
+                        }
+                    }
+                } else if (!this.hasSight
+                    && !game.user.isGM && this.isOwner && !this.document.hidden
+                    && canvas.effects.visionSources.some(s => s.active)) {
+                    visible = true;
+                    overrideFilter = true;
+                }
+                if (overrideFilter) {
+                    this.detectionFilter = DetectionModeLightPerception.getDetectionFilter();
+                    this.impreciseVisible = false;
+                }
             }
             if (wasImpreciseVisible !== this.impreciseVisible) {
                 this._refreshBorder();
@@ -768,6 +789,35 @@ Object.defineProperties(Token.prototype, {
         enumerable: false
     },
 });
+
+Token.prototype._onDragLeftStart = ((_onDragLeftStart) => function (event) {
+    _onDragLeftStart.call(this, event);
+
+    const { clones, destination, origin } = event.interactionData;
+    const preview = game.settings.get("core", "tokenDragPreview");
+
+    // Determine dragged distance
+    const dx = destination.x - origin.x;
+    const dy = destination.y - origin.y;
+
+    // Update the position of each clone
+    for (let c of clones || []) {
+        const o = c._original;
+        const x = o.document.x + dx;
+        const y = o.document.y + dy;
+        if (preview && !game.user.isGM) {
+            const collision = o.checkCollision(o.getCenter(x, y));
+            if (collision) continue;
+        }
+        c.document.x = x;
+        c.document.y = y;
+        c.refresh();
+        if (preview) c.updateSource({ defer: true });
+    }
+
+    // Update perception immediately
+    if (preview) canvas.perception.update({ refreshLighting: true, refreshVision: true });
+})(Token.prototype._onDragLeftStart);
 
 Token.prototype._getBorderColor = ((_getBorderColor) => function (options = {}) {
     options.hover ??= this.hover || this._impreciseHover;
