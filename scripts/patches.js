@@ -642,8 +642,7 @@ Object.defineProperties(Token.prototype, {
                             overrideFilter = true;
                         }
                     }
-                } else if (!this.hasSight
-                    && !game.user.isGM && this.isOwner && !this.document.hidden
+                } else if (!game.user.isGM && this.isOwner && !this.document.hidden
                     && canvas.effects.visionSources.some(s => s.active)) {
                     visible = true;
                     overrideFilter = true;
