@@ -831,6 +831,18 @@ Token.prototype._getBorderColor = ((_getBorderColor) => function (options = {}) 
     return color;
 })(Token.prototype._getBorderColor);
 
+Token.prototype._getBorderColor = ((_getBorderColor) => function (options = {}) {
+    options.hover ??= this.hover || this._impreciseHover;
+
+    let color = _getBorderColor.call(this, options);
+
+    if (color !== null && this.impreciseVisible) {
+        color = CONFIG.Canvas.dispositionColors.INACTIVE;
+    }
+
+    return color;
+})(Token.prototype._getBorderColor);
+
 Token.prototype._renderDetectionFilter = function (renderer) {
     const filter = this.detectionFilter;
     const mesh = !this.visible ? this._impreciseMesh : this.mesh;
@@ -898,6 +910,15 @@ Hooks.on("drawToken", (token) => {
 
 Hooks.on("refreshToken", (token, flags) => {
     const mesh = token._impreciseMesh;
+
+    if (flags.refreshState) {
+        const isSecret = (token.document.disposition === CONST.TOKEN_DISPOSITIONS.SECRET) && !token.isOwner;
+        token.nameplate.renderable = !isSecret;
+        token.bars.renderable = !isSecret;
+        token.effects.renderable = !isSecret;
+        mesh.cursor = !isSecret ? "pointer" : null;
+    }
+
     const { w, h } = token;
     const { width, height } = mesh.texture;
     const s = Math.min(w / width, h / height);
