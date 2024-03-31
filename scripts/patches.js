@@ -766,7 +766,7 @@ Object.defineProperties(Token.prototype, {
             mesh.mouseInteractionManager = mgr.activate();
 
             mesh.render = ((render, token) => function (renderer) {
-                if (this.visible && this.renderable) {
+                if (this.visible && this.renderable && token.parent) {
                     token.updateTransform();
                     token.border?.render(renderer);
                     token.tooltip?.render(renderer);
