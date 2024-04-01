@@ -1,4 +1,5 @@
 import { DetectionModeDarkvision } from "./darkvision.mjs";
+import { isGhost } from "./light-perception.mjs";
 
 /**
  * The detection mode for Ghostly Gaze.
@@ -28,8 +29,7 @@ export class DetectionModeGhostlyGaze extends DetectionModeDarkvision {
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)))
             && !(target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-                && !(target.actor?.type === "npc" && target.actor.system.details.type?.value === "undead")
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL) && !isGhost(target.actor)
                 && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))));
     }
 }

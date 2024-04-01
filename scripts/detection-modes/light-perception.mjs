@@ -1,3 +1,5 @@
+import { createNameRegExp } from "../utils.js";
+
 const detectionModeLightPerceptionClass = ((detectionModeLightPerceptionClass) =>
     /**
      * The detection mode for Light Perception.
@@ -21,8 +23,7 @@ const detectionModeLightPerceptionClass = ((detectionModeLightPerceptionClass) =
                 || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)))
                 && !(target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE)
                     || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
-                    || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-                    && !(target.actor?.type === "npc" && target.actor.system.details.type?.value === "undead")
+                    || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL) && !isGhost(target.actor)
                     && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))));
         }
 
@@ -44,3 +45,32 @@ const detectionModeLightPerceptionClass = ((detectionModeLightPerceptionClass) =
 )(DetectionModeLightPerception);
 
 export { detectionModeLightPerceptionClass as DetectionModeLightPerception };
+
+export function isGhost(actor) {
+    if (!(actor && actor.type === "npc" && actor.system.details.type?.value === "undead")) return false;
+    let hasEtherealness = false;
+    let hasIncorporealMovement = false;
+    for (const item of actor.items) {
+        if (item.type !== "feat") continue;
+        hasEtherealness ||= ETHEREALNESS_FEAT.test(item.name);
+        hasIncorporealMovement ||= INCORPOREAL_MOVEMENT_FEAT.test(item.name);
+        if (hasEtherealness && hasIncorporealMovement) return true;
+    }
+    return false;
+}
+
+const ETHEREALNESS_FEAT = createNameRegExp({
+    en: "Etherealness",
+    de: "Körperlosigkeit",
+    fr: "Forme éthérée",
+    es: "Excursion eterea",
+    "pt-BR": "Forma Etérea",
+});
+
+const INCORPOREAL_MOVEMENT_FEAT = createNameRegExp({
+    en: "Incorporeal Movement",
+    de: "Körperlose Bewegung",
+    fr: "Mouvement incorporel",
+    es: "Movimiento incorpóreo",
+    "pt-BR": "Movimento Incorpóreo",
+});

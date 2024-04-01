@@ -1,4 +1,5 @@
 import { createNameRegExp } from "../utils.js";
+import { isGhost } from "./light-perception.mjs";
 
 /**
  * The detection mode for Divine Sense.
@@ -37,8 +38,7 @@ export class DetectionModeDivineSense extends DetectionMode {
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)))
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
-            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-            && !(target.actor?.type === "npc" && target.actor.system.details.type?.value === "undead")
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL) && !isGhost(target.actor)
             && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))) {
             return false;
         }

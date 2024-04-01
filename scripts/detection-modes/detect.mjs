@@ -1,3 +1,5 @@
+import { isGhost } from "./light-perception.mjs";
+
 /**
  * Base class for Detect Magic, Thoughts, etc.
  * @abstract
@@ -24,8 +26,7 @@ export class DetectionModeDetect extends DetectionMode {
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)))
             && !(target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-                && !(target.actor?.type === "npc" && target.actor.system.details.type?.value === "undead")
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL) && !isGhost(target.actor)
                 && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)));
     }
 }
