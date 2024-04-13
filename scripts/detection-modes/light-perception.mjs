@@ -29,8 +29,7 @@ const detectionModeLightPerceptionClass = ((detectionModeLightPerceptionClass) =
 
         /** @override */
         _testPoint(visionSource, mode, target, test) {
-            if (!this._testRange(visionSource, mode, target, test)) return false;
-            if (!this._testLOS(visionSource, mode, target, test)) return false;
+            if (!DetectionMode.prototype._testPoint.call(this, visionSource, mode, target, test)) return false;
             const source = visionSource.object;
             if (source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
                 return true;
