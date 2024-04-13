@@ -62,7 +62,7 @@ const ETHEREALNESS_FEAT = createNameRegExp({
     en: "Etherealness",
     de: "Körperlosigkeit",
     fr: "Forme éthérée",
-    es: "Excursion eterea",
+    es: "Excursión etérea",
     "pt-BR": "Forma Etérea",
 });
 
