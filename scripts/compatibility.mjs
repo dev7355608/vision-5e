@@ -50,6 +50,10 @@ Hooks.once("init", () => {
         return;
     }
 
+    if (foundry.utils.isNewerVersion(game.modules.get("stealthy").version, "3.14")) {
+        return;
+    }
+
     Hooks.once("setup", () => {
         stealthy.engine.basicVision = function (wrapped, visionSource, mode, config) {
             return wrapped(visionSource, mode, config);
