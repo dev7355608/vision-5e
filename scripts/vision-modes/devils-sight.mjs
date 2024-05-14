@@ -1,9 +1,7 @@
 /**
  * The vision mode for Devil's Sight.
  */
-export class VisionModeDevilsSight extends VisionMode {
-    detectionMode = "devilsSight";
-    neutralIfGlobalLight = true;
+export default class VisionModeDevilsSight extends VisionMode {
 
     constructor() {
         super({
@@ -18,7 +16,7 @@ export class VisionModeDevilsSight extends VisionMode {
             },
             vision: {
                 darkness: { adaptive: false },
-                defaults: { attenuation: 0, contrast: -0.15, saturation: 0, brightness: 0.5 },
+                defaults: { contrast: -0.15, saturation: 0, brightness: 0.5 },
             }
         });
     }

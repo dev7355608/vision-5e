@@ -1,111 +1,70 @@
-import { createNameRegExp } from "../utils.js";
-import { isGhost } from "./light-perception.mjs";
-
 /**
  * The detection mode for Blindsight.
  */
-export class DetectionModeBlindsight extends DetectionMode {
-    sourceType = "sight";
-    wallDirectionMode = PointSourcePolygon.WALL_DIRECTION_MODES.NORMAL;
-    useThreshold = false;
-    priority = 500;
+export default class DetectionModeBlindsight extends DetectionMode {
+    priority = 4;
 
-    constructor(data = {}, options = {}) {
-        super(foundry.utils.mergeObject({
+    constructor() {
+        super({
             id: "blindsight",
             label: "DND5E.SenseBlindsight",
-            type: DetectionMode.DETECTION_TYPES.OTHER,
+            type: DetectionMode.DETECTION_TYPES.SIGHT,
             walls: true,
-            angle: false
-        }, data), options);
+            angle: true
+        });
     }
 
     /** @override */
     static getDetectionFilter() {
         return this._detectionFilter ??= OutlineOverlayFilter.create({
             outlineColor: [1, 1, 1, 1],
+            thickness: [0, 0],
             knockout: true,
             wave: true
         });
     }
 
-    #ignoreDeafness(visionSource) {
-        if (this.id === "echolocation") return false;
+    /** @override */
+    _canDetect(visionSource, target) {
         const source = visionSource.object;
-        if (source instanceof Token) {
-            const actor = source.actor;
-            if (actor) {
-                if (actor.type === "character") {
-                    for (const item of actor.items) {
-                        if (item.type === "feat" && ECHOLOCATION_FEAT.test(item.name)) {
-                            return false;
-                        }
-                    }
-                } else if (actor.type === "npc") {
-                    for (const item of actor.items) {
-                        if (item.type === "feat" && (ECHOLOCATION_FEAT.test(item.name) || BLIND_SENSES_FEAT.test(item.name))) {
-                            return false;
-                        }
-                    }
-                }
+
+        if (target instanceof Token) {
+            if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+                && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+                && !target.document.hasStatusEffect(CONFIG.specialStatusEffects.MATERIAL)) {
+                return false;
             }
         }
+
+        if (source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEPING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)) {
+            return false;
+        }
+
+        if ((source.document.hasStatusEffect(CONFIG.specialStatusEffects.BLIND_SENSES)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.ECHOLOCATION))
+            && source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAFENED)) {
+            return false;
+        }
+
         return true;
     }
 
     /** @override */
-    _canDetect(visionSource, target) {
-        const source = visionSource.object;
-        return !(source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF) && !this.#ignoreDeafness(visionSource)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)))
-            && !(target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL) && !isGhost(target.actor)
-                && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))));
-    }
-
-    _applyBlindness(visionSource) {
-        return visionSource.data.deafened && !this.#ignoreDeafness(visionSource);
-    }
-
-    /** @override */
     _testLOS(visionSource, mode, target, test) {
-        if (!this._testAngle(visionSource, mode, target, test)) return false;
-        if (!this.walls) return true;
         return !CONFIG.Canvas.polygonBackends.sight.testCollision(
             { x: visionSource.x, y: visionSource.y },
             test.point,
             {
-                type: this.sourceType,
+                type: "sight",
                 mode: "any",
                 source: visionSource,
-                wallDirectionMode: this.wallDirectionMode,
-                // Blindsight is restricted by total cover and therefore cannot see
-                // through windows. So we do not want blindsight to see through
-                // a window as we get close to it. That's why we ignore thresholds.
-                // We make the assumption that all windows are configured as threshold
-                // walls. A move-based visibility check would also be an option to check
-                // for total cover, but this would have the undesirable side effect that
-                // blindsight wouldn't work through fences, portcullises, etc.
-                useThreshold: this.useThreshold
+                useThreshold: true
             }
         );
     }
 }
-
-const ECHOLOCATION_FEAT = createNameRegExp({
-    en: "Echolocation",
-    de: "Echolot",
-    fr: ["Écholocalisation", "Écholocation"],
-    es: "Ecolocalización",
-    "pt-BR": "Ecolocalização",
-});
-
-const BLIND_SENSES_FEAT = createNameRegExp({
-    en: "Blind Senses",
-    de: "Blinde Sinne",
-    fr: "Sens aveugles",
-    es: "Sentidos de ciego",
-    "pt-BR": "Sentido Cego",
-});

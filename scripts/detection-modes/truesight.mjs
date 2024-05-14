@@ -1,8 +1,8 @@
 /**
  * The detection mode for Truesight.
  */
-export class DetectionModeTruesight extends DetectionMode {
-    priority = 1000;
+export default class DetectionModeTruesight extends DetectionMode {
+    priority = 5;
 
     constructor() {
         super({
@@ -14,23 +14,46 @@ export class DetectionModeTruesight extends DetectionMode {
         });
     }
 
+
     /** @override */
-    static getDetectionFilter(basic) {
-        if (basic) return;
-        return this._detectionFilter ??= OutlineOverlayFilter.create({
-            outlineColor: [1, 1, 1, 1],
-            knockout: true
-        });
+    static getDetectionFilter(visionSource) {
+        if (visionSource?.visionMode.id === "truesight") {
+            return;
+        }
+
+        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.basicSight.getDetectionFilter();
     }
 
     /** @override */
     _canDetect(visionSource, target) {
         const source = visionSource.object;
-        return !(source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.BLIND)
+
+        if (target instanceof Token && target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)) {
+            return false;
+        }
+
+        if (source.document.hasStatusEffect(CONFIG.specialStatusEffects.BLINDED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)))
-            && !(target instanceof Token && target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW));
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEPING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /** @override */
+    _testLOS(visionSource, mode, target, test) {
+        if (super._testLOS(visionSource, mode, target, test)) {
+            return true;
+        }
+
+        if (visionSource.losDarknessExcluded !== visionSource.los) {
+            return visionSource.losDarknessExcluded.contains(test.point.x, test.point.y);
+        }
+
+        return false;
     }
 }

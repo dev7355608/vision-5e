@@ -1,16 +1,9 @@
-import { createNameRegExp } from "../utils.js";
-import { isGhost } from "./light-perception.mjs";
-
 /**
  * The detection mode for Divine Sense.
  */
-export class DetectionModeDivineSense extends DetectionMode {
-    sourceType = "sight";
-    wallDirectionMode = PointSourcePolygon.WALL_DIRECTION_MODES.NORMAL;
-    useThreshold = false;
+export default class DetectionModeDivineSense extends DetectionMode {
     imprecise = true;
     important = true;
-    priority = -3000;
 
     constructor() {
         super({
@@ -31,37 +24,41 @@ export class DetectionModeDivineSense extends DetectionMode {
 
     /** @override */
     _canDetect(visionSource, target) {
-        if (!(target instanceof Token)) return false;
         const source = visionSource.object;
-        if ((source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)))
-            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
-            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL) && !isGhost(target.actor)
-            && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))) {
+
+        if (!(target instanceof Token)
+            || !target.actor
+            || target.actor.type !== "character" && target.actor.type !== "npc"
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            && !target.document.hasStatusEffect(CONFIG.specialStatusEffects.MATERIAL)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.OBJECT)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)) {
             return false;
         }
-        const actor = target.actor;
-        if (!actor) return false;
-        const isCharacter = actor.type === "character";
-        if (!isCharacter && actor.type !== "npc") return false;
-        const type = actor.system.details.type?.value;
-        if (type === "celestial" || type === "fiend" || type === "undead") return true;
-        if (isCharacter) {
-            for (const item of actor.items) {
-                if (item.type === "feat" && HOLLOW_ONE_FEAT.test(item.name)) {
-                    return true;
-                }
-            }
+
+        if (source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEPING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)) {
+            return false;
         }
-        return false;
+
+        if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.REVENANCE)) {
+            return true;
+        }
+
+        const type = target.actor.system.details.type.value;
+
+        return type === "celestial"
+            || type === "fiend"
+            || type === "undead";
     }
 
     /** @override */
     _testLOS(visionSource, mode, target, test) {
-        if (!this._testAngle(visionSource, mode, target, test)) return false;
-        if (!this.walls) return true;
         return !CONFIG.Canvas.polygonBackends.sight.testCollision(
             { x: visionSource.x, y: visionSource.y },
             test.point,
@@ -69,32 +66,8 @@ export class DetectionModeDivineSense extends DetectionMode {
                 type: "sight",
                 mode: "any",
                 source: visionSource,
-                wallDirectionMode: this.wallDirectionMode,
-                useThreshold: this.useThreshold
+                useThreshold: true
             }
         );
     }
 }
-
-export const HOLLOW_ONE_FEAT = createNameRegExp({
-    en: [
-        [["Supernatural Gift"], ["s", ""], ": Hollow One"],
-        "Hollow One",
-    ],
-    de: [
-        [["Übernatürliche Gabe"], ["n", ""], ": ", ["Leerwandler", "Hollow One"]],
-        "Leerwandler",
-    ],
-    fr: [
-        [["Don surnaturel", "Dons surnaturels"], [": ", " : "], ["Celui-qui-est-creux", "Hollow One"]],
-        "Celui-qui-est-creux",
-    ],
-    es: [
-        [["Don supernatural", "Dones supernaturales"], ": ", ["Aquel que está vacío", "Hollow One"]],
-        "Aquel que está vacío",
-    ],
-    "pt-BR": [
-        [["Dom Sobrenatural", "Dons Sobrenaturais"], ": ", ["Oco", "Hollow One"]],
-        "Oco",
-    ],
-});

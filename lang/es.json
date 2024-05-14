@@ -16,7 +16,6 @@
     "VISION5E.LightPerception": "Percepción de luz",
     "VISION5E.SeeInvisibility": "Ver invisibilidad",
     "VISION5E.WitchSight": "Visión bruja",
-    "VISION5E.Settings.DefaultHearingRangeN": "Distancia de audición por defecto",
-    "VISION5E.Settings.DefaultHearingRangeL": "Configura que tan lejos pueden oír los tokens por defecto. Requiere que el mundo sea recargado.",
-    "VISION5E.Settings.UnitsL": "Configura que unidad de distancia será usada. Requiere que el mundo sea recargado."
+    "VISION5E.SETTINGS.defaultHearingRange.label": "Distancia de audición por defecto",
+    "VISION5E.SETTINGS.defaultHearingRange.hint": "Configura que tan lejos pueden oír los tokens por defecto. Requiere que el mundo sea recargado."
 }

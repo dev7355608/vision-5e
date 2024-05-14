@@ -1,59 +1,73 @@
-import { createNameRegExp } from "../utils.js";
-import { isGhost } from "./light-perception.mjs";
-
 /**
  * The detection mode for Darkvision.
  */
-export class DetectionModeDarkvision extends DetectionModeBasicSight {
-    /**
-     * If false, Umbral Sight is ignored if the source and target have the same disposition.
-     * @type {boolean}
-     */
-    static friendlyUmbralSight = true;
+export default class DetectionModeDarkvision extends DetectionMode {
+    priority = 7;
 
-    constructor(data = {}, options = {}) {
-        super(foundry.utils.mergeObject({
-            id: DetectionMode.BASIC_MODE_ID,
+    constructor() {
+        super({
+            id: "basicSight",
             label: "DND5E.SenseDarkvision",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
             walls: true,
             angle: true
-        }, data), options);
+        });
+    }
+
+    /** @override */
+    static getDetectionFilter(visionSource) {
+        if (visionSource?.visionMode.id === "darkvision") {
+            return;
+        }
+
+        return this._detectionFilter ??= OutlineOverlayFilter.create({
+            outlineColor: [1, 1, 1, 1],
+            knockout: true
+        });
     }
 
     /** @override */
     _canDetect(visionSource, target) {
-        if (target instanceof Token) {
-            const actor = target.actor;
-
-            if (actor && (actor.type === "character" || actor.type === "npc")
-                && (this.constructor.friendlyUmbralSight
-                    || visionSource.object.document.disposition !== target.document.disposition)) {
-                for (const item of actor.items) {
-                    if (item.type === "feat" && UMBRAL_SIGHT_FEAT.test(item.name)) {
-                        return false;
-                    }
-                }
-            }
+        if (visionSource.blinded.darkness) {
+            return false;
         }
 
         const source = visionSource.object;
-        return !(source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.BLIND)
+
+        if (target instanceof Token) {
+            if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.UMBRAL_SIGHT)
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+                && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+                && !target.document.hasStatusEffect(CONFIG.specialStatusEffects.MATERIAL)
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE)) {
+                return false;
+            }
+        }
+
+        if (source.document.hasStatusEffect(CONFIG.specialStatusEffects.BLINDED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)))
-            && !(target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL) && !isGhost(target.actor)
-                && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))));
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEPING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /** @override */
+    _testLOS(visionSource, mode, target, test) {
+        if (super._testLOS(visionSource, mode, target, test)) {
+            return true;
+        }
+
+        if (visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT)
+            && visionSource.losDarknessExcluded !== visionSource.los) {
+            return visionSource.losDarknessExcluded.contains(test.point.x, test.point.y);
+        }
+
+        return false;
     }
 }
-
-const UMBRAL_SIGHT_FEAT = createNameRegExp({
-    en: "Umbral Sight",
-    de: "Düstersicht",
-    fr: "Vision des ombres",
-    es: "Visión en la umbra",
-    "pt-BR": "Visão Umbral",
-});

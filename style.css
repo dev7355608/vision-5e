@@ -1,21 +1,9 @@
-input[type="number"].vision-5e--range::placeholder {
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    font-family: "Font Awesome 6 Pro";
-    font-weight: 900;
-    font-style: normal;
-    font-variant: normal;
-    line-height: 1;
-    text-rendering: auto;
-    font-size: var(--font-size-12);
-}
-
 #token-hud .vision-5e.vision-modes {
     visibility: hidden;
     position: absolute;
     top: -1px;
-    left: -10px;
-    transform: translate(-100%, 0);
+    right: -10px;
+    transform: translate(100%, 0);
     display: block;
     padding: 0;
     box-sizing: content-box;

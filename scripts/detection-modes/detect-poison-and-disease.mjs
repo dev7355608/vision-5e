@@ -1,9 +1,10 @@
-import { DetectionModeDetect } from "./detect.mjs";
+import DetectionModeDetect from "./detect.mjs";
 
 /**
  * The detection mode for Detect Poison and Disease.
  */
-export class DetectionModeDetectPoisonAndDisease extends DetectionModeDetect {
+export default class DetectionModeDetectPoisonAndDisease extends DetectionModeDetect {
+
     constructor() {
         super({
             id: "detectPoisonAndDisease",
@@ -20,28 +21,14 @@ export class DetectionModeDetectPoisonAndDisease extends DetectionModeDetect {
 
     /** @override */
     _canDetect(visionSource, target) {
-        if (!super._canDetect(visionSource, target)) return false;
-
-        if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.POISON)
-            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.DISEASE)) {
-            return true;
+        if (!super._canDetect(visionSource, target)) {
+            return false;
         }
 
-        const actor = target.actor;
-
-        // A poisonous creature is a creature that has a poisonous natural weapon attack.
-        if (actor && (actor.type === "character" || actor.type === "npc")) {
-            for (const item of actor.items) {
-                if (item.type === "weapon" && item.system.weaponType === "natural"
-                    && (item.system.damage.parts.some(part => part[1] === "poison")
-                        || [
-                            item.system.critical.damage,
-                            item.system.damage.versatile,
-                            item.system.formula
-                        ].some(formula => /\[\s*poison\s*\]/i.test(formula)))) {
-                    return true;
-                }
-            }
+        if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.DISEASED)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.POISONED)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.POISONOUS)) {
+            return true;
         }
 
         return false;

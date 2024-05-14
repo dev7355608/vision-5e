@@ -1,47 +1,65 @@
-import { PingDetectionFilter } from "./filters/ping.mjs";
-
 /**
  * The detection mode for Blindsense.
  */
-export class DetectionModeBlindsense extends DetectionMode {
-    sourceType = "sight";
-    wallDirectionMode = PointSourcePolygon.WALL_DIRECTION_MODES.NORMAL;
-    useThreshold = true;
+export default class DetectionModeBlindsense extends DetectionMode {
+    priority = 2;
     imprecise = true;
-    priority = 499;
 
-    constructor(data = {}, options = {}) {
-        super(foundry.utils.mergeObject({
+    constructor() {
+        super({
             id: "blindsense",
             label: "VISION5E.Blindsense",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: true,
             angle: false
-        }, data), options);
-    }
-
-    /** @override */
-    static getDetectionFilter() {
-        return this._detectionFilter ??= PingDetectionFilter.create({
-            color: [1, 1, 1],
-            alpha: 0.75
         });
     }
 
     /** @override */
+    static getDetectionFilter() {
+        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.blindsight.getDetectionFilter();
+    }
+
+    /** @override */
     _canDetect(visionSource, target) {
-        if (!(target instanceof Token)) return false;
-        const actor = target.actor;
-        if (!actor || actor.type !== "character" && actor.type !== "npc") return false;
         const source = visionSource.object;
-        if (source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAF)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW))) return false;
-        if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
+
+        if (!(target instanceof Token)
+            || !target.actor
+            || target.actor.type !== "character" && target.actor.type !== "npc"
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-            && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))) return false;
+            && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.OBJECT)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)) {
+            return false;
+        }
+
+
+        if (source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAFENED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEPING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)) {
+            return false;
+        }
+
         return true;
+    }
+
+    /** @override */
+    _testLOS(visionSource, mode, target, test) {
+        return !CONFIG.Canvas.polygonBackends.sight.testCollision(
+            { x: visionSource.x, y: visionSource.y },
+            test.point,
+            {
+                type: "sight",
+                mode: "any",
+                source: visionSource,
+                useThreshold: true
+            }
+        );
     }
 }

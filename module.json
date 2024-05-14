@@ -1,27 +1,20 @@
 {
   "id": "vision-5e",
   "title": "Vision 5e",
-  "description": "Vision/Detection Modes for D&D 5e",
+  "description": "Vision Automation for D&D 5e",
   "authors": [
     {
       "name": "dev7355608",
       "email": "dev7355608@gmail.com"
     }
   ],
-  "version": "1.14.3",
+  "version": "2.0.0",
   "compatibility": {
-    "minimum": "11.299",
-    "verified": "11.315"
+    "minimum": "12",
+    "verified": "12"
   },
-  "scripts": [
-    "scripts/patches.js"
-  ],
   "esmodules": [
-    "scripts/automation.mjs",
-    "scripts/compatibility.mjs",
-    "scripts/config.mjs",
-    "scripts/hud.mjs",
-    "scripts/settings.mjs"
+    "scripts/main.mjs"
   ],
   "styles": [
     "style.css"
@@ -59,7 +52,7 @@
         "id": "dnd5e",
         "type": "system",
         "compatibility": {
-          "minimum": "2.2.0",
+          "minimum": "3.1.0",
           "verified": "3.1.2"
         }
       }
@@ -67,8 +60,8 @@
   },
   "url": "https://github.com/dev7355608/vision-5e",
   "manifest": "https://github.com/dev7355608/vision-5e/releases/latest/download/module.json",
-  "download": "https://github.com/dev7355608/vision-5e/releases/download/v1.14.3/module.zip",
-  "changelog": "https://github.com/dev7355608/vision-5e/releases/tag/v1.14.3",
+  "download": "https://github.com/dev7355608/vision-5e/releases/download/v2.0.0/module.zip",
+  "changelog": "https://github.com/dev7355608/vision-5e/releases/tag/v2.0.0",
   "bugs": "https://github.com/dev7355608/vision-5e/issues",
   "readme": "https://raw.githubusercontent.com/dev7355608/vision-5e/main/README.md",
   "license": "https://raw.githubusercontent.com/dev7355608/vision-5e/main/LICENSE"

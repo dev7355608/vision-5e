@@ -1,8 +1,7 @@
 /**
  * The vision mode for Darkvision.
  */
-export class VisionModeDarkvision extends VisionMode {
-    neutralIfGlobalLight = true;
+export default class VisionModeDarkvision extends VisionMode {
 
     constructor() {
         super({
@@ -17,7 +16,7 @@ export class VisionModeDarkvision extends VisionMode {
             },
             vision: {
                 darkness: { adaptive: false },
-                defaults: { attenuation: 0, contrast: 0, saturation: -1, brightness: 0.1 }
+                defaults: { contrast: 0, saturation: -1, brightness: 0.1 }
             }
         });
     }

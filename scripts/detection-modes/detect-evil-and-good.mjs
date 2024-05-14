@@ -1,11 +1,10 @@
-import { createNameRegExp } from "../utils.js";
-import { DetectionModeDetect } from "./detect.mjs";
-import { HOLLOW_ONE_FEAT } from "./divine-sense.mjs";
+import DetectionModeDetect from "./detect.mjs";
 
 /**
  * The detection mode for Detect Evil and Good.
  */
-export class DetectionModeDetectEvilAndGood extends DetectionModeDetect {
+export default class DetectionModeDetectEvilAndGood extends DetectionModeDetect {
+
     constructor() {
         super({
             id: "detectEvilAndGood",
@@ -22,31 +21,26 @@ export class DetectionModeDetectEvilAndGood extends DetectionModeDetect {
 
     /** @override */
     _canDetect(visionSource, target) {
-        if (!super._canDetect(visionSource, target)) return false;
-        const actor = target.actor;
-        if (!actor) return false;
-        const isCharacter = actor.type === "character";
-        if (!isCharacter && actor.type !== "npc") return false;
-        const type = actor.system.details.type?.value;
-        if (type === "aberration" || type === "celestial" || type === "elemental"
-            || type === "fey" || type === "fiend" || type === "undead") return true;
-        if (isCharacter) {
-            const race = actor.system.details.race;
-            if (typeof race === "string" && EVIL_OR_GOOD_RACES.test(race)) return true;
-            for (const item of actor.items) {
-                if (item.type === "feat" && HOLLOW_ONE_FEAT.test(item.name)) {
-                    return true;
-                }
-            }
+        if (!super._canDetect(visionSource, target)) {
+            return false;
         }
-        return false;
+
+        if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.OBJECT)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)) {
+            return false;
+        }
+
+        if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.REVENANCE)) {
+            return true;
+        }
+
+        const type = target.actor.system.details.type.value;
+
+        return type === "aberration"
+            || type === "celestial"
+            || type === "elemental"
+            || type === "fey"
+            || type === "fiend"
+            || type === "undead";
     }
 }
-
-const EVIL_OR_GOOD_RACES = createNameRegExp({
-    en: ["Centaur", "Changeling", "Fairy", "Hexblood", "Satyr"],
-    de: ["Zentaur", "Wechselbalg", "Fee", "Hexblut", "Satyr"],
-    fr: ["Centaure", "Changelin", "Fée", "Sang maudit", "Satyre"],
-    es: ["Centauro", "Replicante", "Hada", "Sangre maléfica", "Sátiro"],
-    "pt-BR": ["Centauro", "Transmorfo", "Fada", "Sangue Maldito", "Sátiro"],
-});

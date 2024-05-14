@@ -16,7 +16,6 @@
     "VISION5E.LightPerception": "Percepção da Luz",
     "VISION5E.SeeInvisibility": "Ver o Invisível",
     "VISION5E.WitchSight": "Visão de Bruxa",
-    "VISION5E.Settings.DefaultHearingRangeN": "Alcance de Audição Padrão",
-    "VISION5E.Settings.DefaultHearingRangeL": "Configure o quão longe tokens podem ouvir por padrão. Requer que o mundo seja reiniciado.",
-    "VISION5E.Settings.UnitsL": "Configure qual unidade de medida é usada. Requer que o mundo seja reiniciado."
+    "VISION5E.SETTINGS.defaultHearingRange.label": "Alcance de Audição Padrão",
+    "VISION5E.SETTINGS.defaultHearingRange.hint": "Configure o quão longe tokens podem ouvir por padrão. Requer que o mundo seja reiniciado."
 }

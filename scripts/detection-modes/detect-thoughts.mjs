@@ -1,9 +1,10 @@
-import { DetectionModeDetect } from "./detect.mjs";
+import DetectionModeDetect from "./detect.mjs";
 
 /**
  * The detection mode for Detect Thoughts.
  */
-export class DetectionModeDetectThoughts extends DetectionModeDetect {
+export default class DetectionModeDetectThoughts extends DetectionModeDetect {
+
     constructor() {
         super({
             id: "detectThoughts",
@@ -20,11 +21,10 @@ export class DetectionModeDetectThoughts extends DetectionModeDetect {
 
     /** @override */
     _canDetect(visionSource, target) {
-        if (!super._canDetect(visionSource, target)) return false;
-        const actor = target.actor;
-        // A thinking creature is a creature that has an Intelligence of 4 or higher and speaks at least one language.
-        return actor && (actor.type === "character" || actor.type === "npc")
-            && actor.system.abilities.int.value > 3
-            && (actor.system.traits.languages.value.size > 0 || actor.system.traits.languages.custom);
+        if (!super._canDetect(visionSource, target)) {
+            return false;
+        }
+
+        return target.document.hasStatusEffect(CONFIG.specialStatusEffects.THINKING);
     }
 }

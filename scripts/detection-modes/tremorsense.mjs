@@ -1,12 +1,9 @@
 /**
  * The detection mode for Tremorsense.
  */
-export class DetectionModeTremorsense extends DetectionMode {
-    sourceType = "move";
-    wallDirectionMode = PointSourcePolygon.WALL_DIRECTION_MODES.NORMAL;
-    useThreshold = false;
+export default class DetectionModeTremorsense extends DetectionMode {
+    priority = 3;
     imprecise = true;
-    priority = -1000;
 
     constructor() {
         super({
@@ -29,17 +26,28 @@ export class DetectionModeTremorsense extends DetectionMode {
 
     /** @override */
     _canDetect(visionSource, target) {
-        if (!(target instanceof Token)) return false;
         const source = visionSource.object;
-        return !(source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.FLY)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.HOVER)
+
+        if (!(target instanceof Token)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.FLYING)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.HOVERING)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.OBJECT)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)) {
+            return false;
+        }
+
+        if (source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.FLYING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.HOVERING)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)))
-            && !(target.document.hasStatusEffect(CONFIG.specialStatusEffects.FLY)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.HOVER)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-                && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL))
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED));
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEPING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)) {
+            return false;
+        }
+
+        return true;
     }
 }

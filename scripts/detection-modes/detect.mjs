@@ -1,32 +1,55 @@
-import { isGhost } from "./light-perception.mjs";
-
 /**
- * Base class for Detect Magic, Thoughts, etc.
+ * Base class for Detect Evil and Good / Magic / Poison and Disease / Thoughts.
  * @abstract
  */
-export class DetectionModeDetect extends DetectionMode {
+export default class DetectionModeDetect extends DetectionMode {
     imprecise = true;
     important = true;
-    priority = -3000;
 
-    constructor(data = {}, options = {}) {
+    constructor(data = {}) {
         super(foundry.utils.mergeObject({
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: true,
             angle: true
-        }, data), options);
+        }, data));
     }
 
     /** @override */
     _canDetect(visionSource, target) {
-        if (!(target instanceof Token)) return false;
         const source = visionSource.object;
-        return !(source instanceof Token && (source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEP)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)))
-            && !(target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROW)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL) && !isGhost(target.actor)
-                && !(source instanceof Token && source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)));
+
+        if (!(target instanceof Token)
+            || !target.actor
+            || target.actor.type !== "character" && target.actor.type !== "npc"
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            && !target.document.hasStatusEffect(CONFIG.specialStatusEffects.MATERIAL)) {
+            return false;
+        }
+
+        if (source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEPING)
+            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /** @override */
+    _testLOS(visionSource, mode, target, test) {
+        return !CONFIG.Canvas.polygonBackends.sight.testCollision(
+            { x: visionSource.x, y: visionSource.y },
+            test.point,
+            {
+                type: "sight",
+                mode: "any",
+                source: visionSource,
+                useThreshold: true
+            }
+        );
     }
 }

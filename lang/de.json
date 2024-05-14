@@ -16,7 +16,6 @@
     "VISION5E.LightPerception": "Lichtwahrnehmung",
     "VISION5E.SeeInvisibility": "Unsichtbares sehen",
     "VISION5E.WitchSight": "Hexensicht",
-    "VISION5E.Settings.DefaultHearingRangeN": "Standard-Hörweite",
-    "VISION5E.Settings.DefaultHearingRangeL": "Legt fest, wie weit Spielfiguren standardmäßig hören können. Erfordert Neuladen.",
-    "VISION5E.Settings.UnitsL": "Legt fest, welche Längeneinheit benutzt wird. Erfordert Neuladen."
+    "VISION5E.SETTINGS.defaultHearingRange.label": "Standard-Hörweite",
+    "VISION5E.SETTINGS.defaultHearingRange.hint": "Legt fest, wie weit Spielfiguren standardmäßig hören können. Erfordert Neuladen."
 }
