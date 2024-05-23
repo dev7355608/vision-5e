@@ -67,7 +67,7 @@ export default (Token) => class extends Token {
             || this.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
             || this.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
             || this.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEPING)
-            || this.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)) {
+            || (this.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS) && !game.settings.get("vision-5e", "unconsciousRetainsVision"))) {
             data.radius = 0;
             data.lightRadius = 0;
         } else {

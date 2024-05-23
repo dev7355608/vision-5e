@@ -34,7 +34,7 @@ export default class DetectionModeDetect extends DetectionMode {
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEPING)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)) {
+            || (source.document.hasStatusEffect(CONFIG.specialStatusEffects.Unconscious) && !game.settings.get("vision-5e", "unconsciousRetainsVision"))) {
             return false;
         }
 
