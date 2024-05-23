@@ -1,23 +1,24 @@
+import DetectionMode from "./base.mjs";
+
 /**
  * The detection mode for Blindsense.
  */
 export default class DetectionModeBlindsense extends DetectionMode {
-    priority = 2;
-    imprecise = true;
 
     constructor() {
         super({
             id: "blindsense",
             label: "VISION5E.Blindsense",
             type: DetectionMode.DETECTION_TYPES.OTHER,
-            walls: true,
-            angle: false
+            angle: false,
+            imprecise: true,
+            priority: 2,
         });
     }
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.blindsight.getDetectionFilter();
+        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.blindsight.constructor.getDetectionFilter();
     }
 
     /** @override */
@@ -35,7 +36,6 @@ export default class DetectionModeBlindsense extends DetectionMode {
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)) {
             return false;
         }
-
 
         if (source.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAFENED)

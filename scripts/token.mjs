@@ -1,16 +1,15 @@
+import { DETECTION_LEVELS } from "./const.mjs";
+import { fromFeet } from "./utils.mjs";
+
 export default (Token) => class extends Token {
 
     /**
      * The different levels of detection.
      * @enum {number}
-     * @readonly
      */
-    static DETECTION_LEVELS = Object.freeze({
-        NONE: 0,
-        VAGUE: 1,
-        IMPRECISE: 2,
-        PRECISE: 3
-    });
+    static get DETECTION_LEVELS() {
+        return DETECTION_LEVELS;
+    }
 
     /**
      * The detection level of this token.
@@ -24,14 +23,13 @@ export default (Token) => class extends Token {
      * @type {number}
      * @internal
      */
-    _detectionLevel = this.constructor.DETECTION_LEVELS.NONE;
+    _detectionLevel = DETECTION_LEVELS.NONE;
 
-    /** @override */
-    get isVisible() {
-        this._detectionLevel = this.constructor.DETECTION_LEVELS.PRECISE;
-
-        return super.isVisible;
-    }
+    /**
+     * @type {PIXI.Filter | null}
+     * @internal
+     */
+    _detectionFilter = null;
 
     /**
      * The mesh that represent the token in its less then precise state.
@@ -91,13 +89,32 @@ export default (Token) => class extends Token {
             }
         }
 
-        // The token is blinded if both the active sense and Light Perception are disabled
-        if (data.radius === 0 && data.lightRadius === 0) {
-            data.visionMode = "blindness";
+        // Senses other than Darkvision can see through magical darkness
+        data.includeDarkness = data.detectionMode === "basicSight"
+            && !this.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT);
+
+        // Handle Ghostly Gaze
+        if (this.document.hasStatusEffect(CONFIG.specialStatusEffects.GHOSTLY_GAZE)) {
+            data.unconstrainedRadius = this.getLightRadius(fromFeet(30, canvas.grid.units));
+        } else {
+            data.unconstrainedRadius = 0;
         }
 
-        // Senses other than Darkvision can see through magical darkness
-        data.includeDarkness = data.detectionMode === "basicSight";
+        // Handle Etherealness
+        if (this.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
+            const defaults = CONFIG.Canvas.visionModes.etherealness.vision.defaults;
+            const applyOverride = (key) => defaults[key] !== undefined ? defaults[key] : data[key];
+
+            data.visionMode = "etherealness";
+            data.color = applyOverride("color");
+            data.attenuation = applyOverride("attenuation");
+            data.brightness = applyOverride("brightness");
+            data.contrast = applyOverride("contrast");
+            data.saturation = applyOverride("saturation");
+            data.ignoreDarkness = true;
+        } else {
+            data.ignoreDarkness = false;
+        }
 
         return data;
     }
@@ -109,6 +126,8 @@ export default (Token) => class extends Token {
             || statusId === CONFIG.specialStatusEffects.INAUDIBLE
             || statusId === CONFIG.specialStatusEffects.MAGICAL
             || statusId === CONFIG.specialStatusEffects.MATERIAL
+            || statusId === CONFIG.specialStatusEffects.MIND_BLANK
+            || statusId === CONFIG.specialStatusEffects.NONDETECTION
             || statusId === CONFIG.specialStatusEffects.OBJECT
             || statusId === CONFIG.specialStatusEffects.POISONED
             || statusId === CONFIG.specialStatusEffects.POISONOUS
@@ -128,6 +147,7 @@ export default (Token) => class extends Token {
             this.initializeVisionSource();
         } else if (statusId === CONFIG.specialStatusEffects.ETHEREAL) {
             this.initializeSources();
+            canvas.environment.initialize();
         }
 
         // Blinded, Burrowing, Hovering, Flying, and, Invisible are handled by core
@@ -151,12 +171,47 @@ export default (Token) => class extends Token {
 
     /** @override */
     _refreshVisibility() {
+        const priorDetectionLevel = this._detectionLevel;
+
+        // The patched CanvasVisibilit#testVisibility sets Token#_detectionLevel and Token#_detectionFilter
+        // only if Token#_detectionLevel is undefined
+        this._detectionLevel = undefined;
+        this._detectionFilter = null;
+
         super._refreshVisibility();
 
-        const imprecise = this.detectionLevel !== this.constructor.DETECTION_LEVELS.PRECISE;
+        if (this.visible) {
+            if (this.detectionFilter) {
+                // The patched CanvasVisibilit#testVisibility does not set Token#detectionFilter:
+                // if it was set, then some other module has, in which case we assume precise detection
+                this._detectionLevel = DETECTION_LEVELS.PRECISE;
+                this._detectionFilter = this.detectionFilter;
+            } else if (this._detectionLevel === DETECTION_LEVELS.NONE) {
+                // The patched CanvasVisibilit#testVisibility returned false, but some other module
+                // returned true in Token#isVisible anyway: we assume precise detection
+                this._detectionLevel = DETECTION_LEVELS.PRECISE;
+                this.detectionFilter = this._detectionFilter;
+            } else if (this._detectionLevel === undefined) {
+                // If Token#isVisible returns true before CanvasVisibilit#testVisibility is tested, we assume precise detection
+                this._detectionLevel = DETECTION_LEVELS.PRECISE;
+            } else {
+                this.detectionFilter = this._detectionFilter;
+            }
+        } else {
+            this._detectionLevel = DETECTION_LEVELS.NONE;
+            this._detectionFilter = null;
+            this.detectionFilter = null;
+        }
+
+        const imprecise = this._detectionLevel !== DETECTION_LEVELS.PRECISE;
 
         this.#impreciseMesh.visible = imprecise;
         this.mesh.visible &&= !imprecise;
+
+        if (this._detectionLevel !== priorDetectionLevel) {
+            this.border.tint = this._getBorderColor();
+            this._refreshTarget();
+        }
     }
 
     /** @override */
@@ -174,23 +229,25 @@ export default (Token) => class extends Token {
 
     /** @override */
     _getBorderColor() {
-        return this.detectionLevel === this.constructor.DETECTION_LEVELS.PRECISE
+        return this._detectionLevel === DETECTION_LEVELS.PRECISE
             ? super._getBorderColor() : CONFIG.Canvas.dispositionColors.INACTIVE;
     }
 
     /** @override */
     _renderDetectionFilter(renderer) {
-        const mesh = this.detectionLevel === this.constructor.DETECTION_LEVELS.PRECISE ? this.mesh : this.#impreciseMesh;
+        const mesh = this._detectionLevel === DETECTION_LEVELS.PRECISE ? this.mesh : this.#impreciseMesh;
 
         if (!mesh) {
             return;
         }
 
+        detectionFilterArray[0] = this.detectionFilter;
+
+        const originalFilters = mesh.filters;
         const originalTint = mesh.tint;
         const originalWorldAlpha = mesh.worldAlpha;
 
-        mesh.filters ??= [];
-        mesh.filters.push(this.detectionFilter);
+        mesh.filters = detectionFilterArray;
         mesh.tint = 0xFFFFFF;
         mesh.worldAlpha = 1;
         mesh.pluginName = BaseSamplerShader.classPluginName;
@@ -198,16 +255,18 @@ export default (Token) => class extends Token {
 
         mesh.render(renderer);
 
-        mesh.filters.pop();
+        mesh.filters = originalFilters;
         mesh.tint = originalTint;
         mesh.worldAlpha = originalWorldAlpha;
         mesh.pluginName = null;
         this.#impreciseMesh.renderable = false;
+
+        detectionFilterArray[0] = null;
     }
 
     /** @override */
     render(renderer) {
-        if (this.detectionLevel === this.constructor.DETECTION_LEVELS.PRECISE) {
+        if (this._detectionLevel === DETECTION_LEVELS.PRECISE) {
             super.render(renderer);
 
             return;
@@ -228,3 +287,8 @@ export default (Token) => class extends Token {
         this.mask = originalMask;
     }
 };
+
+/**
+ * @type {[detectionFilter: PIXI.Filter | null]}
+ */
+const detectionFilterArray = [null];

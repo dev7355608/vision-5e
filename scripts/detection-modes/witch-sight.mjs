@@ -1,8 +1,10 @@
+import DetectionMode from "./base.mjs";
+import { DETECTION_LEVELS } from "../const.mjs";
+
 /**
  * The detection mode for Witch Sight.
  */
 export default class DetectionModeDetectWitchSight extends DetectionMode {
-    important = true;
 
     constructor() {
         super({
@@ -10,15 +12,15 @@ export default class DetectionModeDetectWitchSight extends DetectionMode {
             label: "VISION5E.WitchSight",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: false,
-            angle: false
+            angle: false,
+            important: true,
+            priority: -1,
         });
     }
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= GlowOverlayFilter.create({
-            glowColor: [1, 1, 0, 1]
-        });
+        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.detectEvilAndGood.constructor.getDetectionFilter();
     }
 
     /** @override */
@@ -41,14 +43,22 @@ export default class DetectionModeDetectWitchSight extends DetectionMode {
         canvas.effects.visionSources.set("", visionSource);
 
         const detectionModes = visionSource.object.document.detectionModes;
+        const detectionLevel = target._detectionLevel;
+
+        target._detectionLevel = DETECTION_LEVELS.NONE;
 
         visionSource.object.document.detectionModes = detectionModes.filter(
-            (mode) => CONFIG.Canvas.detectionModes[mode.id]?.type === DetectionMode.DETECTION_TYPES.SIGHT
+            ({ id }) => {
+                const mode = CONFIG.Canvas.detectionModes[id];
+
+                return mode && mode !== this && mode.type === DetectionMode.DETECTION_TYPES.SIGHT && !mode.imprecise;
+            }
         );
 
         // Test whether this vision source sees the target
         const result = canvas.visibility.testVisibility(test.point, { tolerance: 0, object: target });
 
+        target._detectionLevel = detectionLevel;
         visionSource.object.document.detectionModes = detectionModes;
         canvas.effects.visionSources = visionSources;
 

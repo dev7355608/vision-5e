@@ -1,16 +1,16 @@
+import DetectionMode from "./base.mjs";
+
 /**
  * The detection mode for Blindsight.
  */
 export default class DetectionModeBlindsight extends DetectionMode {
-    priority = 4;
 
     constructor() {
         super({
             id: "blindsight",
             label: "DND5E.SenseBlindsight",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            walls: true,
-            angle: true
+            priority: 4,
         });
     }
 
@@ -20,7 +20,7 @@ export default class DetectionModeBlindsight extends DetectionMode {
             outlineColor: [1, 1, 1, 1],
             thickness: [0, 0],
             knockout: true,
-            wave: true
+            wave: true,
         });
     }
 

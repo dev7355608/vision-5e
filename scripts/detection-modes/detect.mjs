@@ -1,16 +1,17 @@
+import DetectionMode from "./base.mjs";
+
 /**
  * Base class for Detect Evil and Good / Magic / Poison and Disease / Thoughts.
  * @abstract
  */
 export default class DetectionModeDetect extends DetectionMode {
-    imprecise = true;
-    important = true;
 
     constructor(data = {}) {
         super(foundry.utils.mergeObject({
             type: DetectionMode.DETECTION_TYPES.OTHER,
-            walls: true,
-            angle: true
+            angle: false,
+            important: true,
+            imprecise: true,
         }, data));
     }
 
@@ -20,11 +21,12 @@ export default class DetectionModeDetect extends DetectionMode {
 
         if (!(target instanceof Token)
             || !target.actor
-            || target.actor.type !== "character" && target.actor.type !== "npc"
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-            && !target.document.hasStatusEffect(CONFIG.specialStatusEffects.MATERIAL)) {
+            && !target.document.hasStatusEffect(CONFIG.specialStatusEffects.MATERIAL)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.MIND_BLANK)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.NONDETECTION)) {
             return false;
         }
 

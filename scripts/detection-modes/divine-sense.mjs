@@ -1,3 +1,5 @@
+import DetectionMode from "./base.mjs";
+
 /**
  * The detection mode for Divine Sense.
  */
@@ -10,16 +12,15 @@ export default class DetectionModeDivineSense extends DetectionMode {
             id: "divineSense",
             label: "VISION5E.DivineSense",
             type: DetectionMode.DETECTION_TYPES.OTHER,
-            walls: true,
-            angle: false
+            angle: false,
+            important: true,
+            imprecise: true,
         });
     }
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= GlowOverlayFilter.create({
-            glowColor: [1, 1, 0, 1]
-        });
+        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.detectEvilAndGood.constructor.getDetectionFilter();
     }
 
     /** @override */

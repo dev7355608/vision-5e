@@ -22,8 +22,8 @@ export default (TokenConfig) => class extends TokenConfig {
             element.dataset.tooltipDirection = "LEFT";
         }
 
-        html[0].querySelector(`[name="sight.range"]`).value = this.preview.sight.visionMode === this.preview._source.sight.visionMode
-            ? this.preview.sight.range : 0;
+        html[0].querySelector(`[name="sight.range"]`).value = this.preview.sight.range;
+        html[0].querySelector(`[name="sight.visionMode"]`).value = this.preview.sight.visionMode;
 
         return html;
     }
@@ -36,7 +36,6 @@ export default (TokenConfig) => class extends TokenConfig {
             return;
         }
 
-        this.element[0].querySelector(`[name="sight.range"]`).value = this.preview.sight.visionMode === this.preview._source.sight.visionMode
-            ? this.preview.sight.range : 0;
+        this.element[0].querySelector(`[name="sight.range"]`).value = this.preview.sight.range;
     }
 };

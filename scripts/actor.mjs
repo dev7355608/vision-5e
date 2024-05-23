@@ -1,5 +1,5 @@
 import { defaultHearingRange } from "./settings.mjs";
-import { Matcher, convertRange, feetToUnits } from "./utils.mjs";
+import { Matcher, convertUnits, toFeet } from "./utils.mjs";
 
 export default (Actor) => class extends Actor {
 
@@ -72,13 +72,14 @@ export default (Actor) => class extends Actor {
 
         const senses = this.system.attributes.senses;
 
-        this.detectionModes.basicSight = senses.darkvision ?? 0;
-        this.detectionModes.seeAll = senses.truesight ?? 0;
-        this.detectionModes.blindsight = senses.blindsight ?? 0;
-        this.detectionModes.feelTremor = senses.tremorsense ?? 0;
-        this.detectionModes.hearing = Math.max(feetToUnits(typeof defaultHearingRange === "string"
+        this.detectionModes.lightPerception = null;
+        this.detectionModes.basicSight = senses.darkvision;
+        this.detectionModes.seeAll = senses.truesight;
+        this.detectionModes.blindsight = senses.blindsight;
+        this.detectionModes.feelTremor = senses.tremorsense;
+        this.detectionModes.hearing = Math.max(toFeet(typeof defaultHearingRange === "string"
             ? new Roll(defaultHearingRange, this.getRollData({ deterministic: true })).evaluateSync().total
-            : defaultHearingRange, this.system.attributes.senses.units), 0);
+            : defaultHearingRange, senses.units), 0);
 
         const featRegistry = FEAT_REGISTRY[this.type];
         const featMatcher = FEAT_MATCHERS[this.type];
@@ -107,11 +108,7 @@ export default (Actor) => class extends Actor {
         }
 
         for (const id in this.detectionModes) {
-            if (id === "lightPerception") {
-                if (this.detectionModes[id] === null) {
-                    delete this.detectionModes[id];
-                }
-            } else if (this.detectionModes[id] === 0) {
+            if (this.detectionModes[id] === 0) {
                 delete this.detectionModes[id];
             }
         }
@@ -125,7 +122,7 @@ export default (Actor) => class extends Actor {
  * @param {string} [units]
  */
 function upgradeDetectionMode(actor, id, range, units) {
-    if (range === undefined || range <= 0) {
+    if (range === undefined || range !== null && range <= 0) {
         return;
     }
 
@@ -136,7 +133,7 @@ function upgradeDetectionMode(actor, id, range, units) {
     }
 
     if (range !== null && units !== undefined) {
-        range = convertRange(range, units, actor.system.attributes.senses.units);
+        range = convertUnits(range, units, actor.system.attributes.senses.units);
     }
 
     if (currentRange !== undefined && range !== null) {
@@ -154,7 +151,7 @@ function findRange(description, units) {
     const result = new DOMParser().parseFromString(description, "text/html").body.textContent
         ?.match(/(?<=^|\D)(?<range>[1-9]\d*)\s*(?:(?<ft>ft|feet|Fuß|pieds?|pies?|pés?)|(?<m>m|meters?|metres?|Meter|mètres?|metros?))(?=$|[\s.:,;])/i);
 
-    return result ? convertRange(Number(result.groups.range), result.groups.ft !== undefined ? "ft" : "m", units) : undefined;
+    return result ? convertUnits(Number(result.groups.range), result.groups.ft !== undefined ? "ft" : "m", units) : undefined;
 }
 
 /**
@@ -325,11 +322,14 @@ const EFFECT_REGISTRY = {
         magicAwareness(effect) {
             upgradeDetectionMode(this, "detectMagic", 60, "ft");
         },
+        mindBlank(item) {
+            this.statuses.add(CONFIG.specialStatusEffects.MIND_BLANK);
+        },
+        nondetection(item) {
+            this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
+        },
         seeInvisibility(effect) {
             upgradeDetectionMode(this, "seeInvisibility", null);
-        },
-        theThirdEyeDarkvision(effect) {
-            upgradeDetectionMode(this, "basicSight", 60, "ft");
         },
         theThirdEyeEtherealSight(effect) {
             upgradeDetectionMode(this, "etherealSight", 60, "ft");
@@ -350,6 +350,12 @@ const EFFECT_REGISTRY = {
         },
         detectThoughts(effect) {
             upgradeDetectionMode(this, "detectThoughts", 30, "ft");
+        },
+        mindBlank(item) {
+            this.statuses.add(CONFIG.specialStatusEffects.MIND_BLANK);
+        },
+        nondetection(item) {
+            this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
         },
         seeInvisibility(effect) {
             upgradeDetectionMode(this, "seeInvisibility", null);
@@ -415,6 +421,12 @@ const DATABASE = Object.values({
         magicAwareness: [
             "Magic Awareness",
         ],
+        mindBlank: [
+            "Mind Blank",
+        ],
+        nondetection: [
+            "Nondetection",
+        ],
         seeInvisibility: [
             "See Invisibility",
         ],
@@ -423,9 +435,6 @@ const DATABASE = Object.values({
         ],
         shapechanger: [
             "Shapechanger",
-        ],
-        theThirdEyeDarkvision: [
-            "The Third Eye: Darkvision",
         ],
         theThirdEyeEtherealSight: [
             "The Third Eye: Ethereal Sight",
@@ -493,6 +502,12 @@ const DATABASE = Object.values({
         magicAwareness: [
             "Magische Wahrnehmung",
         ],
+        mindBlank: [
+            "Gedankenleere",
+        ],
+        nondetection: [
+            "Unauffindbarkeit",
+        ],
         seeInvisibility: [
             "Unsichtbares sehen",
         ],
@@ -501,9 +516,6 @@ const DATABASE = Object.values({
         ],
         shapechanger: [
             "Gestaltwandler",
-        ],
-        theThirdEyeDarkvision: [
-            "Das dritte Auge: Dunkelsicht",
         ],
         theThirdEyeEtherealSight: [
             "Das dritte Auge: Ätherische Sicht",
@@ -520,7 +532,7 @@ const DATABASE = Object.values({
             "Sens aveugles",
         ],
         blindsense: [
-            ["Perception aveugle", ["", " [Roublard]"]],
+            "Perception aveugle",
         ],
         detectEvilAndGood: [
             "Détection du mal et du bien",
@@ -538,7 +550,7 @@ const DATABASE = Object.values({
             [["Vision", "Vue"], " ", ["de", "du"], " diable"],
         ],
         divineSense: [
-            ["Perception divine", ["", " [Paladin]"]],
+            "Perception divine",
         ],
         echolocation: [
             "Écholocalisation",
@@ -555,25 +567,31 @@ const DATABASE = Object.values({
             "Celui-qui-est-creux",
         ],
         invocationDevilsSight: [
-            [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable", ["", " [Occultiste]"]],
-            [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable", ["", " [Occultiste]"]],
-            ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable", ["", " [Occultiste]"]],
-            [["Vision", "Vue"], " ", ["de", "du"], " diable", ["", " [Occultiste]"]],
+            [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable"],
+            [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable"],
+            ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de", "du"], " diable"],
+            [["Vision", "Vue"], " ", ["de", "du"], " diable"],
         ],
         invocationGhostlyGaze: [
-            [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], "Regard fantomatique", ["", " [Occultiste]"]],
-            [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], "Regard fantomatique", ["", " [Occultiste]"]],
-            ["Adepte occulte: Regard fantomatique", ["", " [Occultiste]"]],
-            ["Regard fantomatique", ["", " [Occultiste]"]],
+            [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], "Regard fantomatique"],
+            [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], "Regard fantomatique"],
+            ["Adepte occulte: Regard fantomatique"],
+            ["Regard fantomatique"],
         ],
         invocationWitchSight: [
-            [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"], ["", " [Occultiste]"]],
-            [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"], ["", " [Occultiste]"]],
-            ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"], ["", " [Occultiste]"]],
-            [["Vision", "Vue"], " ", ["de sorcier", "sorcière"], ["", " [Occultiste]"]],
+            [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
+            [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
+            ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
+            [["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
         ],
         magicAwareness: [
             "Conscience magique",
+        ],
+        mindBlank: [
+            "Esprit impénétrable",
+        ],
+        nondetection: [
+            "Antidétection",
         ],
         seeInvisibility: [
             ["Détection de l", ["'", "’"], "invisibilité"],
@@ -583,9 +601,6 @@ const DATABASE = Object.values({
         ],
         shapechanger: [
             "Métamorphe",
-        ],
-        theThirdEyeDarkvision: [
-            ["Troisième œil", [": ", " : "], "Vision dans le noir"],
         ],
         theThirdEyeEtherealSight: [
             ["Troisième œil", [": ", " : "], "Vision éthérée"],
@@ -599,74 +614,77 @@ const DATABASE = Object.values({
     },
     es: {
         blindSenses: [
-            "Sentidos de ciego",
+            "Sentidos de Ciego",
         ],
         blindsense: [
-            "Sentir sin ver",
+            "Sentir sin Ver",
         ],
         detectEvilAndGood: [
-            "Detectar el bien y el mal",
+            "Detectar el Bien y el Mal",
         ],
         detectMagic: [
-            "Detectar magia",
+            "Detectar Magia",
         ],
         detectPoisonAndDisease: [
-            "Detectar venenos y enfermedades",
+            "Detectar Venenos y Enfermedades",
         ],
         detectThoughts: [
-            "Detectar pensamientos",
+            "Detectar Pensamientos",
         ],
         devilsSight: [
-            "Vista del diablo",
+            "Vista del Diablo",
         ],
         divineSense: [
-            "Sentidos divinos",
+            "Sentidos Divinos",
         ],
         echolocation: [
             "Ecolocalización",
         ],
         etherealSight: [
-            "Visión etérea",
+            "Visión Etérea",
         ],
         etherealness: [
-            "Excursión etérea",
+            "Excursión Etérea",
         ],
         hollowOne: [
-            [["Don supernatural", "Dones supernaturales"], ": ", ["Aquel que está vacío", "Hollow One"]],
+            [["Don Supernatural", "Dones Supernaturales"], ": ", ["Aquel que está vacío", "Hollow One"]],
             "Aquel que está vacío",
         ],
         invocationDevilsSight: [
-            ["Invocación", [" sobrenatural", ""], ": Vista del diablo"],
-            ["Invocaciones", [" sobrenaturales", ""], ": Vista del diablo"],
-            "Adepto sobrenatural: Vista del diablo",
-            "Vista del diablo",
+            ["Invocación", [" Sobrenatural", ""], ": Vista del Diablo"],
+            ["Invocaciones", [" Sobrenaturales", ""], ": Vista del Diablo"],
+            "Adepto Sobrenatural: Vista del Diablo",
+            "Vista del Diablo",
         ],
         invocationGhostlyGaze: [
-            ["Invocación", [" sobrenatural", ""], ": Mirada fantasmal"],
-            ["Invocaciones", [" sobrenaturales", ""], ": Mirada fantasmal"],
-            "Adepto sobrenatural: Mirada fantasmal",
-            "Mirada fantasmal",
+            ["Invocación", [" Sobrenatural", ""], ": Mirada Fantasmal"],
+            ["Invocaciones", [" Sobrenaturales", ""], ": Mirada Fantasmal"],
+            "Adepto Sobrenatural: Mirada Fantasmal",
+            "Mirada Fantasmal",
         ],
         invocationWitchSight: [
-            ["Invocación", [" sobrenatural", ""], ": Visión bruja"],
-            ["Invocaciones", [" sobrenaturales", ""], ": Visión bruja"],
-            "Adepto sobrenatural: Visión bruja",
-            "Visión bruja",
+            ["Invocación", [" Sobrenatural", ""], ": Visión Bruja"],
+            ["Invocaciones", [" Sobrenaturales", ""], ": Visión Bruja"],
+            "Adepto Sobrenatural: Visión Bruja",
+            "Visión Bruja",
         ],
         magicAwareness: [
-            "Conciencia mágica",
+            "Conciencia Mágica",
+        ],
+        mindBlank: [
+            "Mente en Blanco",
+        ],
+        nondetection: [
+            "Indetectable",
         ],
         seeInvisibility: [
-            "Ver invisibilidad",
+            "Ver Invisibilidad",
         ],
         senseMagic: [
-            "Sentir magia",
+            "Sentir Magia",
         ],
         shapechanger: [
             "Cambiaformas",
-        ],
-        theThirdEyeDarkvision: [
-            "El Tercer Ojo: Visión en la Oscuridad",
         ],
         theThirdEyeEtherealSight: [
             "El Tercer Ojo: Visión Etérea",
@@ -675,7 +693,7 @@ const DATABASE = Object.values({
             "El Tercer Ojo: Ver Invisibilidad",
         ],
         umbralSight: [
-            "Visión en la umbra",
+            "Visión en la Umbra",
         ],
     },
     "pt-BR": {
@@ -739,6 +757,12 @@ const DATABASE = Object.values({
         magicAwareness: [
             "Percepção Mágica",
         ],
+        mindBlank: [
+            "Limpar a Mente",
+        ],
+        nondetection: [
+            "Indetectável",
+        ],
         seeInvisibility: [
             "Ver o Invisível",
         ],
@@ -747,9 +771,6 @@ const DATABASE = Object.values({
         ],
         shapechanger: [
             "Metamorfo",
-        ],
-        theThirdEyeDarkvision: [
-            "O Terceiro Olho: Visão no Escuro",
         ],
         theThirdEyeEtherealSight: [
             "O Terceiro Olho: Visão Etérea",

@@ -1,17 +1,18 @@
+import DetectionMode from "./base.mjs";
+
 /**
  * The detection mode for hearing.
  */
 export default class DetectionModeHearing extends DetectionMode {
-    priority = 1;
-    imprecise = true;
 
     constructor() {
         super({
             id: "hearing",
             label: "VISION5E.Hearing",
             type: DetectionMode.DETECTION_TYPES.SOUND,
-            walls: true,
-            angle: false
+            angle: false,
+            imprecise: true,
+            priority: 1,
         });
     }
 
@@ -31,7 +32,8 @@ export default class DetectionModeHearing extends DetectionMode {
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.INAUDIBLE)) {
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.INAUDIBLE)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)) {
             return false;
         }
 

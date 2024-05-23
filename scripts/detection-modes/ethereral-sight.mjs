@@ -1,3 +1,6 @@
+import DetectionMode from "./base.mjs";
+import { DETECTION_LEVELS } from "../const.mjs";
+
 /**
  * The detection mode for Ethereal Sight.
  */
@@ -9,15 +12,14 @@ export default class DetectionModeEtherealSight extends DetectionMode {
             label: "VISION5E.EtherealSight",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: false,
-            angle: false
+            angle: false,
+            priority: -1,
         });
     }
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= GlowOverlayFilter.create({
-            glowColor: [0, 0.60, 0.33, 1]
-        });
+        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.seeInvisibility.constructor.getDetectionFilter();
     }
 
     /** @override */
@@ -40,9 +42,16 @@ export default class DetectionModeEtherealSight extends DetectionMode {
         canvas.effects.visionSources.set("", visionSource);
 
         const detectionModes = visionSource.object.document.detectionModes;
+        const detectionLevel = target._detectionLevel;
+
+        target._detectionLevel = DETECTION_LEVELS.NONE;
 
         visionSource.object.document.detectionModes = detectionModes.filter(
-            (mode) => CONFIG.Canvas.detectionModes[mode.id]?.type === DetectionMode.DETECTION_TYPES.SIGHT
+            ({ id }) => {
+                const mode = CONFIG.Canvas.detectionModes[id];
+
+                return mode && mode !== this && mode.type === DetectionMode.DETECTION_TYPES.SIGHT && !mode.imprecise;
+            }
         );
 
         target.document.actor.statuses.delete(CONFIG.specialStatusEffects.ETHEREAL);
@@ -51,6 +60,7 @@ export default class DetectionModeEtherealSight extends DetectionMode {
         const result = canvas.visibility.testVisibility(test.point, { tolerance: 0, object: target });
 
         target.document.actor.statuses.add(CONFIG.specialStatusEffects.ETHEREAL);
+        target._detectionLevel = detectionLevel;
         visionSource.object.document.detectionModes = detectionModes;
         canvas.effects.visionSources = visionSources;
 

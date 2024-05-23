@@ -1,21 +1,17 @@
 {
     "VISION5E.Blindsense": "Blindgespür",
-    "VISION5E.Burrowing": "Grabend",
     "VISION5E.DetectEvilAndGood": "Gutes und Böses entdecken",
     "VISION5E.DetectMagic": "Magie entdecken",
     "VISION5E.DetectPoisonAndDisease": "Gift und Krankheit entdecken",
     "VISION5E.DetectThoughts": "Gedanken wahrnehmen",
     "VISION5E.DevilsSight": "Teufelssicht",
     "VISION5E.DivineSense": "Göttliches Gespür",
-    "VISION5E.Echolocation": "Echolot",
-    "VISION5E.Ethereal": "Ätherisch",
     "VISION5E.EtherealSight": "Ätherische Sicht",
-    "VISION5E.GhostlyGaze": "Geisterhafter Blick",
     "VISION5E.Hearing": "Hören",
     "VISION5E.Inaudible": "Lautlos",
-    "VISION5E.LightPerception": "Lichtwahrnehmung",
     "VISION5E.SeeInvisibility": "Unsichtbares sehen",
     "VISION5E.WitchSight": "Hexensicht",
     "VISION5E.SETTINGS.defaultHearingRange.label": "Standard-Hörweite",
-    "VISION5E.SETTINGS.defaultHearingRange.hint": "Legt fest, wie weit Spielfiguren standardmäßig hören können. Erfordert Neuladen."
+    "VISION5E.SETTINGS.defaultHearingRange.hint": "Legt fest, wie weit Spielfiguren standardmäßig hören können. Erfordert Neuladen.",
+    "VISION5E.TOOLTIPS.AutomaticallyManaged": "Automatisch verwaltet von Vision 5e"
 }

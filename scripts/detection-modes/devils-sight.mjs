@@ -1,16 +1,16 @@
+import DetectionMode from "./base.mjs";
+
 /**
  * The detection mode for Devil's Sight.
  */
 export default class DetectionModeDevilsSight extends DetectionMode {
-    priority = 6;
 
     constructor() {
         super({
             id: "devilsSight",
             label: "VISION5E.DevilsSight",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            walls: true,
-            angle: true
+            priority: 6,
         });
     }
 
@@ -20,7 +20,7 @@ export default class DetectionModeDevilsSight extends DetectionMode {
             return;
         }
 
-        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.basicSight.getDetectionFilter();
+        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.basicSight.constructor.getDetectionFilter();
     }
 
     /** @override */

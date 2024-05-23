@@ -1,3 +1,6 @@
+import DetectionMode from "./base.mjs";
+import { DETECTION_LEVELS } from "../const.mjs";
+
 /**
  * The detection mode for See Invisibility.
  */
@@ -40,9 +43,16 @@ export default class DetectionModeSeeInvisibility extends DetectionMode {
         canvas.effects.visionSources.set("", visionSource);
 
         const detectionModes = visionSource.object.document.detectionModes;
+        const detectionLevel = target._detectionLevel;
+
+        target._detectionLevel = DETECTION_LEVELS.NONE;
 
         visionSource.object.document.detectionModes = detectionModes.filter(
-            (mode) => CONFIG.Canvas.detectionModes[mode.id]?.type === DetectionMode.DETECTION_TYPES.SIGHT
+            ({ id }) => {
+                const mode = CONFIG.Canvas.detectionModes[id];
+
+                return mode && mode !== this && mode.type === DetectionMode.DETECTION_TYPES.SIGHT && !mode.imprecise;
+            }
         );
 
         const wasInvisible = target.document.actor.statuses.delete(CONFIG.specialStatusEffects.INVISIBLE);
@@ -59,6 +69,7 @@ export default class DetectionModeSeeInvisibility extends DetectionMode {
             target.document.actor.statuses.add(CONFIG.specialStatusEffects.ETHEREAL);
         }
 
+        target._detectionLevel = detectionLevel;
         visionSource.object.document.detectionModes = detectionModes;
         canvas.effects.visionSources = visionSources;
 

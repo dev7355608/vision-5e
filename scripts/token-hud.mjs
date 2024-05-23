@@ -21,7 +21,7 @@ export default (TokenHUD) => class extends TokenHUD {
             }
         }
 
-        if (!visionModes.length) {
+        if (visionModes.length <= 1) {
             return html;
         }
 
@@ -66,11 +66,7 @@ export default (TokenHUD) => class extends TokenHUD {
         visionModesList.querySelectorAll(`.vision-5e.vision-mode`).forEach(
             element => element.addEventListener("click", (event) => {
                 event.preventDefault();
-
-                const target = event.currentTarget
-                const visionMode = target.classList.contains("active") ? "basic" : target.dataset.visionMode;
-
-                this.document.updateVisionMode(visionMode);
+                this.document.updateVisionMode(event.currentTarget.dataset.visionMode);
                 this.clear();
             })
         );

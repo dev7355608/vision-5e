@@ -1,16 +1,16 @@
+import DetectionMode from "./base.mjs";
+
 /**
  * The detection mode for Darkvision.
  */
 export default class DetectionModeDarkvision extends DetectionMode {
-    priority = 7;
 
     constructor() {
         super({
             id: "basicSight",
             label: "DND5E.SenseDarkvision",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            walls: true,
-            angle: true
+            priority: 7,
         });
     }
 
@@ -28,19 +28,15 @@ export default class DetectionModeDarkvision extends DetectionMode {
 
     /** @override */
     _canDetect(visionSource, target) {
-        if (visionSource.blinded.darkness) {
-            return false;
-        }
-
         const source = visionSource.object;
 
         if (target instanceof Token) {
             if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.UMBRAL_SIGHT)
                 || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
                 && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
                 && !target.document.hasStatusEffect(CONFIG.specialStatusEffects.MATERIAL)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE)) {
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE)
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.UMBRAL_SIGHT)) {
                 return false;
             }
         }
@@ -64,6 +60,7 @@ export default class DetectionModeDarkvision extends DetectionMode {
         }
 
         if (visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT)
+            && visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             && visionSource.losDarknessExcluded !== visionSource.los) {
             return visionSource.losDarknessExcluded.contains(test.point.x, test.point.y);
         }

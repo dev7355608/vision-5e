@@ -23,21 +23,21 @@ import DetectionModeDetectWitchSight from "./detection-modes/witch-sight.mjs";
 import VisionModeBlindsight from "./vision-modes/blindsight.mjs";
 import VisionModeDarkvision from "./vision-modes/darkvision.mjs";
 import VisionModeDevilsSight from "./vision-modes/devils-sight.mjs";
+import VisionModeEtherealness from "./vision-modes/etherealness.mjs";
 import VisionModeTruesight from "./vision-modes/truesight.mjs";
 import testVisibility from "./test-visibility.mjs";
 
 Hooks.once("init", () => {
-    // Extend Actor, Token, TokenHUD, and TokenDocument
+    // Extend Actor, TokenDocument, Token, and TokenHUD
     CONFIG.Actor.documentClass = ActorMixin(CONFIG.Actor.documentClass);
-    CONFIG.Token.objectClass = TokenMixin(CONFIG.Token.objectClass);
     CONFIG.Token.documentClass = TokenDocumentMixin(CONFIG.Token.documentClass);
+    CONFIG.Token.objectClass = TokenMixin(CONFIG.Token.objectClass);
     CONFIG.Token.hudClass = TokenHUDMixin(CONFIG.Token.hudClass);
-    CONFIG.Token.prototypeSheetClass = TokenConfigMixin(CONFIG.Token.prototypeSheetClass);
 
     // Extend PointVisionSource
     CONFIG.Canvas.visionSourceClass = VisionSourceMixin(CONFIG.Canvas.visionSourceClass);
 
-    // Register Inaudible status effect
+    // Register the Inaudible status effect
     CONFIG.statusEffects.push({
         id: "inaudible",
         name: "VISION5E.Inaudible",
@@ -60,6 +60,8 @@ Hooks.once("init", () => {
     CONFIG.specialStatusEffects.INAUDIBLE = "inaudible";
     CONFIG.specialStatusEffects.MAGICAL = "magical";
     CONFIG.specialStatusEffects.MATERIAL = "material";
+    CONFIG.specialStatusEffects.MIND_BLANK = "mindBlank";
+    CONFIG.specialStatusEffects.NONDETECTION = "nondetection";
     CONFIG.specialStatusEffects.OBJECT = "object";
     CONFIG.specialStatusEffects.PETRIFIED = "petrified";
     CONFIG.specialStatusEffects.POISONED = "poisoned";
@@ -112,6 +114,7 @@ Hooks.once("init", () => {
         VisionModeBlindsight,
         VisionModeDarkvision,
         VisionModeDevilsSight,
+        VisionModeEtherealness,
         VisionModeTruesight,
     ]) {
         const mode = new visionModeClass();
@@ -126,7 +129,8 @@ Hooks.once("init", () => {
     delete CONFIG.Canvas.visionModes.lightAmplification;
     delete CONFIG.Canvas.visionModes.monochromatic;
 
-    // Tremorsense is not supported as vision mode, because it is an imprecise sense
+    // Tremorsense is not supported as vision mode, because it is an imprecise sense and
+    // we currently cannot prevent FOV from exploring the fog
     delete CONFIG.Canvas.visionModes.tremorsense;
 
     // Patch visiblity testing
@@ -138,4 +142,18 @@ Hooks.once("ready", () => {
     for (const config of Object.values(CONFIG.Token.sheetClasses.base)) {
         config.cls = TokenConfigMixin(config.cls);
     }
+
+    CONFIG.Token.prototypeSheetClass = TokenConfigMixin(CONFIG.Token.prototypeSheetClass);
+});
+
+Hooks.on("lightingRefresh", () => {
+    const visionModeData = canvas.visibility.visionModeData;
+
+    if (visionModeData.source?.object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
+        canvas.primary._ambienceFilter.enabled = false;
+    }
+});
+
+Hooks.on("visibilityRefresh", () => {
+    canvas.visibility.vision.light.sources.drawShape(canvas.dimensions.rect);
 });

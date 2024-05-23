@@ -25,7 +25,8 @@ export default class DetectionModeDetectEvilAndGood extends DetectionModeDetect 
             return false;
         }
 
-        if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.OBJECT)
+        if (target.actor.type !== "character" && target.actor.type !== "npc"
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.OBJECT)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)) {
             return false;
         }

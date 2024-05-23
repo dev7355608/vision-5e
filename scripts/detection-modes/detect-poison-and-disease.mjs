@@ -25,12 +25,8 @@ export default class DetectionModeDetectPoisonAndDisease extends DetectionModeDe
             return false;
         }
 
-        if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.DISEASED)
+        return target.document.hasStatusEffect(CONFIG.specialStatusEffects.DISEASED)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.POISONED)
-            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.POISONOUS)) {
-            return true;
-        }
-
-        return false;
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.POISONOUS);
     }
 }

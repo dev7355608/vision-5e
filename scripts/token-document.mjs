@@ -1,4 +1,4 @@
-import { convertRange, feetToUnits } from "./utils.mjs";
+import { convertUnits, fromFeet } from "./utils.mjs";
 
 export default (TokenDocument) => class extends TokenDocument {
 
@@ -8,6 +8,7 @@ export default (TokenDocument) => class extends TokenDocument {
 
         this._prepareSight();
 
+        // Sorting is necessary for patched CanvasVisibility#testVisibility
         this.detectionModes.sort((a, b) => {
             a = CONFIG.Canvas.detectionModes[a.id];
             b = CONFIG.Canvas.detectionModes[b.id];
@@ -27,12 +28,12 @@ export default (TokenDocument) => class extends TokenDocument {
             return;
         }
 
-        for (const { id, range, enabled } of this._source.detectionModes) {
+        for (const { id, enabled, range } of this._source.detectionModes) {
             if (!(id in CONFIG.Canvas.detectionModes)) {
                 continue;
             }
 
-            this.detectionModes.push({ id, range, enabled });
+            this.detectionModes.push({ id, enabled, range });
         }
 
         const sceneUnits = this.parent?.grid.units || "";
@@ -44,19 +45,19 @@ export default (TokenDocument) => class extends TokenDocument {
                 if (!this.detectionModes.find((mode) => mode.id === id)) {
                     this.detectionModes.push({
                         id,
-                        range: convertRange(range, actorUnits, sceneUnits),
-                        enabled: true
+                        enabled: true,
+                        range: convertUnits(range, actorUnits, sceneUnits)
                     });
                 }
             }
-        }
-
-        if (!this.detectionModes.find((mode) => mode.id === "lightPerception")) {
-            this.detectionModes.push({ id: "lightPerception", enabled: true, range: null });
+        } else {
+            if (!this.detectionModes.find((mode) => mode.id === "lightPerception")) {
+                this.detectionModes.push({ id: "lightPerception", enabled: true, range: null });
+            }
         }
 
         if (this.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
-            const maxRange = feetToUnits(60, sceneUnits);
+            const maxRange = fromFeet(60, sceneUnits);
 
             for (const mode of this.detectionModes) {
                 if (mode.range !== null) {
@@ -73,7 +74,7 @@ export default (TokenDocument) => class extends TokenDocument {
         if (!this.sight.enabled) {
             this.sight.range = 0;
             this.sight.angle = 360;
-            this.sight.visionMode = "basic";
+            this.sight.visionMode = "darkvision";
             this.sight.detectionMode = "basicSight";
             this.sight.color = null;
             this.sight.attenuation = 0;

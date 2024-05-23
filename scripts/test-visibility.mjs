@@ -1,17 +1,27 @@
-export default function (point, { tolerance = 2, object = null } = {}) {
+import { DETECTION_LEVELS } from "./const.mjs";
+
+export default function (point, options = {}) {
+    const object = options.object ?? null;
+
     if (!canvas.effects.visionSources.some((source) => source.active)) {
-        return game.user.isGM;
+        if (game.user.isGM) {
+            if (object instanceof Token && object._detectionLevel === undefined) {
+                object._detectionLevel = DETECTION_LEVELS.PRECISE;
+                object._detectionFilter = null;
+            }
+
+            return true;
+        }
+
+        if (object instanceof Token && object._detectionLevel === undefined) {
+            object._detectionLevel = DETECTION_LEVELS.NONE;
+            object._detectionFilter = null;
+        }
+
+        return false;
     }
 
-    const t = tolerance;
-    const offsets = t > 0 ? [[0, 0], [-t, -t], [-t, t], [t, t], [t, -t], [-t, 0], [t, 0], [0, -t], [0, t]] : [[0, 0]];
-    const config = {
-        object,
-        tests: offsets.map(o => ({
-            point: { x: point.x + o[0], y: point.y + o[1] },
-            los: new Map()
-        }))
-    };
+    const config = this._createVisibilityTestConfig(point, options);
 
     for (const lightSource of canvas.effects.lightSources) {
         if (!lightSource.data.vision || !lightSource.active) {
@@ -21,16 +31,20 @@ export default function (point, { tolerance = 2, object = null } = {}) {
         const result = lightSource.testVisibility(config);
 
         if (result === true) {
+            if (object instanceof Token && object._detectionLevel === undefined) {
+                object._detectionLevel = DETECTION_LEVELS.PRECISE;
+                object._detectionFilter = null;
+            }
+
             return true;
         }
     }
 
     const sceneRect = canvas.dimensions.sceneRect;
     const inBuffer = !sceneRect.contains(point.x, point.y);
-    const levels = CONFIG.Token.objectClass.DETECTION_LEVELS;
     const detectionFilters = new Set();
     let visible = false;
-    let detectionLevel = CONFIG.Token.objectClass.DETECTION_LEVELS.VAGUE;
+    let detectionLevel = DETECTION_LEVELS.NONE;
 
     for (const visionSource of canvas.effects.visionSources) {
         if (!visionSource.active || inBuffer === sceneRect.contains(visionSource.x, visionSource.y)) {
@@ -39,6 +53,7 @@ export default function (point, { tolerance = 2, object = null } = {}) {
 
         const token = visionSource.object.document;
 
+        // The detection modes have been sorted by TokenDocument#prepareBaseData
         for (const mode of token.detectionModes) {
             const detectionMode = CONFIG.Canvas.detectionModes[mode.id];
             const result = detectionMode?.testVisibility(visionSource, mode, config);
@@ -48,16 +63,15 @@ export default function (point, { tolerance = 2, object = null } = {}) {
             }
 
             visible = true;
+            detectionLevel = Math.max(detectionLevel, detectionMode.imprecise ? DETECTION_LEVELS.IMPRECISE : DETECTION_LEVELS.PRECISE);
 
-            if (object instanceof Token) {
+            if (object instanceof Token && object._detectionLevel === undefined) {
                 const detectionFilter = detectionMode.constructor.getDetectionFilter(visionSource);
 
                 if (detectionFilter) {
                     detectionFilters.add(detectionFilter);
                 }
             }
-
-            detectionLevel = Math.max(detectionLevel, detectionMode.imprecise ? levels.IMPRECISE : levels.PRECISE);
 
             if (!detectionMode.important) {
                 break;
@@ -66,19 +80,24 @@ export default function (point, { tolerance = 2, object = null } = {}) {
     }
 
     if (!visible) {
+        if (object instanceof Token && object._detectionLevel === undefined) {
+            object._detectionLevel = DETECTION_LEVELS.NONE;
+            object._detectionFilter = null;
+        }
+
         return false;
     }
 
-    if (object instanceof Token) {
-        if (detectionFilters.size > 1) {
-            object.detectionFilter = new MultiDetectionFilter([...detectionFilters]);
-        } else if (detectionFilters.size === 1) {
-            object.detectionFilter = detectionFilters.first();
-        } else {
-            object.detectionFilter = undefined;
-        }
-
+    if (object instanceof Token && object._detectionLevel === undefined) {
         object._detectionLevel = detectionLevel;
+
+        if (detectionFilters.size > 1) {
+            object._detectionFilter = new MultiDetectionFilter([...detectionFilters]);
+        } else if (detectionFilters.size === 1) {
+            object._detectionFilter = detectionFilters.first();
+        } else {
+            object._detectionFilter = null;
+        }
     }
 
     return true;

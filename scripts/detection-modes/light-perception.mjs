@@ -1,16 +1,16 @@
+import DetectionMode from "./base.mjs";
+
 /**
  * The detection mode for Light Perception.
  */
-export default class DetectionModeLightPerception extends new Function("return DetectionModeLightPerception")() {
-    priority = 8;
+export default class DetectionModeLightPerception extends DetectionMode {
 
     constructor() {
         super({
             id: "lightPerception",
             label: "DETECTION.LightPerception",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            walls: true,
-            angle: true
+            priority: 8,
         });
     }
 
@@ -20,15 +20,11 @@ export default class DetectionModeLightPerception extends new Function("return D
             return;
         }
 
-        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.basicSight.getDetectionFilter();
+        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.basicSight.constructor.getDetectionFilter();
     }
 
     /** @override */
     _canDetect(visionSource, target) {
-        if (visionSource.blinded.darkness) {
-            return false;
-        }
-
         const source = visionSource.object;
 
         if (target instanceof Token) {
@@ -51,5 +47,32 @@ export default class DetectionModeLightPerception extends new Function("return D
         }
 
         return true;
+    }
+
+    /** @override */
+    _testPoint(visionSource, mode, target, test) {
+        if (!super._testPoint(visionSource, mode, target, test)) {
+            return false;
+        }
+
+        if (visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
+            return true;
+        }
+
+        return canvas.effects.testInsideLight(test.point, test.elevation);
+    }
+
+    /** @override */
+    _testLOS(visionSource, mode, target, test) {
+        if (super._testLOS(visionSource, mode, target, test)) {
+            return true;
+        }
+
+        if (visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            && visionSource.losDarknessExcluded !== visionSource.los) {
+            return visionSource.losDarknessExcluded.contains(test.point.x, test.point.y);
+        }
+
+        return false;
     }
 }

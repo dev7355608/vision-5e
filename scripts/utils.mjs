@@ -8,11 +8,9 @@ export class Matcher {
             (Array.isArray(matches) ? matches : [matches])
                 .map(m => (Array.isArray(m) ? m : [m]).map(m => Array.isArray(m) ? m : [m]))
                 .flatMap(m => m.reduce((a, b) => a.flatMap((c) => b.map((d) => c + d))))
-                .map(s => s.trim().toLowerCase().replace(/\s+/g, " "))
-        )).sort()]));
+        )).sort()]).sort((a, b) => a[0].compare(b[0])));
 
-        this.#pattern = new RegExp(`^${Object.entries(object).map(([key, matches]) => `(?<${key}>${matches.map(s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-            .join("|")})`).join("|")}$`, "i");
+        this.#pattern = new RegExp(`^${Object.entries(object).map(([key, matches]) => `(?<${key}>${matches.map(RegExp.escape).join("|")})`).join("|")}$`, "i");
 
         const matches = Object.values(object).flat();
 
@@ -40,7 +38,11 @@ export class Matcher {
     }
 }
 
-export function unitsToFeet(range, units) {
+export function fromFeet(range, units) {
+    if (range === null) {
+        return null;
+    }
+
     switch (units) {
         case "in": return range / 12;
         case "ft": return range;
@@ -55,7 +57,11 @@ export function unitsToFeet(range, units) {
     }
 }
 
-export function feetToUnits(range, units) {
+export function toFeet(range, units) {
+    if (range === null) {
+        return null;
+    }
+
     switch (units) {
         case "in": return range * 12;
         case "ft": return range;
@@ -70,6 +76,6 @@ export function feetToUnits(range, units) {
     }
 }
 
-export function convertRange(range, fromUnits, toUnits) {
-    return feetToUnits(unitsToFeet(range, fromUnits), toUnits);
+export function convertUnits(range, fromUnits, toUnits) {
+    return toFeet(fromFeet(range, fromUnits), toUnits);
 }

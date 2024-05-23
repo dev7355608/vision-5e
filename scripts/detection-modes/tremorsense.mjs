@@ -1,9 +1,9 @@
+import DetectionMode from "./base.mjs";
+
 /**
  * The detection mode for Tremorsense.
  */
 export default class DetectionModeTremorsense extends DetectionMode {
-    priority = 3;
-    imprecise = true;
 
     constructor() {
         super({
@@ -11,7 +11,9 @@ export default class DetectionModeTremorsense extends DetectionMode {
             label: "DND5E.SenseTremorsense",
             type: DetectionMode.DETECTION_TYPES.MOVE,
             walls: false,
-            angle: false
+            angle: false,
+            imprecise: true,
+            priority: 3,
         });
     }
 
