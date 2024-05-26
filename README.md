@@ -15,7 +15,7 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Detects PC/NPC actors that are not objects (e.g. Item Piles).
   - Cannot detect actors that are _burrowing_, _defeated (dead)_, _ethereal_ (from the the material plane), or _petrified_.
   - Does not reveal the identity of detected tokens.
-  - Disabled while _burrowing_, _deafened_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
+  - Disabled while _burrowing_, _deafened_, _defeated_ (_dead_), _petrified_, or _unconscious_.
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
   - Configured automatically for PC actors with the `Blindsense`[\*](#translations) feat.
 - **Blindsight**
@@ -80,7 +80,7 @@ The automation detects relevant feats and effects that affect the creatures sens
 - **Hearing**
   - Detect PC/NPC actors that are not objects (e.g. Item Piles).
   - Cannot detect actors that are _defeated (dead)_, _ethereal_ (from the the material plane), _inaudible_, or _petrified_.
-  - Disabled while _deafened_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
+  - Disabled while _deafened_, _defeated_ (_dead_), _petrified_, or _unconscious_.
   - Is restricted by sound-blocking walls with reversed direction.
   - By default all tokens have hearing range of 15 + 2.5 * (*Passive Perception* - 10) feet (`15 + 2.5 * (@skills.prc.passive - 10)`). The default hearing range can be configured in the module settings.
 - **See Invisibility**
@@ -92,7 +92,7 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Detect PC/NPC actors that are not objects (e.g. Item Piles).
   - Cannot detect actors that are _burrowing_, _defeated (dead)_, _ethereal_ (from the the material plane), _flying_, _hovering_, or _petrified_.
   - Does not reveal the identity of detected tokens.
-  - Disabled while _defeated_ (_dead_), _flying_, _hovering_, _petrified_, _sleeping_, or _unconscious_.
+  - Disabled while _defeated_ (_dead_), _flying_, _hovering_, _petrified_, or _unconscious_.
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically from the actor's _Tremorsense_.
 - **Truesight**

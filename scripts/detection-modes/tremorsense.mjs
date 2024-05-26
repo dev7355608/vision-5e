@@ -45,7 +45,6 @@ export default class DetectionModeTremorsense extends DetectionMode {
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.FLYING)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.HOVERING)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEPING)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)) {
             return false;
         }

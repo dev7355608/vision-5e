@@ -41,7 +41,6 @@ export default class DetectionModeBlindsense extends DetectionMode {
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAFENED)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.SLEEPING)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)) {
             return false;
         }
