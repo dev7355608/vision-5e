@@ -145,15 +145,3 @@ Hooks.once("ready", () => {
 
     CONFIG.Token.prototypeSheetClass = TokenConfigMixin(CONFIG.Token.prototypeSheetClass);
 });
-
-Hooks.on("lightingRefresh", () => {
-    const visionModeData = canvas.visibility.visionModeData;
-
-    if (visionModeData.source?.object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
-        canvas.primary._ambienceFilter.enabled = false;
-    }
-});
-
-Hooks.on("visibilityRefresh", () => {
-    canvas.visibility.vision.light.sources.drawShape(canvas.dimensions.rect);
-});

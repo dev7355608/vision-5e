@@ -111,9 +111,6 @@ export default (Token) => class extends Token {
             data.brightness = applyOverride("brightness");
             data.contrast = applyOverride("contrast");
             data.saturation = applyOverride("saturation");
-            data.ignoreDarkness = true;
-        } else {
-            data.ignoreDarkness = false;
         }
 
         return data;
@@ -147,7 +144,6 @@ export default (Token) => class extends Token {
             this.initializeVisionSource();
         } else if (statusId === CONFIG.specialStatusEffects.ETHEREAL) {
             this.initializeSources();
-            canvas.environment.initialize();
         }
 
         // Blinded, Burrowing, Hovering, Flying, and, Invisible are handled by core

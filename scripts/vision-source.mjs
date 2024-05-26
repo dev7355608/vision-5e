@@ -5,8 +5,6 @@ export default (PointVisionSource) => class extends PointVisionSource {
         ...super.defaultData,
         // Let's the Limits module know which detection mode this vision source represents and so it can constrain the FOV accordingly
         detectionMode: "basicSight",
-        // Affects PointVisionSource#los, PointVisionSource#light, and PointVisionSource#shape
-        ignoreDarkness: false,
         // Affects only PointVisionSource#shape but not PointVisionSource#los or ointVisionSource#light
         includeDarkness: true,
         // The radius within vision is not constrained by walls
@@ -16,7 +14,7 @@ export default (PointVisionSource) => class extends PointVisionSource {
     /** @override */
     get isBlinded() {
         return this.data.radius === 0 && (this.data.lightRadius === 0 || !this.visionMode?.perceivesLight)
-            || !this.data.ignoreDarkness && this.data.includeDarkness && this.blinded.darkness;
+            || this.data.includeDarkness && this.blinded.darkness;
     }
 
     /** @type {PointSourcePolygon} */
@@ -56,18 +54,6 @@ export default (PointVisionSource) => class extends PointVisionSource {
 
     /** @type {PointSourcePolygon} */
     #losDarknessExcluded;
-
-    /** @override */
-    _getPolygonConfiguration() {
-        const config = super._getPolygonConfiguration();
-
-        if (this.data.ignoreDarkness) {
-            config.radius = this.data.disabled || this.suppressed ? 0 : canvas.dimensions.maxR;
-            config.includeDarkness = false;
-        }
-
-        return config;
-    }
 
     /** @override */
     _createShapes() {

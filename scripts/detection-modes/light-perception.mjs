@@ -51,28 +51,7 @@ export default class DetectionModeLightPerception extends DetectionMode {
 
     /** @override */
     _testPoint(visionSource, mode, target, test) {
-        if (!super._testPoint(visionSource, mode, target, test)) {
-            return false;
-        }
-
-        if (visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
-            return true;
-        }
-
-        return canvas.effects.testInsideLight(test.point, test.elevation);
-    }
-
-    /** @override */
-    _testLOS(visionSource, mode, target, test) {
-        if (super._testLOS(visionSource, mode, target, test)) {
-            return true;
-        }
-
-        if (visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-            && visionSource.losDarknessExcluded !== visionSource.los) {
-            return visionSource.losDarknessExcluded.contains(test.point.x, test.point.y);
-        }
-
-        return false;
+        return super._testPoint(visionSource, mode, target, test)
+            && canvas.effects.testInsideLight(test.point, test.elevation);
     }
 }

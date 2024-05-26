@@ -12,20 +12,27 @@ export default class VisionModeEtherealness extends VisionMode {
                 uniforms: { contrast: 0, saturation: -1, exposure: 0 }
             },
             lighting: {
-                background: { visibility: VisionMode.LIGHTING_VISIBILITY.DISABLED },
-                illumination: { visibility: VisionMode.LIGHTING_VISIBILITY.DISABLED },
-                coloration: { visibility: VisionMode.LIGHTING_VISIBILITY.DISABLED },
-                darkness: { visibility: VisionMode.LIGHTING_VISIBILITY.DISABLED }
+                background: {
+                    postProcessingModes: ["SATURATION"],
+                    uniforms: { saturation: -1, tint: [1, 1, 1] }
+                },
+                illumination: {
+                    postProcessingModes: ["SATURATION"],
+                    uniforms: { saturation: -1, tint: [1, 1, 1] }
+                },
+                coloration: {
+                    postProcessingModes: ["SATURATION"],
+                    uniforms: { saturation: -1, tint: [1, 1, 1] }
+                },
+                darkness: {
+                    postProcessingModes: ["SATURATION"],
+                    uniforms: { saturation: -1, tint: [1, 1, 1] }
+                }
             },
             vision: {
                 darkness: { adaptive: false },
-                defaults: { color: null, contrast: 0, saturation: -1, brightness: 1 }
+                defaults: { color: null, contrast: 0, saturation: -1, brightness: 0 }
             }
         });
-    }
-
-    /** @override */
-    get perceivesLight() {
-        return true;
     }
 }
