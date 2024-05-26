@@ -113,6 +113,10 @@ PC actors that have the `Ghostly Gaze`[\*](#translations), `Invocation: Ghostly 
 
 This module restricts the available vision modes to _Blindsight_, _Darkvision_, _Devil's Sight_, and _Truesight_. The vision mode can be changed in token's HUD (<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/eye.svg" width="16px" height="16px" style="filter: invert(100%);">) if the token has at least two of these senses. Players can select their preferred vision mode for their owned tokens on their own this way.
 
+### Spectator mode
+
+While a player does have any owned nonhidden Tokens with vision that are _defeated_ (_dead_), _petrified_, or _unconscious_ in the current scene, tokens with vision owned by other players become a source of vision for this player if they have limited permission over the token's actor. This behavior aims to prevent players from missing out on all the fun if their character dies, is knocked unconscious, or is petrified, which are all conditions that make the token not perceive anything and are likely to affect the character more than one round of combat.
+
 ### Active Effects
 
 | Detection Mode            | Attribute Key                                     |

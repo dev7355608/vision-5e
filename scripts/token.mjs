@@ -50,6 +50,57 @@ export default (Token) => class extends Token {
     }
 
     /** @override */
+    _isVisionSource() {
+        if (!canvas.visibility.tokenVision || !this.hasSight) {
+            return false;
+        }
+
+        const isGM = game.user.isGM;
+
+        // Only display hidden tokens for the GM
+        if (this.document.hidden && !isGM) {
+            return false;
+        }
+
+        // Always display controlled tokens which have vision
+        if (this.controlled) {
+            return true;
+        }
+
+        // Otherwise, vision is ignored for GM users
+        if (isGM) {
+            return false;
+        }
+
+        // At this point only tokens with an actor could be a source of vision
+        if (!this.actor) {
+            return false;
+        }
+
+        // A token that is defeated, petrified, or unconscious cannot perceive anything
+        const canPerceive = (token) => !token.document.hidden && token.hasSight
+            && !(token.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
+                || token.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
+                || token.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS));
+
+        // If the user controls that can perceive something, ...
+        if (this.layer.controlled.some(canPerceive)) {
+            // ... this token is not a source of vision
+            return false;
+        }
+
+        // If the user is the owner of a token that can perceive something but isn't controlling it, ...
+        if (this.layer.placeables.some((token) => !token.controlled && token.isOwner && canPerceive(token))) {
+            // ... this token is a source of vision only if the user has observer permissions
+            return this.actor.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER);
+        }
+
+        // If the user does not have a token that can perceive something,
+        // this token is a source of vision if the user has limited permissions and the actor has a player owner
+        return this.actor.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED) && this.actor.hasPlayerOwner;
+    }
+
+    /** @override */
     _getVisionBlindedStates() {
         // Blindness is handled in Token#_getVisionSourceData instead
         return {};
@@ -133,14 +184,23 @@ export default (Token) => class extends Token {
             || statusId === CONFIG.specialStatusEffects.THINKING
             || statusId === CONFIG.specialStatusEffects.UMBRAL_SIGHT) {
             canvas.perception.update({ refreshVision: true });
+        } else if (statusId === CONFIG.specialStatusEffects.DEFEATED
+            || statusId === CONFIG.specialStatusEffects.PETRIFIED
+            || statusId === CONFIG.specialStatusEffects.UNCONSCIOUS) {
+            if (!this.document.hidden && this.hasSight && !game.user.isGM && this.isOwner) {
+                for (const token of this.layer.placeables) {
+                    if (token !== this) {
+                        token.initializeVisionSource();
+                    }
+                }
+            }
+
+            this.initializeVisionSource();
         } else if (statusId === CONFIG.specialStatusEffects.BLIND_SENSES
             || statusId === CONFIG.specialStatusEffects.DEAFENED
-            || statusId === CONFIG.specialStatusEffects.DEFEATED
             || statusId === CONFIG.specialStatusEffects.ECHOLOCATION
             || statusId === CONFIG.specialStatusEffects.GHOSTLY_GAZE
-            || statusId === CONFIG.specialStatusEffects.PETRIFIED
-            || statusId === CONFIG.specialStatusEffects.SLEEPING
-            || statusId === CONFIG.specialStatusEffects.UNCONSCIOUS) {
+            || statusId === CONFIG.specialStatusEffects.SLEEPING) {
             this.initializeVisionSource();
         } else if (statusId === CONFIG.specialStatusEffects.ETHEREAL) {
             this.initializeSources();
