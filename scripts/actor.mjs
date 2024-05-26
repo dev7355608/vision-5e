@@ -35,16 +35,20 @@ export default (Actor) => class extends Actor {
     prepareDerivedData() {
         super.prepareDerivedData();
 
+        const conditionImmunities = this.system.traits?.ci?.value;
+
+        if (conditionImmunities) {
+            for (const condition of conditionImmunities) {
+                this.statuses.delete(condition);
+            }
+        }
+
         const itemPile = game.itempiles?.API.getActorFlagData(this);
 
         if (itemPile && itemPile.enabled && (itemPile.type === game.itempiles.pile_types.PILE
             || itemPile.type === game.itempiles.pile_types.CONTAINER
             || itemPile.type === game.itempiles.pile_types.VAULT)) {
             this.statuses.add(CONFIG.specialStatusEffects.OBJECT);
-            this.statuses.add(CONFIG.specialStatusEffects.INAUDIBLE);
-        }
-
-        if (this.statuses.has(CONFIG.specialStatusEffects.PETRIFIED)) {
             this.statuses.add(CONFIG.specialStatusEffects.INAUDIBLE);
         }
 
