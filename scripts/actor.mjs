@@ -154,22 +154,30 @@ function findRange(description, units) {
     return result ? convertUnits(Number(result.groups.range), result.groups.ft !== undefined ? "ft" : "m", units) : undefined;
 }
 
+/** @type {Set<string>} */
+const MAGIC_ITEM_TYPES = new Set([
+    "consumable",
+    "container",
+    "dnd-tashas-cauldron.tattoo",
+    "equipment",
+    "loot",
+    "weapon",
+    "tool",
+]);
+
+/**
+ * @param {Item} item
+ * @returns {boolean}
+ */
+function isMagicItem(item) {
+    return MAGIC_ITEM_TYPES.has(item.type) && item.system.validProperties.has("mgc") && item.system.properties.has("mgc");
+}
+
 /**
  * @param {Actor} actor
  * @returns {boolean}
  */
 function isMagical(actor) {
-    const isMagicItem = (item) => {
-        const type = item.type;
-
-        return (type === "consumable"
-            || type === "container"
-            || type === "equipment"
-            || type === "loot"
-            || type === "weapon"
-            || type === "tool") && item.system.properties.has("mgc");
-    }
-
     // Does the actor carry a magical item?
     if (actor.items.some(isMagicItem)) {
         return true;
@@ -179,7 +187,7 @@ function isMagical(actor) {
         return false;
     }
 
-    // Is the actor affect by a spell?
+    // Is the actor affect by a spell or a magical effect?
     for (const effect of actor.appliedEffects) {
         if (!effect.origin || effect.origin.startsWith("Compendium.")) {
             continue;
