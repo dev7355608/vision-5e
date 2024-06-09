@@ -28,8 +28,7 @@ export default class DetectionModeDivineSense extends DetectionMode {
         const source = visionSource.object;
 
         if (!(target instanceof Token)
-            || !target.actor
-            || target.actor.type !== "character" && target.actor.type !== "npc"
+            || !target.actor?.system.details?.type
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)

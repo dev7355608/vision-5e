@@ -189,7 +189,7 @@ export default (Token) => class extends Token {
             || statusId === CONFIG.specialStatusEffects.UNCONSCIOUS) {
             if (!this.document.hidden && this.hasSight && !game.user.isGM && this.isOwner) {
                 for (const token of this.layer.placeables) {
-                    if (token !== this) {
+                    if (token !== this && !token.vision === token._isVisionSource()) {
                         token.initializeVisionSource();
                     }
                 }

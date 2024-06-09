@@ -26,8 +26,6 @@ export default class DetectionModeBlindsense extends DetectionMode {
         const source = visionSource.object;
 
         if (!(target instanceof Token)
-            || !target.actor
-            || target.actor.type !== "character" && target.actor.type !== "npc"
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)

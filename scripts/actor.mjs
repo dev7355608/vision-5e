@@ -64,50 +64,58 @@ export default (Actor) => class extends Actor {
             this.statuses.add(CONFIG.specialStatusEffects.THINKING);
         }
 
-        this.detectionModes = {};
-
-        if (this.type !== "character" && this.type !== "npc") {
-            return;
+        if (this.type === "vehicle") {
+            this.statuses.add(CONFIG.specialStatusEffects.OBJECT);
         }
 
-        if (/(?<=^|[\s,;])(?:Shapechanger|Gestaltwandler|Métamorphe|Cambiaformas|Metamorfo)(?=$|[\s,;])/i.test(this.system.details.type.subtype)) {
+        if (/(?<=^|[\s,;])(?:Shapechanger|Gestaltwandler|Métamorphe|Cambiaformas|Metamorfo)(?=$|[\s,;])/i.test(this.system.details?.type?.subtype ?? "")) {
             this.statuses.add(CONFIG.specialStatusEffects.SHAPECHANGER);
         }
 
-        const senses = this.system.attributes.senses;
+        this.detectionModes = {};
 
-        this.detectionModes.lightPerception = null;
-        this.detectionModes.basicSight = senses.darkvision;
-        this.detectionModes.seeAll = senses.truesight;
-        this.detectionModes.blindsight = senses.blindsight;
-        this.detectionModes.feelTremor = senses.tremorsense;
-        this.detectionModes.hearing = Math.max(toFeet(typeof defaultHearingRange === "string"
-            ? new Roll(defaultHearingRange, this.getRollData({ deterministic: true })).evaluateSync().total
-            : defaultHearingRange, senses.units), 0);
+        const senses = this.system.attributes?.senses;
+
+        if (senses) {
+            this.detectionModes.lightPerception = null;
+            this.detectionModes.basicSight = senses.darkvision;
+            this.detectionModes.seeAll = senses.truesight;
+            this.detectionModes.blindsight = senses.blindsight;
+            this.detectionModes.feelTremor = senses.tremorsense;
+            this.detectionModes.hearing = Math.max(toFeet(typeof defaultHearingRange === "string"
+                ? new Roll(defaultHearingRange, this.getRollData({ deterministic: true })).evaluateSync().total
+                : defaultHearingRange, senses.units), 0);
+        }
 
         const featRegistry = FEAT_REGISTRY[this.type];
-        const featMatcher = FEAT_MATCHERS[this.type];
 
-        for (const item of this.items) {
-            if (item.type !== "feat") {
-                continue;
-            }
+        if (featRegistry) {
+            const featMatcher = FEAT_MATCHERS[this.type];
 
-            const id = featMatcher.match(item.name);
+            for (const item of this.items) {
+                if (item.type !== "feat") {
+                    continue;
+                }
 
-            if (id) {
-                featRegistry[id].call(this, item);
+                const id = featMatcher.match(item.name);
+
+                if (id) {
+                    featRegistry[id].call(this, item);
+                }
             }
         }
 
         const effectRegistry = EFFECT_REGISTRY[this.type];
-        const effectMatcher = EFFECT_MATCHERS[this.type];
 
-        for (const effect of this.appliedEffects) {
-            const id = effectMatcher.match(effect.name);
+        if (effectRegistry) {
+            const effectMatcher = EFFECT_MATCHERS[this.type];
 
-            if (id) {
-                effectRegistry[id].call(this, effect);
+            for (const effect of this.appliedEffects) {
+                const id = effectMatcher.match(effect.name);
+
+                if (id) {
+                    effectRegistry[id].call(this, effect);
+                }
             }
         }
 
