@@ -27,7 +27,7 @@ export default class DetectionModeBlindsense extends DetectionMode {
 
         if (!(target instanceof Token)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
-            || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.OBJECT)
