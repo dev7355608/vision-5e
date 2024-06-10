@@ -169,8 +169,7 @@ export default (Token) => class extends Token {
 
     /** @override */
     _onApplyStatusEffect(statusId, active) {
-        if (statusId === CONFIG.specialStatusEffects.DEVILS_SIGHT
-            || statusId === CONFIG.specialStatusEffects.DISEASED
+        if (statusId === CONFIG.specialStatusEffects.DISEASED
             || statusId === CONFIG.specialStatusEffects.INAUDIBLE
             || statusId === CONFIG.specialStatusEffects.MAGICAL
             || statusId === CONFIG.specialStatusEffects.MATERIAL
@@ -198,6 +197,7 @@ export default (Token) => class extends Token {
             this.initializeVisionSource();
         } else if (statusId === CONFIG.specialStatusEffects.BLIND_SENSES
             || statusId === CONFIG.specialStatusEffects.DEAFENED
+            || statusId === CONFIG.specialStatusEffects.DEVILS_SIGHT
             || statusId === CONFIG.specialStatusEffects.ECHOLOCATION
             || statusId === CONFIG.specialStatusEffects.GHOSTLY_GAZE
             || statusId === CONFIG.specialStatusEffects.SLEEPING) {
