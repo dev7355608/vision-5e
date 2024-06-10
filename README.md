@@ -86,7 +86,7 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Is restricted by sound-blocking walls with reversed direction.
   - By default all tokens have hearing range of 15 + 2.5 * (*Passive Perception* - 10) feet (`15 + 2.5 * (@skills.prc.passive - 10)`). The default hearing range can be configured in the module settings.
 - **Life Sense**
-  - Detects PC/NPC actors that are not objects (e.g. Item Piles).
+  - Detects PC/NPC actors that are not undead, constructs, or objects (e.g. Item Piles).
   - Cannot detect actors that are _defeated (dead)_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) NPC feat says otherwise), or _petrified_.
   - Does not reveal the identity of detected tokens.
   - Disabled while _defeated_ (_dead_), _petrified_, or _unconscious_.
