@@ -15,6 +15,7 @@ import DetectionModeDevilsSight from "./detection-modes/devils-sight.mjs";
 import DetectionModeDivineSense from "./detection-modes/divine-sense.mjs";
 import DetectionModeEtherealSight from "./detection-modes/ethereral-sight.mjs";
 import DetectionModeHearing from "./detection-modes/hearing.mjs";
+import DetectionModeLifeSense from "./detection-modes/life-sense.mjs";
 import DetectionModeLightPerception from "./detection-modes/light-perception.mjs";
 import DetectionModeSeeInvisibility from "./detection-modes/see-invisibility.mjs";
 import DetectionModeTremorsense from "./detection-modes/tremorsense.mjs";
@@ -94,6 +95,7 @@ Hooks.once("init", () => {
         DetectionModeDivineSense,
         DetectionModeEtherealSight,
         DetectionModeHearing,
+        DetectionModeLifeSense,
         DetectionModeLightPerception,
         DetectionModeSeeInvisibility,
         DetectionModeTremorsense,

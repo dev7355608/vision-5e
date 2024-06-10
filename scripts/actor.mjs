@@ -308,6 +308,9 @@ const FEAT_REGISTRY = {
         devilsSight(item) {
             this.statuses.add(CONFIG.specialStatusEffects.DEVILS_SIGHT);
         },
+        lifeSense(item) {
+            upgradeDetectionMode(this, "lifeSense", findRange(item.system.description.value, this.system.attributes.senses.units));
+        },
         senseMagic(item) {
             upgradeDetectionMode(this, "detectMagic", findRange(item.system.description.value, this.system.attributes.senses.units));
         },
@@ -438,6 +441,9 @@ const DATABASE = Object.values({
             "Eldritch Adept: Witch Sight",
             "Witch Sight",
         ],
+        lifeSense: [
+            "Life Sense",
+        ],
         magicAwareness: [
             "Magic Awareness",
         ],
@@ -518,6 +524,9 @@ const DATABASE = Object.values({
             [["Schauerliche ", ""], "Anrufung", ["en", ""], ": Hexensicht"],
             "Schauerlicher Adept: Hexensicht",
             "Hexensicht",
+        ],
+        lifeSense: [
+            "Lebensgespür",
         ],
         magicAwareness: [
             "Magische Wahrnehmung",
@@ -604,6 +613,9 @@ const DATABASE = Object.values({
             ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
             [["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
         ],
+        lifeSense: [
+            "Perception de la vie",
+        ],
         magicAwareness: [
             "Conscience magique",
         ],
@@ -687,6 +699,9 @@ const DATABASE = Object.values({
             ["Invocaciones", [" Sobrenaturales", ""], ": Visión Bruja"],
             "Adepto Sobrenatural: Visión Bruja",
             "Visión Bruja",
+        ],
+        lifeSense: [
+            "Percepción de la Vida",
         ],
         magicAwareness: [
             "Conciencia Mágica",
@@ -773,6 +788,9 @@ const DATABASE = Object.values({
             ["Invocações", [" Místicas", ""], ": Visão da Bruxa"],
             "Adepto Místico: Visão da Bruxa",
             "Visão da Bruxa",
+        ],
+        lifeSense: [
+            "Percepção da Vida",
         ],
         magicAwareness: [
             "Percepção Mágica",

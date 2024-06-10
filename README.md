@@ -9,6 +9,8 @@ Additional and improved Vision/Detection modes for D&D 5e including automatic vi
 
 The automation detects relevant feats and effects that affect the creatures senses and detection by their name (supported are English, German, French, Spanish, and Portuguese (Brazil)). No configuration is required unless you want to adjust the default hearing range formula or turn hearing off entirely by default.
 
+---
+
 ### Detection Modes
 
 - **Blindsense**
@@ -25,7 +27,7 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
   - Configured automatically from the actor's _Blindsight_.
 - **Darkvision**
-  - Detect tokens, notes, and door controls.
+  - Detects tokens, notes, and door controls.
   - Cannot detect actors that are _burrowing_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) NPC feat says otherwise), or _invisible_. Also cannot detect PC actors with the `Umbral Sight`[\*](#translations) feat.
   - Disabled while _blinded_, _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
   - Is restricted by sight-blocking walls and is blocked by darkness sources unless the actor in a NPC with the `Devil's Sight`[\*](#translations) feat.
@@ -78,18 +80,31 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically for NPC actors that have the `Ethereal Sight`[\*](#translations) feat and PC actors with the `The Third Eye: Ethereal Sight`[\*](#translations) feat.
 - **Hearing**
-  - Detect PC/NPC actors that are not objects (e.g. Item Piles).
+  - Detects PC/NPC actors that are not objects (e.g. Item Piles).
   - Cannot detect actors that are _defeated (dead)_, _ethereal_ (from the the material plane), _inaudible_, or _petrified_.
   - Disabled while _deafened_, _defeated_ (_dead_), _petrified_, or _unconscious_.
   - Is restricted by sound-blocking walls with reversed direction.
   - By default all tokens have hearing range of 15 + 2.5 * (*Passive Perception* - 10) feet (`15 + 2.5 * (@skills.prc.passive - 10)`). The default hearing range can be configured in the module settings.
+- **Life Sense**
+  - Detects PC/NPC actors that are not objects (e.g. Item Piles).
+  - Cannot detect actors that are _defeated (dead)_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) NPC feat says otherwise), or _petrified_.
+  - Does not reveal the identity of detected tokens.
+  - Disabled while _defeated_ (_dead_), _petrified_, or _unconscious_.
+  - Is not restricted by walls or blocked by darkness sources.
+  - Configured automatically for NPC actors that have the `Life Sense`[\*](#translations) feat.
+- **Light Perception**
+  - Detects tokens, notes, and door controls that are illuminated a light source.
+  - Cannot detect actors that are _burrowing_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) NPC feat says otherwise), or _invisible_.
+  - Disabled while _blinded_, _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
+  - Is restricted by sight-blocking walls and is blocked by darkness sources.
+  - Infinite range by default.
 - **See Invisibility**
   - Allows detection of _invisible_ and _ethereal_ actors.
   - Cannot detect anything on its own and requires another sense to see the target without the _ethereal_ and _invisible_ status.
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically for actors with the `See Invisibility`[\*](#translations) effect and PC actors with the `The Third Eye: See Invisibility`[\*](#translations) feat.
 - **Tremorsense**
-  - Detect PC/NPC actors that are not objects (e.g. Item Piles).
+  - Detects PC/NPC actors that are not objects (e.g. Item Piles).
   - Cannot detect actors that are _burrowing_, _defeated (dead)_, _ethereal_ (from the the material plane), _flying_, _hovering_, or _petrified_.
   - Does not reveal the identity of detected tokens.
   - Disabled while _defeated_ (_dead_), _flying_, _hovering_, _petrified_, or _unconscious_.
@@ -109,13 +124,19 @@ The automation detects relevant feats and effects that affect the creatures sens
 
 PC actors that have the `Ghostly Gaze`[\*](#translations), `Invocation: Ghostly Gaze`, `Invocations: Ghostly Gaze`, `Eldritch Invocation: Ghostly Gaze`, `Eldritch Invocations: Ghostly Gaze`, or `Eldritch Adept: Ghostly Gaze` feat gain 30 feet _Darkvision_ and can see through walls within 30 feet.
 
+---
+
 ### Vision Modes
 
 This module restricts the available vision modes to _Blindsight_, _Darkvision_, _Devil's Sight_, and _Truesight_. The vision mode can be changed in token's HUD (<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/eye.svg" width="16px" height="16px" style="filter: invert(100%);">) if the token has at least two of these senses. Players can select their preferred vision mode for their owned tokens on their own this way.
 
-### Spectator mode
+---
 
-While a player does have any owned nonhidden Tokens with vision that are _defeated_ (_dead_), _petrified_, or _unconscious_ in the current scene, tokens with vision owned by other players become a source of vision for this player if they have limited permission over the token's actor. This behavior aims to prevent players from missing out on all the fun if their character dies, is knocked unconscious, or is petrified, which are all conditions that make the token not perceive anything and are likely to affect the character more than one round of combat.
+### Spectator Mode
+
+While a player does have any owned nonhidden tokens with vision that are _defeated_ (_dead_), _petrified_, or _unconscious_ in the current scene, tokens with vision owned by other players become a source of vision for this player if they have limited permission over the token's actor. This behavior aims to prevent players from missing out on all the fun if their character dies, is knocked unconscious, or is petrified, which are all conditions that make the token not perceive anything and are likely to affect the character more than one round of combat.
+
+---
 
 ### Active Effects
 
@@ -132,6 +153,7 @@ While a player does have any owned nonhidden Tokens with vision that are _defeat
 | Divine Sense              | `ATL.detectionModes.divineSense.range`            |
 | Ethereal Sight            | `ATL.detectionModes.etherealSight.range`          |
 | Hearing                   | `ATL.detectionModes.hearing.range`                |
+| Life Sense                | `ATL.detectionModes.lifeSense.range`              |
 | Light Perception          | `ATL.detectionModes.lightPerception.range`        |
 | See Invisibility          | `ATL.detectionModes.seeInvisibility.range`        |
 | Tremorsense               | `system.attributes.senses.tremorsense`            |
@@ -160,6 +182,7 @@ _Note: Attribute keys starting with `ATL.` require the [Active Token Effects](ht
 | `Ethereal Sight`            | _Monster feat_                        | `Ätherische Sicht`             | `Vision éthérée` / `Vue éthérée`                                            | `Visión etérea`                   | `Visão Etérea`                                    |
 | `Ghostly Gaze`              | _Warlock invocation_                  | `Geisterhafter Blick`          | `Regard fantomatique`                                                       | `Mirada fantasmal`                | `Olhar Fantasmagórico`                            |
 | `Hollow One`                | _Supernatural Gift_                   | `Leerwandler`                  | `Celui-qui-est-creux`                                                       | `Aquel que está vacío`            | `Oco`                                             |
+| `Life Sense`                | _Monster feat_                        | `Lebensgespür`                 | `Perception de la vie`                                                      | `Percepción de la Vida`           | `Percepção da Vida`                               |
 | `Magic Awareness`           | _Barbarian (Path of Wild Magic) feat_ | `Magische Wahrnehmung`         | `Conscience magique`                                                        | `Conciencia mágica`               | `Percepção Mágica`                                |
 | `Mind Blank`                | _Spell_                               | `Gedankenleere`                | `Esprit impénétrable`                                                       | `Mente en Blanco`                 | `Limpar a Mente`                                  |
 | `Nondetection`              | _Spell_                               | `Unauffindbarkeit`             | `Antidétection`                                                             | `Indetectable`                    | `Indetectável`                                    |
