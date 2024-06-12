@@ -26,6 +26,13 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Disabled while _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_. Also disabled if _deafened_ and the actor is a NPC and has the `Echolocation`[\*](#translations) or `Blind Senses`[\*](#translations) feat.
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
   - Configured automatically from the actor's _Blindsight_.
+- **Blood Sense**
+  - Detects PC/NPC actors that are not constructs, elementals, oozes, plants, undead, or objects (e.g. Item Piles), and any actor that has is _bleeding_.
+  - Cannot detect actors that are _ethereal_ (from the the material plane), _petrified_ and not _bleeding_, or immune to _bleeding_.
+  - Does not reveal the identity of detected tokens.
+  - Disabled while _defeated_ (_dead_), _petrified_, or _unconscious_.
+  - Is not restricted by walls or blocked by darkness sources.
+  - Configured automatically for NPC actors that have the `Blood Sense`[\*](#translations) feat.
 - **Darkvision**
   - Detects tokens, notes, and door controls.
   - Cannot detect actors that are _burrowing_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) NPC feat says otherwise), or _invisible_. Also cannot detect PC actors with the `Umbral Sight`[\*](#translations) feat.
@@ -144,6 +151,7 @@ While a player does have any owned nonhidden tokens with vision that are _defeat
 | ------------------------- | ------------------------------------------------- |
 | Blindsense                | `ATL.detectionModes.bindsense.range`              |
 | Blindsight                | `system.attributes.senses.blindsight`             |
+| Blood Sense               | `ATL.detectionModes.bloodSense.range`             |
 | Darkvision                | `system.attributes.senses.darkvision`             |
 | Detect Evil and Good      | `ATL.detectionModes.detectEvilAndGood.range`      |
 | Detect Magic              | `ATL.detectionModes.detectMagic.range`            |
@@ -170,6 +178,7 @@ _Note: Attribute keys starting with `ATL.` require the [Active Token Effects](ht
 | --------------------------- | ------------------------------------- | ------------------------------ | --------------------------------------------------------------------------- | --------------------------------- | ------------------------------------------------- |
 | `Blind Senses`              | _Monster feat_                        | `Blinde Sinne`                 | `Sens aveugles`                                                             | `Sentidos de ciego`               | `Sentido Cego`                                    |
 | `Blindsense`                | _Rogue feat_                          | `Blindgespür`                  | `Perception aveugle`                                                        | `Sentir sin ver`                  | `Sentido Cego`                                    |
+| `Blood Sense`               | _Monster feat_                        | `Blutgespür`                   | `Perception du sang`                                                        | `Percepción de Sangre`            | `Percepção do Sangue`                             |
 | `Detect Evil and Good`      | _Spell_                               | `Gutes und Böses entdecken`    | `Détection du mal et du bien`                                               | `Detectar el bien y el mal`       | `Detectar o Bem e o Mal` / `Detectar o Bem e Mal` |
 | `Detect Magic`              | _Spell_                               | `Magie entdecken`              | `Détection de la magie`                                                     | `Detectar magia`                  | `Detectar Magia`                                  |
 | `Detect Poison and Disease` | _Spell_                               | `Gift und Krankheit entdecken` | `Détection du poison et des maladies`                                       | `Detectar venenos y enfermedades` | `Detectar Veneno e Doença`                        |

@@ -169,7 +169,8 @@ export default (Token) => class extends Token {
 
     /** @override */
     _onApplyStatusEffect(statusId, active) {
-        if (statusId === CONFIG.specialStatusEffects.DISEASED
+        if (statusId === CONFIG.specialStatusEffects.BLEEDING
+            || statusId === CONFIG.specialStatusEffects.DISEASED
             || statusId === CONFIG.specialStatusEffects.INAUDIBLE
             || statusId === CONFIG.specialStatusEffects.MAGICAL
             || statusId === CONFIG.specialStatusEffects.MATERIAL

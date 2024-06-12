@@ -6,6 +6,7 @@ import TokenHUDMixin from "./token-hud.mjs";
 import VisionSourceMixin from "./vision-source.mjs";
 import DetectionModeBlindsense from "./detection-modes/blindsense.mjs";
 import DetectionModeBlindsight from "./detection-modes/blindsight.mjs";
+import DetectionModeBloodSense from "./detection-modes/blood-sense.mjs";
 import DetectionModeDarkvision from "./detection-modes/darkvision.mjs";
 import DetectionModeDetectEvilAndGood from "./detection-modes/detect-evil-and-good.mjs";
 import DetectionModeDetectMagic from "./detection-modes/detect-magic.mjs";
@@ -47,6 +48,7 @@ Hooks.once("init", () => {
     });
 
     // Register special status effects
+    CONFIG.specialStatusEffects.BLEEDING = "bleeding";
     CONFIG.specialStatusEffects.BLIND_SENSES = "blindSenses";
     CONFIG.specialStatusEffects.BLINDED = "blinded";
     CONFIG.specialStatusEffects.BURROWING = "burrowing";
@@ -86,6 +88,7 @@ Hooks.once("init", () => {
     for (const detectionModeClass of [
         DetectionModeBlindsense,
         DetectionModeBlindsight,
+        DetectionModeBloodSense,
         DetectionModeDarkvision,
         DetectionModeDetectEvilAndGood,
         DetectionModeDetectMagic,
