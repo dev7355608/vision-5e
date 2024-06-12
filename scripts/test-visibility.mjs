@@ -92,7 +92,7 @@ export default function (point, options = {}) {
         object._detectionLevel = detectionLevel;
 
         if (detectionFilters.size > 1) {
-            object._detectionFilter = new MultiDetectionFilter([...detectionFilters]);
+            object._detectionFilter = new MultiDetectionFilter([...detectionFilters].reverse());
         } else if (detectionFilters.size === 1) {
             object._detectionFilter = detectionFilters.first();
         } else {
