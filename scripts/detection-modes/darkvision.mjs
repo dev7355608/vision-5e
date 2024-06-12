@@ -16,7 +16,7 @@ export default class DetectionModeDarkvision extends DetectionMode {
 
     /** @override */
     static getDetectionFilter(visionSource) {
-        if (visionSource?.visionMode.id === "darkvision") {
+        if (visionSource?.data.detectionMode === "basicSight") {
             return;
         }
 

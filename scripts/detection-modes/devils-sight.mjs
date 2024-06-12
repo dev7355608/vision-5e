@@ -16,7 +16,7 @@ export default class DetectionModeDevilsSight extends DetectionMode {
 
     /** @override */
     static getDetectionFilter(visionSource) {
-        if (visionSource?.visionMode.id === "devilsSight") {
+        if (visionSource?.data.detectionMode === "devilsSight") {
             return;
         }
 

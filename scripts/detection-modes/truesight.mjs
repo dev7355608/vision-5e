@@ -17,7 +17,7 @@ export default class DetectionModeTruesight extends DetectionMode {
 
     /** @override */
     static getDetectionFilter(visionSource) {
-        if (visionSource?.visionMode.id === "truesight") {
+        if (visionSource?.data.detectionMode === "seeAll") {
             return;
         }
 
