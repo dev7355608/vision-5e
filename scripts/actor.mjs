@@ -13,19 +13,19 @@ export default (Actor) => class extends Actor {
 
         super.prepareData();
 
-        if (foundry.utils.objectsEqual(this.detectionModes, detectionModes)
+        if (!detectionModes || foundry.utils.objectsEqual(this.detectionModes, detectionModes)
             && wasEthereal === this.statuses.has(CONFIG.specialStatusEffects.ETHEREAL)) {
             return;
         }
 
-        for (const token of this.getActiveTokens(false, true)) {
+        for (const token of this.getDependentTokens()) {
             if (!token.sight.enabled) {
                 continue;
             }
 
             token.prepareData();
 
-            if (token.object?.vision) {
+            if (token.rendered && token.object.vision) {
                 token.object.initializeVisionSource();
             }
         }
