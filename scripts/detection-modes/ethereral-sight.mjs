@@ -39,7 +39,7 @@ export default class DetectionModeEtherealSight extends DetectionMode {
         const visionSources = canvas.effects.visionSources;
 
         canvas.effects.visionSources = new foundry.utils.Collection();
-        canvas.effects.visionSources.set("", visionSource);
+        canvas.effects.visionSources.set(visionSource.sourceId, visionSource);
 
         const detectionModes = visionSource.object.document.detectionModes;
         const detectionLevel = target._detectionLevel;
