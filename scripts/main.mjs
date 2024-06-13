@@ -136,7 +136,17 @@ Hooks.once("init", () => {
     delete CONFIG.Canvas.visionModes.tremorsense;
 
     // Patch visiblity testing
-    CanvasVisibility.prototype.testVisibility = testVisibility;
+    if (game.modules.get("lib-wrapper")?.active) {
+        libWrapper.register(
+            "vision-5e",
+            "CanvasVisibility.prototype.testVisibility",
+            testVisibility,
+            libWrapper.OVERRIDE,
+            { perf_mode: libWrapper.PERF_FAST }
+        );
+    } else {
+        CanvasVisibility.prototype.testVisibility = testVisibility;
+    }
 });
 
 Hooks.once("ready", () => {
