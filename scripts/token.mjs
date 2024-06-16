@@ -215,6 +215,9 @@ export default (Token) => class extends Token {
     async _draw(options) {
         await super._draw(options);
 
+        // Patch because Token#_renderDetectionFilter uses Token#_detectionFilter instead of Token#detectionFilter
+        this.detectionFilterMesh.render = (renderer) => this._renderDetectionFilter(renderer);
+
         const impreciseTexture = await loadTexture(this.document.constructor.DEFAULT_ICON);
 
         this.#impreciseMesh = this.addChildAt(
@@ -230,7 +233,7 @@ export default (Token) => class extends Token {
     _refreshVisibility() {
         const priorDetectionLevel = this._detectionLevel;
 
-        // The patched CanvasVisibilit#testVisibility sets Token#_detectionLevel and Token#_detectionFilter
+        // The patched CanvasVisibility#testVisibility sets Token#_detectionLevel and Token#_detectionFilter
         // only if Token#_detectionLevel is undefined
         this._detectionLevel = undefined;
         this._detectionFilter = null;
@@ -292,13 +295,17 @@ export default (Token) => class extends Token {
 
     /** @override */
     _renderDetectionFilter(renderer) {
+        if (!this._detectionFilter) {
+            return;
+        }
+
         const mesh = this._detectionLevel === DETECTION_LEVELS.PRECISE ? this.mesh : this.#impreciseMesh;
 
         if (!mesh) {
             return;
         }
 
-        detectionFilterArray[0] = this.detectionFilter;
+        detectionFilterArray[0] = this._detectionFilter;
 
         const originalFilters = mesh.filters;
         const originalTint = mesh.tint;
