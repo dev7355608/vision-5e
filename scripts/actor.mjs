@@ -292,6 +292,9 @@ const FEAT_REGISTRY = {
         blindSenses(item) {
             this.statuses.add(CONFIG.specialStatusEffects.BLIND_SENSES);
         },
+        bloodSense(item) {
+            upgradeDetectionMode(this, "bloodSense", findRange(item.system.description.value, this.system.attributes.senses.units));
+        },
         echolocation(item) {
             this.statuses.add(CONFIG.specialStatusEffects.ECHOLOCATION);
         },
@@ -395,6 +398,9 @@ const DATABASE = Object.values({
         blindsense: [
             "Blindsense",
         ],
+        bloodSense: [
+            "Blood Sense",
+        ],
         detectEvilAndGood: [
             "Detect Evil and Good",
         ],
@@ -479,6 +485,9 @@ const DATABASE = Object.values({
         blindsense: [
             "Blindgespür",
         ],
+        bloodSense: [
+            "Blutgespür",
+        ],
         detectEvilAndGood: [
             "Gutes und Böses entdecken",
         ],
@@ -562,6 +571,9 @@ const DATABASE = Object.values({
         ],
         blindsense: [
             "Perception aveugle",
+        ],
+        bloodSense: [
+            "Perception du sang",
         ],
         detectEvilAndGood: [
             "Détection du mal et du bien",
@@ -651,6 +663,9 @@ const DATABASE = Object.values({
         blindsense: [
             "Sentir sin Ver",
         ],
+        bloodSense: [
+            "Percepción de Sangre",
+        ],
         detectEvilAndGood: [
             "Detectar el Bien y el Mal",
         ],
@@ -737,6 +752,9 @@ const DATABASE = Object.values({
         ],
         blindsense: [
             "Sentido Cego",
+        ],
+        bloodSense: [
+            "Percepção do Sangue",
         ],
         detectEvilAndGood: [
             ["Detectar o Bem e", [" o", ""], " Mal"],
