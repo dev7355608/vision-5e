@@ -57,6 +57,8 @@ export default (PointVisionSource) => class extends PointVisionSource {
 
     /** @override */
     _createShapes() {
+        this._updateVisionMode();
+
         this.#losDarknessExcluded = undefined;
 
         const origin = { x: this.data.x, y: this.data.y };
