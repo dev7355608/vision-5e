@@ -35,14 +35,6 @@ export default (Actor) => class extends Actor {
     prepareDerivedData() {
         super.prepareDerivedData();
 
-        const conditionImmunities = this.system.traits?.ci?.value;
-
-        if (conditionImmunities) {
-            for (const condition of conditionImmunities) {
-                this.statuses.delete(condition);
-            }
-        }
-
         const itemPile = game.itempiles?.API.getActorFlagData(this);
 
         if (itemPile && itemPile.enabled && (itemPile.type === game.itempiles.pile_types.PILE
