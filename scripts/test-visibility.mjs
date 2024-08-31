@@ -66,7 +66,7 @@ export default function (point, options = {}) {
             detectionLevel = Math.max(detectionLevel, detectionMode.imprecise ? DETECTION_LEVELS.IMPRECISE : DETECTION_LEVELS.PRECISE);
 
             if (object instanceof Token && object._detectionLevel === undefined) {
-                const detectionFilter = detectionMode.constructor.getDetectionFilter(visionSource);
+                const detectionFilter = detectionMode.constructor.getDetectionFilter(visionSource, object);
 
                 if (detectionFilter) {
                     detectionFilters.add(detectionFilter);

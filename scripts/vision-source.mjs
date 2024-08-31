@@ -5,7 +5,7 @@ export default (PointVisionSource) => class extends PointVisionSource {
         ...super.defaultData,
         // Let's the Limits module know which detection mode this vision source represents and so it can constrain the FOV accordingly
         detectionMode: "basicSight",
-        // Affects only PointVisionSource#shape but not PointVisionSource#los or ointVisionSource#light
+        // Affects only PointVisionSource#shape but not PointVisionSource#los or PointVisionSource#light
         includeDarkness: true,
         // The radius within vision is not constrained by walls
         unconstrainedRadius: 0,

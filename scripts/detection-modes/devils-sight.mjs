@@ -15,8 +15,9 @@ export default class DetectionModeDevilsSight extends DetectionMode {
     }
 
     /** @override */
-    static getDetectionFilter(visionSource) {
-        if (visionSource?.data.detectionMode === "devilsSight") {
+    static getDetectionFilter(visionSource, object) {
+        if (visionSource?.data.detectionMode === "devilsSight"
+            && !canvas.effects.testInsideDarkness(object.center, object.document.elevation)) {
             return;
         }
 
