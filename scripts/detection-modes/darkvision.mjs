@@ -60,7 +60,6 @@ export default class DetectionModeDarkvision extends DetectionMode {
         }
 
         if (visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT)
-            && visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             && visionSource.losDarknessExcluded !== visionSource.los) {
             return visionSource.losDarknessExcluded.contains(test.point.x, test.point.y);
         }
