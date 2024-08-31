@@ -4,6 +4,7 @@ import TokenConfigMixin from "./token-config.mjs";
 import TokenDocumentMixin from "./token-document.mjs";
 import TokenHUDMixin from "./token-hud.mjs";
 import VisionSourceMixin from "./vision-source.mjs";
+import CombatTrackerMixin from "./combat-tracker.mjs";
 import DetectionModeBlindsense from "./detection-modes/blindsense.mjs";
 import DetectionModeBlindsight from "./detection-modes/blindsight.mjs";
 import DetectionModeBloodSense from "./detection-modes/blood-sense.mjs";
@@ -38,6 +39,9 @@ Hooks.once("init", () => {
 
     // Extend PointVisionSource
     CONFIG.Canvas.visionSourceClass = VisionSourceMixin(CONFIG.Canvas.visionSourceClass);
+
+    // Extend CombatTracker
+    CONFIG.ui.combat = CombatTrackerMixin(CONFIG.ui.combat);
 
     // Register the Inaudible status effect
     CONFIG.statusEffects.push({
