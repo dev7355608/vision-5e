@@ -37,12 +37,20 @@ export default (PointVisionSource) => class extends PointVisionSource {
                 polygon = polygonClass.create(origin, config);
 
                 if (this.data.unconstrainedRadius > 0) {
-                    const radius = this.data.unconstrainedRadius;
-                    const circle = new PIXI.Circle(origin.x, origin.y, radius);
-                    const density = PIXI.Circle.approximateVertexDensity(radius);
+                    const radius = Math.min(this.data.unconstrainedRadius, polygon.config.radius);
+                    let union = new PIXI.Circle(origin.x, origin.y, radius).intersectPolygon(polygon, {
+                        clipType: ClipperLib.ClipType.ctUnion,
+                        scalingFactor: 100,
+                        density: PIXI.Circle.approximateVertexDensity(radius)
+                    });
+                    const bounds = polygon.config.useInnerBounds ? canvas.dimensions.sceneRect : canvas.dimensions.rect;
 
-                    polygon.points = WeilerAthertonClipper.union(this.los, circle, { density })[0].points;
-                    polygon.bounds = this.los.getBounds();
+                    if (Math.min(origin.x - bounds.left, bounds.right - origin.x, origin.y - bounds.top, bounds.bottom - origin.y) < radius) {
+                        union = bounds.intersectPolygon(union, { scalingFactor: 100 });
+                    }
+
+                    polygon.points = union.points;
+                    polygon.bounds = polygon.getBounds();
                 }
             }
 
@@ -71,9 +79,11 @@ export default (PointVisionSource) => class extends PointVisionSource {
             const config = this._getPolygonConfiguration();
 
             config.type = "universal";
-            config.radius = this.data.unconstrainedRadius;
+            config.radius = Math.min(this.data.unconstrainedRadius, this.los.config.radius);
+            config.useInnerBounds = this.los.config.useInnerBounds;
 
-            this.los.points = polygonClass.create(origin, config).points;
+            this.los.points = polygonClass.create(origin, config).intersectPolygon(this.los,
+                { clipType: ClipperLib.ClipType.ctUnion, scalingFactor: 100 }).points;
             this.los.bounds = this.los.getBounds();
         }
 
