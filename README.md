@@ -87,6 +87,13 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Cannot detect anything on its own and requires another sense to see the target without the _ethereal_ status.
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically for NPC actors that have the `Ethereal Sight`[\*](#translations) feat and PC actors with the `The Third Eye: Ethereal Sight`[\*](#translations) feat.
+- **Eyes of the Grave** _(Class Feature: Cleric, XGE 19)_
+  - Detects undead, and PC actors with the `Hollow One`[\*](#translations) _(Character Creation Option, EGW 182)_, `Supernatural Gift: Hollow One`, or `Supernatural Gifts: Hollow One` feat.
+  - Cannot detect actors that are _burrowing_, _ethereal_ (from the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise), or _petrified_. Also cannot detect actors with the `Nondetection`[\*](#translations) _(Spell, SRD / PHB 263)_ effect.
+  - Does not reveal the identity of detected tokens.
+  - Disabled while _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
+  - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
+  - Configured automatically for PC actors with the `Eyes of the Grave`[\*](#translations) effect.
 - **Hearing**
   - Detects PC/NPC actors that are not objects (e.g. [Item Piles](https://foundryvtt.com/packages/item-piles)).
   - Cannot detect actors that are _defeated (dead)_, _ethereal_ (from the the material plane), _inaudible_, or _petrified_.
@@ -161,6 +168,7 @@ While a player does have any owned nonhidden tokens with vision that are _defeat
 | Devil's Sight             | `ATL.detectionModes.devilsSight.range`            |
 | Divine Sense              | `ATL.detectionModes.divineSense.range`            |
 | Ethereal Sight            | `ATL.detectionModes.etherealSight.range`          |
+| Eyes of the Grave         | `ATL.detectionModes.eyesOfTheGrave.range`         |
 | Hearing                   | `ATL.detectionModes.hearing.range`                |
 | Life Sense                | `ATL.detectionModes.lifeSense.range`              |
 | Light Perception          | `ATL.detectionModes.lightPerception.range`        |
@@ -190,6 +198,7 @@ _Note: Attribute keys starting with `ATL.` require the [Active Token Effects](ht
 | `Eldritch Adept`            | _Feat_                                | `Schauerlicher Adept`          | `Adepte occulte`                                                            | `Adepto sobrenatural`             | `Adepto Místico`                                  |
 | `Eldritch Invocation`       | _Warlock feat_                        | `Schauerliche Anrufung`        | `Invocation occulte` / `Manifestation occulte`                              | `Invocación sobrenatural`         | `Invocação Mística`                               |
 | `Ethereal Sight`            | _Monster feat_                        | `Ätherische Sicht`             | `Vision éthérée` / `Vue éthérée`                                            | `Visión etérea`                   | `Visão Etérea`                                    |
+| `Eyes of the Grave`         | _Cleric (Grave Domain) feat_          | `Grabesblick`                  | `Œil de la tombe`                                                           | `Ojos de la Tumba`                | `Olhos da Sepultura`                              |
 | `Ghostly Gaze`              | _Warlock invocation_                  | `Geisterhafter Blick`          | `Regard fantomatique`                                                       | `Mirada fantasmal`                | `Olhar Fantasmagórico`                            |
 | `Hollow One`                | _Supernatural Gift_                   | `Leerwandler`                  | `Celui-qui-est-creux`                                                       | `Aquel que está vacío`            | `Oco`                                             |
 | `Life Sense`                | _Monster feat_                        | `Lebensgespür`                 | `Perception de la vie`                                                      | `Percepción de la Vida`           | `Percepção da Vida`                               |

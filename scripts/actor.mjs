@@ -314,6 +314,9 @@ const EFFECT_REGISTRY = {
         divineSense(effect) {
             upgradeDetectionMode(this, "divineSense", 60, "ft");
         },
+        eyesOfTheGrave(item) {
+            upgradeDetectionMode(this, "eyesOfTheGrave", 60, "ft");
+        },
         invocationGhostlyGaze(effect) {
             upgradeDetectionMode(this, "basicSight", 30, "ft");
             this.statuses.add(CONFIG.specialStatusEffects.GHOSTLY_GAZE);
@@ -400,6 +403,9 @@ const DATABASE = Object.values({
         ],
         etherealness: [
             "Etherealness",
+        ],
+        eyesOfTheGrave: [
+            "Eyes of the Grave",
         ],
         hollowOne: [
             [["Supernatural Gift"], ["s", ""], ": Hollow One"],
@@ -488,6 +494,9 @@ const DATABASE = Object.values({
         etherealness: [
             "Körperlosigkeit",
         ],
+        eyesOfTheGrave: [
+            "Grabesblick",
+        ],
         hollowOne: [
             [["Übernatürliche Gabe"], ["n", ""], ": ", ["Leerwandler", "Hollow One"]],
             "Leerwandler",
@@ -575,6 +584,9 @@ const DATABASE = Object.values({
         ],
         etherealness: [
             "Forme éthérée",
+        ],
+        eyesOfTheGrave: [
+            "Œil de la tombe",
         ],
         hollowOne: [
             [["Don surnaturel", "Dons surnaturels"], [": ", " : "], ["Celui-qui-est-creux", "Hollow One"]],
@@ -666,6 +678,9 @@ const DATABASE = Object.values({
         etherealness: [
             "Excursión Etérea",
         ],
+        eyesOfTheGrave: [
+            "Ojos de la Tumba",
+        ],
         hollowOne: [
             [["Don Supernatural", "Dones Supernaturales"], ": ", ["Aquel que está vacío", "Hollow One"]],
             "Aquel que está vacío",
@@ -756,6 +771,9 @@ const DATABASE = Object.values({
         ],
         etherealness: [
             "Forma Etérea",
+        ],
+        eyesOfTheGrave: [
+            "Olhos da Sepultura",
         ],
         hollowOne: [
             [["Dom Sobrenatural", "Dons Sobrenaturais"], ": ", ["Oco", "Hollow One"]],
