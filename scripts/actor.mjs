@@ -195,6 +195,34 @@ function isMagical(actor) {
 }
 
 /**
+ * @param {DamageData} damage
+ * @returns {boolean}
+ */
+function isPoisonDamage(damage) {
+    return damage.types.has("poison") || damage.custom.enabled && /\[\s*poison\s*\]/i.test(damage.custom.formula);
+}
+
+/**
+ * @param {Activity} activity
+ * @returns {boolean}
+ */
+function isPoisonousAttack(activity) {
+    return activity.type === "attack" && (activity.damage.parts.some(isPoisonDamage)
+        || /\[\s*poison\s*\]/i.test(activity.damage.critical));
+}
+
+/**
+ * @param {Item} item
+ * @returns {boolean}
+ */
+function isPoisonousNaturalWeapon(item) {
+    return item.type === "weapon" && item.system.type.value === "natural"
+        && (isPoisonDamage(item.system.damage.base)
+            || item.system.properties.has("ver") && isPoisonDamage(item.system.damage.versatile)
+            || item.system.activities.some(isPoisonousAttack));
+}
+
+/**
  * A poisonous creature is a creature that has a poisonous natural weapon attack.
  * @param {Actor} actor
  * @returns {boolean}
@@ -205,20 +233,35 @@ function isPoisonous(actor) {
         return false;
     }
 
-    for (const item of actor.items) {
-        if (item.type === "weapon" && item.system.type.value === "natural"
-            && (item.system.damage.parts.some(part => part[1] === "poison")
-                || [
-                    item.system.critical.damage,
-                    item.system.damage.versatile,
-                    item.system.formula
-                ].some(formula => /\[poison\]/i.test(formula)))) {
-            return true;
-        }
+    return actor.items.some(isPoisonousNaturalWeapon);
+}
+
+Hooks.once("init", () => {
+    if (!foundry.utils.isNewerVersion("4.0.0", game.system.version)) {
+        return;
     }
 
-    return false;
-}
+    isPoisonous = function (actor) {
+        if (actor.statuses.has(CONFIG.specialStatusEffects.OBJECT)
+            || actor.statuses.has(CONFIG.specialStatusEffects.PETRIFIED)) {
+            return false;
+        }
+
+        for (const item of actor.items) {
+            if (item.type === "weapon" && item.system.type.value === "natural"
+                && (item.system.damage.parts.some(part => part[1] === "poison")
+                    || [
+                        item.system.critical.damage,
+                        item.system.damage.versatile,
+                        item.system.formula
+                    ].some(formula => /\[poison\]/i.test(formula)))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+});
 
 /**
  * A thinking creature is a creature that has an Intelligence of 4 or higher and speaks at least one language.
