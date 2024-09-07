@@ -178,39 +178,20 @@ function isMagicItem(item) {
 }
 
 /**
+ * @param {ActiveEffect} effect
+ * @returns {boolean}
+ */
+function isMagicEffect(effect) {
+    return effect.flags.dnd5e?.spellLevel !== undefined && !effect.statuses.has(CONFIG.specialStatusEffects.CONCENTRATING);
+}
+
+/**
  * @param {Actor} actor
  * @returns {boolean}
  */
 function isMagical(actor) {
-    // Does the actor carry a magical item?
-    if (actor.items.some(isMagicItem)) {
-        return true;
-    }
-
-    if (!game._documentsReady) {
-        return false;
-    }
-
-    // Is the actor affect by a spell or a magical effect?
-    for (const effect of actor.appliedEffects) {
-        if (!effect.origin || effect.origin.startsWith("Compendium.")) {
-            continue;
-        }
-
-        try {
-            if (foundry.utils.parseUuid(effect.origin).type !== "Item") {
-                continue;
-            }
-
-            const item = foundry.utils.fromUuidSync(effect.origin);
-
-            if (item instanceof Item && (item.type === "spell" || isMagicItem(item))) {
-                return true;
-            }
-        } catch (error) { }
-    }
-
-    return false;
+    // Does the actor carry a magical item or is the actor affected by a spell effect?
+    return actor.items.some(isMagicItem) || actor.appliedEffects.some(isMagicEffect)
 }
 
 /**
