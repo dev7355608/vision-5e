@@ -56,6 +56,7 @@ Hooks.once("init", () => {
     CONFIG.specialStatusEffects.BLEEDING = "bleeding";
     CONFIG.specialStatusEffects.BLIND_SENSES = "blindSenses";
     CONFIG.specialStatusEffects.BLINDED = "blinded";
+    CONFIG.specialStatusEffects.BURNING = "burning";
     CONFIG.specialStatusEffects.BURROWING = "burrowing";
     CONFIG.specialStatusEffects.DEAFENED = "deafened";
     CONFIG.specialStatusEffects.DEVILS_SIGHT = "devilsSight";

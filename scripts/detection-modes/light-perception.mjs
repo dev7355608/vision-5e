@@ -15,8 +15,9 @@ export default class DetectionModeLightPerception extends DetectionMode {
     }
 
     /** @override */
-    static getDetectionFilter(visionSource) {
-        if (visionSource?.visionMode.perceivesLight) {
+    static getDetectionFilter(visionSource, object) {
+        if (visionSource?.visionMode.perceivesLight && (!object.document.hasStatusEffect(CONFIG.specialStatusEffects.BURNING)
+            || canvas.effects.testInsideLight(object.center, object.document.elevation))) {
             return;
         }
 
@@ -52,6 +53,7 @@ export default class DetectionModeLightPerception extends DetectionMode {
     /** @override */
     _testPoint(visionSource, mode, target, test) {
         return super._testPoint(visionSource, mode, target, test)
-            && canvas.effects.testInsideLight(test.point, test.elevation);
+            && (canvas.effects.testInsideLight(test.point, test.elevation)
+                || target instanceof Token && target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURNING));
     }
 }

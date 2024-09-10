@@ -108,7 +108,7 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically for NPC actors that have the `Life Sense`[\*](#translations) feat.
 - **Light Perception**
-  - Detects tokens, notes, and door controls that are illuminated a light source.
+  - Detects tokens, notes, and door controls that are illuminated a light source or are _burning_.
   - Cannot detect actors that are _burrowing_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise), or _invisible_.
   - Disabled while _blinded_, _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
   - Is restricted by sight-blocking walls and is blocked by darkness sources.
