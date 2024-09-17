@@ -13,17 +13,17 @@ The automation detects relevant feats and effects that affect the creatures sens
 
 ### Detection Modes
 
-- **Blindsense** _(Class Feature: Rogue, SRD / PHB 94)_
+- **Blindsense** _(Class Feature: Rogue, SRD 5.1 / PHB14 94)_
   - Detects PC/NPC actors that are not objects (e.g. [Item Piles](https://foundryvtt.com/packages/item-piles)).
   - Cannot detect actors that are _burrowing_, _defeated (dead)_, _ethereal_ (from the the material plane), or _petrified_.
   - Does not reveal the identity of detected tokens.
   - Disabled while _burrowing_, _deafened_, _defeated_ (_dead_), _petrified_, or _unconscious_.
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
   - Configured automatically for PC actors with the `Blindsense`[\*](#translations) feat.
-- **Blindsight** _(Sense, SRD / PHB 183)_
+- **Blindsight** _(Sense, SRD 5.1 / PHB14 183)_
   - Detects tokens, notes, and door controls.
-  - Cannot detect actors that are _burrowing_ or _ethereal_ (from the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise).
-  - Disabled while _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_. Also disabled if _deafened_ and the actor is a NPC and has the `Echolocation`[\*](#translations) _(Monster Feature, e.g. SRD / MM 318)_ or `Blind Senses`[\*](#translations) _(Monster Feature, e.g. SRD / MM 175)_ feat.
+  - Cannot detect actors that are _burrowing_ or _ethereal_ (from the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 147)_ NPC feat says otherwise).
+  - Disabled while _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_. Also disabled if _deafened_ and the actor is a NPC and has the `Echolocation`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 318)_ or `Blind Senses`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 175)_ feat.
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
   - Configured automatically from the actor's _Blindsight_.
 - **Blood Sense** _(Homebrew)_
@@ -33,63 +33,63 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Disabled while _defeated_ (_dead_), _petrified_, or _unconscious_.
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically for NPC actors that have the `Blood Sense`[\*](#translations) feat.
-- **Darkvision** _(Sense, SRD / PHB 183)_
+- **Darkvision** _(Sense, SRD 5.1 / PHB14 183)_
   - Detects tokens, notes, and door controls.
-  - Cannot detect actors that are _burrowing_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise), or _invisible_. Also cannot detect PC actors with the `Umbral Sight`[\*](#translations) _(Subclass Feature: Gloom Stalker Ranger, XGE 41)_ feat.
+  - Cannot detect actors that are _burrowing_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 147)_ NPC feat says otherwise), or _invisible_. Also cannot detect PC actors with the `Umbral Sight`[\*](#translations) _(Subclass Feature: Gloom Stalker Ranger, XGE 41)_ feat.
   - Disabled while _blinded_, _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
-  - Is restricted by sight-blocking walls and is blocked by darkness sources unless the actor in a NPC with the `Devil's Sight`[\*](#translations) _(Monster Feature, e.g. SRD / MM 70)_ feat.
+  - Is restricted by sight-blocking walls and is blocked by darkness sources unless the actor in a NPC with the `Devil's Sight`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 70)_ feat.
   - Configured automatically from the actor's _Darkvision_.
-- **Detect Evil and Good** _(Spell, SRD / PHB 231)_
+- **Detect Evil and Good** _(Spell, SRD 5.1 / PHB14 231)_
   - Detects aberrations, celestials, elementals, feys, fiends, undeads, and PC actors with the `Hollow One`[\*](#translations) _(Character Creation Option, EGW 182)_, `Supernatural Gift: Hollow One`, or `Supernatural Gifts: Hollow One` feat.
-  - Cannot detect actors that are _burrowing_ or _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise). Also cannot detect actors with the `Mind Blank`[\*](#translations) _(Spell, SRD / PHB 259)_ or `Nondetection`[\*](#translations) _(Spell, SRD / PHB 263)_ effect.
+  - Cannot detect actors that are _burrowing_ or _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 147)_ NPC feat says otherwise). Also cannot detect actors with the `Mind Blank`[\*](#translations) _(Spell, SRD 5.1 / PHB14 259)_ or `Nondetection`[\*](#translations) _(Spell, SRD 5.1 / PHB14 263)_ effect.
   - Does not reveal the identity of detected tokens.
   - Disabled while _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
   - Configured automatically for actors that have the `Detect Evil and Good`[\*](#translations) effect.
-- **Detect Magic** _(Spell, SRD / PHB 231)_
+- **Detect Magic** _(Spell, SRD 5.1 / PHB14 231)_
   - Detects actors that carry a magic item or are affected by a spell effect.
-  - Cannot detect actors that are _burrowing_ or _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise). Also cannot detect actors with the `Mind Blank`[\*](#translations) _(Spell, SRD / PHB 259)_ or `Nondetection`[\*](#translations) _(Spell, SRD / PHB 263)_ effect.
+  - Cannot detect actors that are _burrowing_ or _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 147)_ NPC feat says otherwise). Also cannot detect actors with the `Mind Blank`[\*](#translations) _(Spell, SRD 5.1 / PHB14 259)_ or `Nondetection`[\*](#translations) _(Spell, SRD 5.1 / PHB14 263)_ effect.
   - Does not reveal the identity of detected tokens.
   - Disabled while _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
-  - Configured automatically for actors with the `Detect Magic`[\*](#translations) effect, PC actors with the `Magic Awareness`[\*](#translations) _(Subclass Feature: Wild Magic Barbarian, TCE 25)_ feat, and NPC actors with the `Sense Magic`[\*](#translations) _(Monster Feature, e.g. SRD / MM 40)_ feat.
-- **Detect Poison and Disease** _(Spell, SRD / PHB 231)_
+  - Configured automatically for actors with the `Detect Magic`[\*](#translations) effect, PC actors with the `Magic Awareness`[\*](#translations) _(Subclass Feature: Wild Magic Barbarian, TCE 25)_ feat, and NPC actors with the `Sense Magic`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 40)_ feat.
+- **Detect Poison and Disease** _(Spell, SRD 5.1 / PHB14 231)_
   - Detects all actors that have a poisonous natural weapon attack or have the _poisoned_ or _diseased_ status effect.
-  - Cannot detect actors that are _burrowing_ or _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise). Also cannot detect actors with the `Mind Blank`[\*](#translations) _(Spell, SRD / PHB 259)_ or `Nondetection`[\*](#translations) _(Spell, SRD / PHB 263)_ effect.
+  - Cannot detect actors that are _burrowing_ or _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 147)_ NPC feat says otherwise). Also cannot detect actors with the `Mind Blank`[\*](#translations) _(Spell, SRD 5.1 / PHB14 259)_ or `Nondetection`[\*](#translations) _(Spell, SRD 5.1 / PHB14 263)_ effect.
   - Does not reveal the identity of detected tokens.
   - Disabled while _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
   - Configured automatically for actors that have the `Detect Poison and Disease`[\*](#translations) effect.
   - _Note: Some poisonous creatures might not be detected, because the Versatile Damage of the natural weapon attack is missing the `[poison]` flavor, which you'll need to fix yourself._
-- **Detect Thoughts** _(Spell, SRD / PHB 231)_
+- **Detect Thoughts** _(Spell, SRD 5.1 / PHB14 231)_
   - Detects all PC/NPC actors that have an Intelligence of 4 or higher and speak at least one language and are not an object (e.g. [Item Piles](https://foundryvtt.com/packages/item-piles)).
-  - Cannot detect actors that are _burrowing_ or _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise). Also cannot detect actors with the `Mind Blank`[\*](#translations) _(Spell, SRD / PHB 259)_ or `Nondetection`[\*](#translations) _(Spell, SRD / PHB 263)_ effect.
+  - Cannot detect actors that are _burrowing_ or _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 147)_ NPC feat says otherwise). Also cannot detect actors with the `Mind Blank`[\*](#translations) _(Spell, SRD 5.1 / PHB14 259)_ or `Nondetection`[\*](#translations) _(Spell, SRD 5.1 / PHB14 263)_ effect.
   - Does not reveal the identity of detected tokens.
   - Disabled while _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
   - Configured automatically for actors that have the `Detect Thoughts`[\*](#translations) effect.
-- **Devil's Sight** _(Eldritch Invocation, SRD / PHB 110)_
+- **Devil's Sight** _(Eldritch Invocation, SRD 5.1 / PHB14 110)_
   - Can detect tokens, notes, and door controls.
-  - Cannot detect actors that are _burrowing_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise), or _invisible_.
+  - Cannot detect actors that are _burrowing_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 147)_ NPC feat says otherwise), or _invisible_.
   - Disabled while _blinded_, _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
   - Configured automatically for PC actors that have the `Devil's Sight`[\*](#translations), `Invocation: Devil's Sight`, `Invocations: Devil's Sight`, `Eldritch Invocation: Devil's Sight`, `Eldritch Invocations: Devil's Sight`, or `Eldritch Adept: Devil's Sight` feat.
   - _Note: Remove the active effect that gives 120 feet Darkvision from the Invocation: Devil's Sight feat if it exists: Devil's Sight doesn't increase the range of Darkvision._
-- **Divine Sense** _(Class Feature: Paladin, SRD / PHB 82)_
+- **Divine Sense** _(Class Feature: Paladin, SRD 5.1 / PHB14 82)_
   - Detects celestials, fiends, undead, and PC actors with the `Hollow One`[\*](#translations) _(Character Creation Option, EGW 182)_, `Supernatural Gift: Hollow One`, or `Supernatural Gifts: Hollow One` feat.
-  - Cannot detect actors that are _burrowing_, _ethereal_ (from the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise), or _petrified_.
+  - Cannot detect actors that are _burrowing_, _ethereal_ (from the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 147)_ NPC feat says otherwise), or _petrified_.
   - Does not reveal the identity of detected tokens.
   - Disabled while _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
   - Configured automatically for PC actors with the `Divine Sense`[\*](#translations) effect.
-- **Ethereal Sight** _(Monster Feature, e.g. SRD / MM 147)_
+- **Ethereal Sight** _(Monster Feature, e.g. SRD 5.1 / MM14 147)_
   - Allows detection _ethereal_ actors.
   - Cannot detect anything on its own and requires another sense to see the target without the _ethereal_ status.
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically for NPC actors that have the `Ethereal Sight`[\*](#translations) feat and PC actors with the `The Third Eye: Ethereal Sight`[\*](#translations) feat.
 - **Eyes of the Grave** _(Class Feature: Cleric, XGE 19)_
   - Detects undead, and PC actors with the `Hollow One`[\*](#translations) _(Character Creation Option, EGW 182)_, `Supernatural Gift: Hollow One`, or `Supernatural Gifts: Hollow One` feat.
-  - Cannot detect actors that are _burrowing_, _ethereal_ (from the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise), or _petrified_. Also cannot detect actors with the `Nondetection`[\*](#translations) _(Spell, SRD / PHB 263)_ effect.
+  - Cannot detect actors that are _burrowing_, _ethereal_ (from the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 147)_ NPC feat says otherwise), or _petrified_. Also cannot detect actors with the `Nondetection`[\*](#translations) _(Spell, SRD 5.1 / PHB14 263)_ effect.
   - Does not reveal the identity of detected tokens.
   - Disabled while _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
@@ -100,39 +100,39 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Disabled while _deafened_, _defeated_ (_dead_), _petrified_, or _unconscious_.
   - Is restricted by sound-blocking walls with reversed direction.
   - By default all tokens have hearing range of 15 + 2.5 * (*Passive Perception* - 10) feet (`15 + 2.5 * (@skills.prc.passive - 10)`). The default hearing range can be configured in the module settings.
-- **Life Sense** _(Monster Feature, e.g. MPMM 250 / MTF 246)_
+- **Life Sense** _(Monster Feature, e.g. MPMM14 250 / MTF 246)_
   - Detects PC/NPC actors that are not undead, constructs, or objects (e.g. [Item Piles](https://foundryvtt.com/packages/item-piles)).
-  - Cannot detect actors that are _defeated (dead)_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise), or _petrified_.
+  - Cannot detect actors that are _defeated (dead)_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 147)_ NPC feat says otherwise), or _petrified_.
   - Does not reveal the identity of detected tokens.
   - Disabled while _defeated_ (_dead_), _petrified_, or _unconscious_.
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically for NPC actors that have the `Life Sense`[\*](#translations) feat.
 - **Light Perception**
   - Detects tokens, notes, and door controls that are illuminated a light source or are _burning_.
-  - Cannot detect actors that are _burrowing_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD / MM 147)_ NPC feat says otherwise), or _invisible_.
+  - Cannot detect actors that are _burrowing_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 147)_ NPC feat says otherwise), or _invisible_.
   - Disabled while _blinded_, _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
   - Is restricted by sight-blocking walls and is blocked by darkness sources.
   - Infinite range by default.
-- **See Invisibility** _(Spell, SRD / PHB 274)_
+- **See Invisibility** _(Spell, SRD 5.1 / PHB14 274)_
   - Allows detection of _invisible_ and _ethereal_ actors.
   - Cannot detect anything on its own and requires another sense to see the target without the _ethereal_ and _invisible_ status.
   - Is not restricted by walls or blocked by darkness sources.
-  - Configured automatically for actors with the `See Invisibility`[\*](#translations) effect and PC actors with the `The Third Eye: See Invisibility`[\*](#translations) _(Class Feature: Wizard, PHB 116)_ feat.
-- **Tremorsense** _(Sense, SRD / MM 9)_
+  - Configured automatically for actors with the `See Invisibility`[\*](#translations) effect and PC actors with the `The Third Eye: See Invisibility`[\*](#translations) _(Class Feature: Wizard, PHB14 116)_ feat.
+- **Tremorsense** _(Sense, SRD 5.1 / MM14 9)_
   - Detects PC/NPC actors that are not objects (e.g. [Item Piles](https://foundryvtt.com/packages/item-piles)).
   - Cannot detect actors that are _burrowing_, _defeated (dead)_, _ethereal_ (from the the material plane), _flying_, _hovering_, or _petrified_.
   - Does not reveal the identity of detected tokens.
   - Disabled while _defeated_ (_dead_), _flying_, _hovering_, _petrified_, or _unconscious_.
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically from the actor's _Tremorsense_.
-- **Truesight** _(Sense, SRD / PHB 183)_
+- **Truesight** _(Sense, SRD 5.1 / PHB14 183)_
   - Detects tokens, notes, and door controls.
   - Cannot detect actors that are _burrowing_.
   - Disabled while _blinded_, _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
   - Configured automatically from the actor's _Truesight_.
-- **Witch Sight** _(Eldritch Invocation, SRD / PHB 111)_
-  - Allows detection of PC/NPC actors that have has the `Shapechanger`[\*](#translations) creature subtype and NPC actors with the `Shapechanger`[\*](#translations) _(Monster Feature, e.g. SRD / MM 220)_ feat.
+- **Witch Sight** _(Eldritch Invocation, SRD 5.1 / PHB14 111)_
+  - Allows detection of PC/NPC actors that have has the `Shapechanger`[\*](#translations) creature subtype and NPC actors with the `Shapechanger`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM14 220)_ feat.
   - Cannot detect anything on its own and requires another sense to see the target.
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically for PC actor that have the `Witch Sight`[\*](#translations), `Invocation: Witch Sight`, `Invocations: Witch Sight`, `Eldritch Invocation: Witch Sight`, `Eldritch Invocations: Witch Sight`, or `Eldritch Adept: Witch Sight` feat.
