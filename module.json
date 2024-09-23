@@ -53,7 +53,7 @@
         "type": "system",
         "compatibility": {
           "minimum": "3.2.0",
-          "verified": "4.0.0"
+          "verified": "4.0.3"
         }
       }
     ]
