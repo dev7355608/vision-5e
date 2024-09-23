@@ -19,11 +19,7 @@ export default class DetectionModeTremorsense extends DetectionMode {
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= OutlineOverlayFilter.create({
-            outlineColor: [1, 0, 1, 1],
-            knockout: true,
-            wave: true
-        });
+        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.hearing.constructor.getDetectionFilter();
     }
 
     /** @override */

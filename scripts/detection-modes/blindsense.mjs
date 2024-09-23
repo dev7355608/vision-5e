@@ -18,7 +18,7 @@ export default class DetectionModeBlindsense extends DetectionMode {
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.blindsight.constructor.getDetectionFilter();
+        return this._detectionFilter ??= CONFIG.Canvas.detectionModes.hearing.constructor.getDetectionFilter();
     }
 
     /** @override */
