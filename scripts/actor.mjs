@@ -64,12 +64,11 @@ export default (Actor) => class extends Actor {
             this.statuses.add(CONFIG.specialStatusEffects.SHAPECHANGER);
         }
 
-        this.detectionModes = {};
+        this.detectionModes = { lightPerception: null };
 
         const senses = this.system.attributes?.senses;
 
         if (senses) {
-            this.detectionModes.lightPerception = null;
             this.detectionModes.basicSight = senses.darkvision;
             this.detectionModes.seeAll = senses.truesight;
             this.detectionModes.blindsight = senses.blindsight;
