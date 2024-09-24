@@ -82,7 +82,7 @@ Hooks.once("init", () => {
     CONFIG.specialStatusEffects.UNCONSCIOUS = "unconscious";
 
     // Shapechanger detection is not needed in PHB'24 at the momement, because Witch Sight has been changed
-    if (game.settings.get("dnd5e", "rulesVersion") === "legacy") {
+    if (getSafeSetting("dnd5e", "rulesVersion") === "legacy") {
         CONFIG.specialStatusEffects.SHAPECHANGER = "shapechanger";
     }
 
@@ -120,7 +120,7 @@ Hooks.once("init", () => {
     }
 
     // Register legacy detection modes
-    if (game.settings.get("dnd5e", "rulesVersion") === "legacy") {
+    if (getSafeSetting("dnd5e", "rulesVersion") === "legacy") {
         for (const detectionModeClass of [
             DetectionModeBlindsense,
             DetectionModeWitchSight,
@@ -160,7 +160,7 @@ Hooks.once("init", () => {
     delete CONFIG.Canvas.visionModes.tremorsense;
 
     // Legacy Devil's Sight
-    if (game.settings.get("dnd5e", "rulesVersion") === "legacy") {
+    if (getSafeSetting("dnd5e", "rulesVersion") === "legacy") {
         CONFIG.Canvas.visionModes.devilsSight.updateSource({
             canvas: {
                 shader: ColorAdjustmentsSamplerShader,
@@ -198,3 +198,8 @@ Hooks.once("ready", () => {
 
     CONFIG.Token.prototypeSheetClass = TokenConfigMixin(CONFIG.Token.prototypeSheetClass);
 });
+
+function getSafeSetting(namespace, key) {
+    if (game.settings.settings.get(`${namespace}.${key}`))
+        return game.settings.get(namespace, key);
+};
