@@ -32,6 +32,8 @@ import VisionModeTruesight from "./vision-modes/truesight.mjs";
 import testVisibility from "./test-visibility.mjs";
 
 Hooks.once("init", () => {
+    const legacy = foundry.utils.isNewerVersion("4.0.0", game.system.version) || game.settings.get("dnd5e", "rulesVersion") === "legacy";
+
     // Extend Actor, TokenDocument, Token, and TokenHUD
     CONFIG.Actor.documentClass = ActorMixin(CONFIG.Actor.documentClass);
     CONFIG.Token.documentClass = TokenDocumentMixin(CONFIG.Token.documentClass);
@@ -82,7 +84,7 @@ Hooks.once("init", () => {
     CONFIG.specialStatusEffects.UNCONSCIOUS = "unconscious";
 
     // Shapechanger detection is not needed in PHB'24 at the momement, because Witch Sight has been changed
-    if (game.settings.get("dnd5e", "rulesVersion") === "legacy") {
+    if (legacy) {
         CONFIG.specialStatusEffects.SHAPECHANGER = "shapechanger";
     }
 
@@ -120,7 +122,7 @@ Hooks.once("init", () => {
     }
 
     // Register legacy detection modes
-    if (game.settings.get("dnd5e", "rulesVersion") === "legacy") {
+    if (legacy) {
         for (const detectionModeClass of [
             DetectionModeBlindsense,
             DetectionModeWitchSight,
@@ -160,7 +162,7 @@ Hooks.once("init", () => {
     delete CONFIG.Canvas.visionModes.tremorsense;
 
     // Legacy Devil's Sight
-    if (game.settings.get("dnd5e", "rulesVersion") === "legacy") {
+    if (legacy) {
         CONFIG.Canvas.visionModes.devilsSight.updateSource({
             canvas: {
                 shader: ColorAdjustmentsSamplerShader,
