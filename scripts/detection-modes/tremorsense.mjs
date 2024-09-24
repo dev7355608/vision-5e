@@ -26,6 +26,7 @@ export default class DetectionModeTremorsense extends DetectionMode {
     _canDetect(visionSource, target) {
         const source = visionSource.object;
 
+        // TODO: incorporeal creatures should not be detected
         if (!(target instanceof Token)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)

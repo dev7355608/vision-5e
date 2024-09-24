@@ -60,7 +60,8 @@ export default (Actor) => class extends Actor {
             this.statuses.add(CONFIG.specialStatusEffects.OBJECT);
         }
 
-        if (/(?<=^|[\s,;])(?:Shapechanger|Gestaltwandler|Métamorphe|Cambiaformas|Metamorfo)(?=$|[\s,;])/i.test(this.system.details?.type?.subtype ?? "")) {
+        if (CONFIG.specialStatusEffects.SHAPECHANGER
+            && /(?<=^|[\s,;])(?:Shapechanger|Gestaltwandler|Métamorphe|Cambiaformas|Metamorfo)(?=$|[\s,;])/i.test(this.system.details?.type?.subtype ?? "")) {
             this.statuses.add(CONFIG.specialStatusEffects.SHAPECHANGER);
         }
 
@@ -235,35 +236,8 @@ function isPoisonous(actor) {
     return actor.items.some(isPoisonousNaturalWeapon);
 }
 
-Hooks.once("init", () => {
-    if (!foundry.utils.isNewerVersion("4.0.0", game.system.version)) {
-        return;
-    }
-
-    isPoisonous = function (actor) {
-        if (actor.statuses.has(CONFIG.specialStatusEffects.OBJECT)
-            || actor.statuses.has(CONFIG.specialStatusEffects.PETRIFIED)) {
-            return false;
-        }
-
-        for (const item of actor.items) {
-            if (item.type === "weapon" && item.system.type.value === "natural"
-                && (item.system.damage.parts.some(part => part[1] === "poison")
-                    || [
-                        item.system.critical.damage,
-                        item.system.damage.versatile,
-                        item.system.formula
-                    ].some(formula => /\[poison\]/i.test(formula)))) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-});
-
 /**
- * A thinking creature is a creature that has an Intelligence of 4 or higher and speaks at least one language.
+ * A thinking creature is a creature that speaks at least one language or is telepathic.
  * @param {Actor} actor
  * @returns {boolean}
  */
@@ -274,7 +248,6 @@ function isThinking(actor) {
     }
 
     return (actor.type === "character" || actor.type === "npc")
-        && actor.system.abilities.int.value > 3
         && (actor.system.traits.languages.value.size > 0
             || !!actor.system.traits.languages.custom);
 }
@@ -287,17 +260,11 @@ function isThinking(actor) {
 /** @type {Registry<Item>} */
 const FEAT_REGISTRY = {
     character: {
-        blindsense(item) {
-            upgradeDetectionMode(this, "blindsense", 10, "ft");
-        },
         hollowOne(item) {
             this.statuses.add(CONFIG.specialStatusEffects.REVENANCE);
         },
         invocationDevilsSight(item) {
             upgradeDetectionMode(this, "devilsSight", 120, "ft");
-        },
-        invocationWitchSight(item) {
-            upgradeDetectionMode(this, "witchSight", 30, "ft");
         },
         umbralSight(item) {
             this.statuses.add(CONFIG.specialStatusEffects.UMBRAL_SIGHT);
@@ -331,9 +298,6 @@ const FEAT_REGISTRY = {
         },
         senseMagic(item) {
             upgradeDetectionMode(this, "detectMagic", findRange(item.system.description.value, this.system.attributes.senses.units));
-        },
-        shapechanger(item) {
-            this.statuses.add(CONFIG.specialStatusEffects.SHAPECHANGER);
         },
     }
 };
@@ -375,12 +339,6 @@ const EFFECT_REGISTRY = {
         seeInvisibility(effect) {
             upgradeDetectionMode(this, "seeInvisibility", null);
         },
-        theThirdEyeEtherealSight(effect) {
-            upgradeDetectionMode(this, "etherealSight", 60, "ft");
-        },
-        theThirdEyeSeeInvisibility(effect) {
-            upgradeDetectionMode(this, "seeInvisibility", 10, "ft");
-        },
     },
     npc: {
         detectEvilAndGood(effect) {
@@ -407,14 +365,11 @@ const EFFECT_REGISTRY = {
     }
 };
 
-/** @type {Record<string, (string | (string | string[])[])[]>} */
-const DATABASE = Object.values({
+/** @type {Record<"en" | "de" | "fr" | "es" | "pt-BR", Record<string, (string | (string | string[])[])[]>>} */
+const DATABASE = {
     en: {
         blindSenses: [
             "Blind Senses",
-        ],
-        blindsense: [
-            "Blindsense",
         ],
         bloodSense: [
             "Blood Sense",
@@ -463,11 +418,6 @@ const DATABASE = Object.values({
             "Eldritch Adept: Ghostly Gaze",
             "Ghostly Gaze",
         ],
-        invocationWitchSight: [
-            [["Eldritch ", ""], "Invocation", ["s", ""], ": Witch Sight"],
-            "Eldritch Adept: Witch Sight",
-            "Witch Sight",
-        ],
         lifeSense: [
             "Life Sense",
         ],
@@ -486,15 +436,6 @@ const DATABASE = Object.values({
         senseMagic: [
             "Sense Magic",
         ],
-        shapechanger: [
-            "Shapechanger",
-        ],
-        theThirdEyeEtherealSight: [
-            "The Third Eye: Ethereal Sight",
-        ],
-        theThirdEyeSeeInvisibility: [
-            "The Third Eye: See Invisibility",
-        ],
         umbralSight: [
             "Umbral Sight",
         ],
@@ -502,9 +443,6 @@ const DATABASE = Object.values({
     de: {
         blindSenses: [
             "Blinde Sinne",
-        ],
-        blindsense: [
-            "Blindgespür",
         ],
         bloodSense: [
             "Blutgespür",
@@ -553,11 +491,6 @@ const DATABASE = Object.values({
             "Schauerlicher Adept: Geisterhafter Blick",
             "Geisterhafter Blick",
         ],
-        invocationWitchSight: [
-            [["Schauerliche ", ""], "Anrufung", ["en", ""], ": Hexensicht"],
-            "Schauerlicher Adept: Hexensicht",
-            "Hexensicht",
-        ],
         lifeSense: [
             "Lebensgespür",
         ],
@@ -576,15 +509,6 @@ const DATABASE = Object.values({
         senseMagic: [
             "Magie spüren",
         ],
-        shapechanger: [
-            "Gestaltwandler",
-        ],
-        theThirdEyeEtherealSight: [
-            "Das dritte Auge: Ätherische Sicht",
-        ],
-        theThirdEyeSeeInvisibility: [
-            "Das dritte Auge: Unsichtbares sehen",
-        ],
         umbralSight: [
             "Düstersicht",
         ],
@@ -592,9 +516,6 @@ const DATABASE = Object.values({
     fr: {
         blindSenses: [
             "Sens aveugles",
-        ],
-        blindsense: [
-            "Perception aveugle",
         ],
         bloodSense: [
             "Perception du sang",
@@ -646,12 +567,6 @@ const DATABASE = Object.values({
             ["Adepte occulte: Regard fantomatique"],
             ["Regard fantomatique"],
         ],
-        invocationWitchSight: [
-            [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
-            [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
-            ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
-            [["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
-        ],
         lifeSense: [
             "Perception de la vie",
         ],
@@ -670,15 +585,6 @@ const DATABASE = Object.values({
         senseMagic: [
             [["Détection", "Perception"], " de la magie"],
         ],
-        shapechanger: [
-            "Métamorphe",
-        ],
-        theThirdEyeEtherealSight: [
-            ["Troisième œil", [": ", " : "], "Vision éthérée"],
-        ],
-        theThirdEyeSeeInvisibility: [
-            ["Troisième œil", [": ", " : "], "Voir l", ["'", "’"], "invisible"],
-        ],
         umbralSight: [
             "Vision des ombres",
         ],
@@ -686,9 +592,6 @@ const DATABASE = Object.values({
     es: {
         blindSenses: [
             "Sentidos de Ciego",
-        ],
-        blindsense: [
-            "Sentir sin Ver",
         ],
         bloodSense: [
             "Percepción de Sangre",
@@ -739,12 +642,6 @@ const DATABASE = Object.values({
             "Adepto Sobrenatural: Mirada Fantasmal",
             "Mirada Fantasmal",
         ],
-        invocationWitchSight: [
-            ["Invocación", [" Sobrenatural", ""], ": Visión Bruja"],
-            ["Invocaciones", [" Sobrenaturales", ""], ": Visión Bruja"],
-            "Adepto Sobrenatural: Visión Bruja",
-            "Visión Bruja",
-        ],
         lifeSense: [
             "Percepción de la Vida",
         ],
@@ -763,24 +660,12 @@ const DATABASE = Object.values({
         senseMagic: [
             "Sentir Magia",
         ],
-        shapechanger: [
-            "Cambiaformas",
-        ],
-        theThirdEyeEtherealSight: [
-            "El Tercer Ojo: Visión Etérea",
-        ],
-        theThirdEyeSeeInvisibility: [
-            "El Tercer Ojo: Ver Invisibilidad",
-        ],
         umbralSight: [
             "Visión en la Umbra",
         ],
     },
     "pt-BR": {
         blindSenses: [
-            "Sentido Cego",
-        ],
-        blindsense: [
             "Sentido Cego",
         ],
         bloodSense: [
@@ -834,12 +719,6 @@ const DATABASE = Object.values({
             "Adepto Místico: Olhar Fantasmagórico",
             "Olhar Fantasmagórico",
         ],
-        invocationWitchSight: [
-            ["Invocação", [" Mística", ""], ": Visão da Bruxa"],
-            ["Invocações", [" Místicas", ""], ": Visão da Bruxa"],
-            "Adepto Místico: Visão da Bruxa",
-            "Visão da Bruxa",
-        ],
         lifeSense: [
             "Percepção da Vida",
         ],
@@ -858,6 +737,197 @@ const DATABASE = Object.values({
         senseMagic: [
             "Sentir Magia",
         ],
+        umbralSight: [
+            "Visão Umbral",
+        ],
+    },
+};
+
+/**
+ * @param {Registry<*>} registry
+ * @returns {{ character: Matcher, npc: Matcher }}
+ */
+function createMatchers(registry) {
+    const database = Object.values(DATABASE).reduce((object, current) => {
+        for (const key in current) {
+            object[key] = (object[key] ?? []).concat(current[key]);
+        }
+
+        return object;
+    });
+
+    return Object.fromEntries(
+        Object.entries(registry).map(([type, methods]) => [
+            type,
+            new Matcher(Object.keys(methods).reduce((object, name) => {
+                object[name] = database[name];
+
+                return object;
+            }, {}))
+        ])
+    );
+}
+
+/** @type {{ character: Matcher, npc: Matcher }} */
+let FEAT_MATCHERS = createMatchers(FEAT_REGISTRY);
+
+/** @type {{ character: Matcher, npc: Matcher }} */
+let EFFECT_MATCHERS = createMatchers(EFFECT_REGISTRY);
+
+Hooks.once("init", () => {
+    if (foundry.utils.isNewerVersion("4.0.0", game.system.version)) {
+        isPoisonous = function (actor) {
+            if (actor.statuses.has(CONFIG.specialStatusEffects.OBJECT)
+                || actor.statuses.has(CONFIG.specialStatusEffects.PETRIFIED)) {
+                return false;
+            }
+
+            for (const item of actor.items) {
+                if (item.type === "weapon" && item.system.type.value === "natural"
+                    && (item.system.damage.parts.some(part => part[1] === "poison")
+                        || [
+                            item.system.critical.damage,
+                            item.system.damage.versatile,
+                            item.system.formula
+                        ].some(formula => /\[poison\]/i.test(formula)))) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+        return;
+    }
+
+    if (game.settings.get("dnd5e", "rulesVersion") !== "legacy") {
+        return;
+    }
+
+    // Detect Thoughts in PHB'14 requires an Intelligence of 4 or higher.
+    isThinking = function (actor) {
+        if (actor.statuses.has(CONFIG.specialStatusEffects.OBJECT)
+            || actor.statuses.has(CONFIG.specialStatusEffects.PETRIFIED)) {
+            return false;
+        }
+
+        return (actor.type === "character" || actor.type === "npc")
+            && actor.system.abilities.int.value > 3
+            && (actor.system.traits.languages.value.size > 0
+                || !!actor.system.traits.languages.custom);
+    };
+
+    // Invocation: Witch Sight and The Third Eye have changed in PHB'24.
+    Object.assign(FEAT_REGISTRY.character, {
+        blindsense(item) {
+            upgradeDetectionMode(this, "blindsense", 10, "ft");
+        },
+        invocationWitchSight(item) {
+            upgradeDetectionMode(this, "witchSight", 30, "ft");
+        },
+    });
+    Object.assign(FEAT_REGISTRY.npc, {
+        shapechanger(item) {
+            this.statuses.add(CONFIG.specialStatusEffects.SHAPECHANGER);
+        },
+    });
+    Object.assign(EFFECT_REGISTRY.character, {
+        theThirdEyeEtherealSight(effect) {
+            upgradeDetectionMode(this, "etherealSight", 60, "ft");
+        },
+        theThirdEyeSeeInvisibility(effect) {
+            upgradeDetectionMode(this, "seeInvisibility", 10, "ft");
+        },
+    });
+
+    Object.assign(DATABASE.en, {
+        blindsense: [
+            "Blindsense",
+        ],
+        invocationWitchSight: [
+            [["Eldritch ", ""], "Invocation", ["s", ""], ": Witch Sight"],
+            "Eldritch Adept: Witch Sight",
+            "Witch Sight",
+        ],
+        shapechanger: [
+            "Shapechanger",
+        ],
+        theThirdEyeEtherealSight: [
+            "The Third Eye: Ethereal Sight",
+        ],
+        theThirdEyeSeeInvisibility: [
+            "The Third Eye: See Invisibility",
+        ],
+    });
+    Object.assign(DATABASE.de, {
+        blindsense: [
+            "Blindgespür",
+        ],
+        invocationWitchSight: [
+            [["Schauerliche ", ""], "Anrufung", ["en", ""], ": Hexensicht"],
+            "Schauerlicher Adept: Hexensicht",
+            "Hexensicht",
+        ],
+        shapechanger: [
+            "Gestaltwandler",
+        ],
+        theThirdEyeEtherealSight: [
+            "Das dritte Auge: Ätherische Sicht",
+        ],
+        theThirdEyeSeeInvisibility: [
+            "Das dritte Auge: Unsichtbares sehen",
+        ],
+    });
+    Object.assign(DATABASE.fr, {
+        blindsense: [
+            "Perception aveugle",
+        ],
+        invocationWitchSight: [
+            [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
+            [["Invocations", "Manifestations"], [" occultes", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
+            ["Adepte occulte", [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
+            [["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
+        ],
+        shapechanger: [
+            "Métamorphe",
+        ],
+        theThirdEyeEtherealSight: [
+            ["Troisième œil", [": ", " : "], "Vision éthérée"],
+        ],
+        theThirdEyeSeeInvisibility: [
+            ["Troisième œil", [": ", " : "], "Voir l", ["'", "’"], "invisible"],
+        ],
+    });
+    Object.assign(DATABASE.es, {
+        blindsense: [
+            "Sentir sin Ver",
+        ],
+        invocationWitchSight: [
+            ["Invocación", [" Sobrenatural", ""], ": Visión Bruja"],
+            ["Invocaciones", [" Sobrenaturales", ""], ": Visión Bruja"],
+            "Adepto Sobrenatural: Visión Bruja",
+            "Visión Bruja",
+        ],
+        shapechanger: [
+            "Cambiaformas",
+        ],
+        theThirdEyeEtherealSight: [
+            "El Tercer Ojo: Visión Etérea",
+        ],
+        theThirdEyeSeeInvisibility: [
+            "El Tercer Ojo: Ver Invisibilidad",
+        ],
+    });
+    Object.assign(DATABASE["pt-BR"], {
+        blindsense: [
+            "Sentido Cego",
+        ],
+        invocationWitchSight: [
+            ["Invocação", [" Mística", ""], ": Visão da Bruxa"],
+            ["Invocações", [" Místicas", ""], ": Visão da Bruxa"],
+            "Adepto Místico: Visão da Bruxa",
+            "Visão da Bruxa",
+        ],
         shapechanger: [
             "Metamorfo",
         ],
@@ -867,37 +937,8 @@ const DATABASE = Object.values({
         theThirdEyeSeeInvisibility: [
             "O Terceiro Olho: Ver Invisibilidade",
         ],
-        umbralSight: [
-            "Visão Umbral",
-        ],
-    },
-}).reduce((object, current) => {
-    for (const key in current) {
-        object[key] = (object[key] ?? []).concat(current[key]);
-    }
+    });
 
-    return object;
+    FEAT_MATCHERS = createMatchers(FEAT_REGISTRY);
+    EFFECT_MATCHERS = createMatchers(EFFECT_REGISTRY);
 });
-
-/**
- * @param {Registry<*>} registry
- * @returns {{ character: Matcher, npc: Matcher }}
- */
-function createMatchers(registry) {
-    return Object.fromEntries(
-        Object.entries(registry).map(([type, methods]) => [
-            type,
-            new Matcher(Object.keys(methods).reduce((object, name) => {
-                object[name] = DATABASE[name];
-
-                return object;
-            }, {}))
-        ])
-    );
-}
-
-/** @type {{ character: Matcher, npc: Matcher }} */
-const FEAT_MATCHERS = createMatchers(FEAT_REGISTRY);
-
-/** @type {{ character: Matcher, npc: Matcher }} */
-const EFFECT_MATCHERS = createMatchers(EFFECT_REGISTRY);

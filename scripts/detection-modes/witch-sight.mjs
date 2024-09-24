@@ -4,7 +4,7 @@ import { DETECTION_LEVELS } from "../const.mjs";
 /**
  * The detection mode for Witch Sight.
  */
-export default class DetectionModeDetectWitchSight extends DetectionMode {
+export default class DetectionModeWitchSight extends DetectionMode {
 
     constructor() {
         super({

@@ -23,7 +23,7 @@ import DetectionModeLightPerception from "./detection-modes/light-perception.mjs
 import DetectionModeSeeInvisibility from "./detection-modes/see-invisibility.mjs";
 import DetectionModeTremorsense from "./detection-modes/tremorsense.mjs";
 import DetectionModeTruesight from "./detection-modes/truesight.mjs";
-import DetectionModeDetectWitchSight from "./detection-modes/witch-sight.mjs";
+import DetectionModeWitchSight from "./detection-modes/witch-sight.mjs";
 import VisionModeBlindsight from "./vision-modes/blindsight.mjs";
 import VisionModeDarkvision from "./vision-modes/darkvision.mjs";
 import VisionModeDevilsSight from "./vision-modes/devils-sight.mjs";
@@ -76,11 +76,15 @@ Hooks.once("init", () => {
     CONFIG.specialStatusEffects.POISONED = "poisoned";
     CONFIG.specialStatusEffects.POISONOUS = "poisonous";
     CONFIG.specialStatusEffects.REVENANCE = "revenance";
-    CONFIG.specialStatusEffects.SHAPECHANGER = "shapechanger";
     CONFIG.specialStatusEffects.SLEEPING = "sleeping";
     CONFIG.specialStatusEffects.THINKING = "thinking";
     CONFIG.specialStatusEffects.UMBRAL_SIGHT = "umbralSight";
     CONFIG.specialStatusEffects.UNCONSCIOUS = "unconscious";
+
+    // Shapechanger detection is not needed in PHB'24 at the momement, because Witch Sight has been changed
+    if (game.settings.get("dnd5e", "rulesVersion") === "legacy") {
+        CONFIG.specialStatusEffects.SHAPECHANGER = "shapechanger";
+    }
 
     // Create aliases for core special status effects
     Object.defineProperties(CONFIG.specialStatusEffects, {
@@ -92,7 +96,6 @@ Hooks.once("init", () => {
 
     // Register detection modes
     for (const detectionModeClass of [
-        DetectionModeBlindsense,
         DetectionModeBlindsight,
         DetectionModeBloodSense,
         DetectionModeDarkvision,
@@ -110,11 +113,22 @@ Hooks.once("init", () => {
         DetectionModeSeeInvisibility,
         DetectionModeTremorsense,
         DetectionModeTruesight,
-        DetectionModeDetectWitchSight,
     ]) {
         const mode = new detectionModeClass();
 
         CONFIG.Canvas.detectionModes[mode.id] = mode;
+    }
+
+    // Register legacy detection modes
+    if (game.settings.get("dnd5e", "rulesVersion") === "legacy") {
+        for (const detectionModeClass of [
+            DetectionModeBlindsense,
+            DetectionModeWitchSight,
+        ]) {
+            const mode = new detectionModeClass();
+
+            CONFIG.Canvas.detectionModes[mode.id] = mode;
+        }
     }
 
     // Remove core detection modes that do not exist in D&D 5e
@@ -144,6 +158,23 @@ Hooks.once("init", () => {
     // Tremorsense is not supported as vision mode, because it is an imprecise sense and
     // we currently cannot prevent FOV from exploring the fog
     delete CONFIG.Canvas.visionModes.tremorsense;
+
+    // Legacy Devil's Sight
+    if (game.settings.get("dnd5e", "rulesVersion") === "legacy") {
+        CONFIG.Canvas.visionModes.devilsSight.updateSource({
+            canvas: {
+                shader: ColorAdjustmentsSamplerShader,
+                uniforms: { contrast: -0.15, saturation: 0, exposure: 0 }
+            },
+            lighting: {
+                background: { visibility: VisionMode.LIGHTING_VISIBILITY.REQUIRED }
+            },
+            vision: {
+                darkness: { adaptive: false },
+                defaults: { contrast: -0.15, saturation: 0, brightness: 0.5 },
+            }
+        });
+    }
 
     // Patch visiblity testing
     if (game.modules.get("lib-wrapper")?.active) {
