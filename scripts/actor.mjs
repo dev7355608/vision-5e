@@ -44,7 +44,7 @@ export default (Actor) => class extends Actor {
             this.statuses.add(CONFIG.specialStatusEffects.INAUDIBLE);
         }
 
-        if (isMagical(this)) {
+        if (hasMagicalAura(this)) {
             this.statuses.add(CONFIG.specialStatusEffects.MAGICAL);
         }
 
@@ -173,8 +173,9 @@ const MAGIC_ITEM_TYPES = new Set([
  * @param {Item} item
  * @returns {boolean}
  */
-function isMagicItem(item) {
-    return MAGIC_ITEM_TYPES.has(item.type) && item.system.validProperties.has("mgc") && item.system.properties.has("mgc");
+function isVisibleMagicItem(item) {
+    return MAGIC_ITEM_TYPES.has(item.type) && item.system.validProperties.has("mgc") && item.system.properties.has("mgc")
+        && (item.system.equipped === true || !item.container);
 }
 
 /**
@@ -189,9 +190,9 @@ function isMagicEffect(effect) {
  * @param {Actor} actor
  * @returns {boolean}
  */
-function isMagical(actor) {
-    // Does the actor carry a magical item or is the actor affected by a spell effect?
-    return actor.items.some(isMagicItem) || actor.appliedEffects.some(isMagicEffect)
+function hasMagicalAura(actor) {
+    // Does the actor carry a visible magical item or is the actor affected by a spell effect?
+    return actor.items.some(isVisibleMagicItem) || actor.appliedEffects.some(isMagicEffect)
 }
 
 /**
