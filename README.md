@@ -47,7 +47,8 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
   - Configured automatically for actors that have the `Detect Evil and Good`[\*](#translations) effect.
 - **Detect Magic** _(Spell, SRD 5.1 / PHB'14 231 / PHB'24 262)_
-  - Detects actors that carry a magic item or are affected by a spell effect.
+  - Detects actors that are carry a visible magic item (a magic item that is either not in a container or not equipped) or are affected by a spell effect.
+  - Cannot detect anything on its own and requires another sense to see the target.
   - Cannot detect actors that are _burrowing_ or _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM'14 147)_ NPC feat says otherwise). Also cannot detect actors with the `Mind Blank`[\*](#translations) _(Spell, SRD 5.1 / PHB'14 259 / PHB'24 298)_ or `Nondetection`[\*](#translations) _(Spell, SRD 5.1 / PHB'14 263 / PHB'24 302)_ effect.
   - Does not reveal the identity of detected tokens.
   - Disabled while _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
