@@ -4,7 +4,6 @@ import DetectionMode from "./base.mjs";
  * The detection mode for Devil's Sight.
  */
 export default class DetectionModeDevilsSight extends DetectionMode {
-
     constructor() {
         super({
             id: "devilsSight",

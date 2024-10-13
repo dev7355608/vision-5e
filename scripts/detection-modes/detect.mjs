@@ -5,7 +5,6 @@ import DetectionMode from "./base.mjs";
  * @abstract
  */
 export default class DetectionModeDetect extends DetectionMode {
-
     constructor(data = {}) {
         super(foundry.utils.mergeObject({
             type: DetectionMode.DETECTION_TYPES.OTHER,
@@ -50,8 +49,8 @@ export default class DetectionModeDetect extends DetectionMode {
                 type: "sight",
                 mode: "any",
                 source: visionSource,
-                useThreshold: true
-            }
+                useThreshold: true,
+            },
         );
     }
 }

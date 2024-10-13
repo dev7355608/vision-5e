@@ -4,9 +4,6 @@ import DetectionMode from "./base.mjs";
  * The detection mode for Divine Sense.
  */
 export default class DetectionModeDivineSense extends DetectionMode {
-    imprecise = true;
-    important = true;
-
     constructor() {
         super({
             id: "divineSense",
@@ -66,8 +63,8 @@ export default class DetectionModeDivineSense extends DetectionMode {
                 type: "sight",
                 mode: "any",
                 source: visionSource,
-                useThreshold: true
-            }
+                useThreshold: true,
+            },
         );
     }
 }

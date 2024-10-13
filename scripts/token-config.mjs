@@ -1,5 +1,4 @@
 export default (TokenConfig) => class extends TokenConfig {
-
     /** @override */
     async getData(options) {
         const data = await super.getData(options);

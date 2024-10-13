@@ -4,18 +4,17 @@ import DetectionModeDetect from "./detect.mjs";
  * The detection mode for Detect Poison and Disease.
  */
 export default class DetectionModeDetectPoisonAndDisease extends DetectionModeDetect {
-
     constructor() {
         super({
             id: "detectPoisonAndDisease",
-            label: "VISION5E.DetectPoisonAndDisease"
+            label: "VISION5E.DetectPoisonAndDisease",
         });
     }
 
     /** @override */
     static getDetectionFilter() {
         return this._detectionFilter ??= GlowOverlayFilter.create({
-            glowColor: [0, 1, 0, 1]
+            glowColor: [0, 1, 0, 1],
         });
     }
 

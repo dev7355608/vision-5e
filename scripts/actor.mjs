@@ -2,7 +2,6 @@ import { defaultHearingRange } from "./settings.mjs";
 import { Matcher, convertUnits, toFeet } from "./utils.mjs";
 
 export default (Actor) => class extends Actor {
-
     /**  @type {Record<string, number>} */
     detectionModes = this.detectionModes;
 
@@ -192,7 +191,7 @@ function isMagicEffect(effect) {
  */
 function hasMagicalAura(actor) {
     // Does the actor carry a visible magical item or is the actor affected by a spell effect?
-    return actor.items.some(isVisibleMagicItem) || actor.appliedEffects.some(isMagicEffect)
+    return actor.items.some(isVisibleMagicItem) || actor.appliedEffects.some(isMagicEffect);
 }
 
 /**
@@ -300,7 +299,7 @@ const FEAT_REGISTRY = {
         senseMagic(item) {
             upgradeDetectionMode(this, "detectMagic", findRange(item.system.description.value, this.system.attributes.senses.units));
         },
-    }
+    },
 };
 
 /** @type {Registry<ActiveEffect>} */
@@ -363,12 +362,12 @@ const EFFECT_REGISTRY = {
         seeInvisibility(effect) {
             upgradeDetectionMode(this, "seeInvisibility", null);
         },
-    }
+    },
 };
 
 /** @type {Record<"en" | "de" | "fr" | "es" | "pt-BR", Record<string, (string | (string | string[])[])[]>>} */
 const DATABASE = {
-    en: {
+    "en": {
         blindSenses: [
             "Blind Senses",
         ],
@@ -441,7 +440,7 @@ const DATABASE = {
             "Umbral Sight",
         ],
     },
-    de: {
+    "de": {
         blindSenses: [
             "Blinde Sinne",
         ],
@@ -514,7 +513,7 @@ const DATABASE = {
             "Düstersicht",
         ],
     },
-    fr: {
+    "fr": {
         blindSenses: [
             "Sens aveugles",
         ],
@@ -590,7 +589,7 @@ const DATABASE = {
             "Vision des ombres",
         ],
     },
-    es: {
+    "es": {
         blindSenses: [
             "Sentidos de Ciego",
         ],
@@ -676,7 +675,7 @@ const DATABASE = {
             ["Detectar o Bem e", [" o", ""], " Mal"],
         ],
         detectMagic: [
-            "Detectar Magia"
+            "Detectar Magia",
         ],
         detectPoisonAndDisease: [
             "Detectar Veneno e Doença",
@@ -764,8 +763,8 @@ function createMatchers(registry) {
                 object[name] = database[name];
 
                 return object;
-            }, {}))
-        ])
+            }, {})),
+        ]),
     );
 }
 
@@ -777,6 +776,7 @@ let EFFECT_MATCHERS = createMatchers(EFFECT_REGISTRY);
 
 Hooks.once("init", () => {
     if (foundry.utils.isNewerVersion("4.0.0", game.system.version)) {
+        // eslint-disable-next-line no-func-assign
         isPoisonous = function (actor) {
             if (actor.statuses.has(CONFIG.specialStatusEffects.OBJECT)
                 || actor.statuses.has(CONFIG.specialStatusEffects.PETRIFIED)) {
@@ -785,12 +785,12 @@ Hooks.once("init", () => {
 
             for (const item of actor.items) {
                 if (item.type === "weapon" && item.system.type.value === "natural"
-                    && (item.system.damage.parts.some(part => part[1] === "poison")
+                    && (item.system.damage.parts.some((part) => part[1] === "poison")
                         || [
                             item.system.critical.damage,
                             item.system.damage.versatile,
-                            item.system.formula
-                        ].some(formula => /\[poison\]/i.test(formula)))) {
+                            item.system.formula,
+                        ].some((formula) => /\[poison\]/i.test(formula)))) {
                     return true;
                 }
             }
@@ -806,6 +806,7 @@ Hooks.once("init", () => {
     }
 
     // Detect Thoughts in PHB'14 requires an Intelligence of 4 or higher.
+    // eslint-disable-next-line no-func-assign
     isThinking = function (actor) {
         if (actor.statuses.has(CONFIG.specialStatusEffects.OBJECT)
             || actor.statuses.has(CONFIG.specialStatusEffects.PETRIFIED)) {

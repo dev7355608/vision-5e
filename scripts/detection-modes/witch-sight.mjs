@@ -5,7 +5,6 @@ import { DETECTION_LEVELS } from "../const.mjs";
  * The detection mode for Witch Sight.
  */
 export default class DetectionModeWitchSight extends DetectionMode {
-
     constructor() {
         super({
             id: "witchSight",
@@ -52,7 +51,7 @@ export default class DetectionModeWitchSight extends DetectionMode {
                 const mode = CONFIG.Canvas.detectionModes[id];
 
                 return mode && mode !== this && mode.type === DetectionMode.DETECTION_TYPES.SIGHT && !mode.imprecise;
-            }
+            },
         );
 
         // Test whether this vision source sees the target

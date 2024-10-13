@@ -2,7 +2,6 @@ import { DETECTION_LEVELS } from "./const.mjs";
 import { fromFeet } from "./utils.mjs";
 
 export default (Token) => class extends Token {
-
     /**
      * The different levels of detection.
      * @enum {number}
@@ -135,14 +134,14 @@ export default (Token) => class extends Token {
             if (data.detectionMode === "blindsight"
                 && (this.document.hasStatusEffect(CONFIG.specialStatusEffects.BLIND_SENSES)
                     || this.document.hasStatusEffect(CONFIG.specialStatusEffects.ECHOLOCATION))
-                && this.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAFENED)) {
+                    && this.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAFENED)) {
                 data.radius = 0;
             }
         }
 
         // Senses other than Darkvision can see through magical darkness
         data.includeDarkness = data.detectionMode === "basicSight"
-            && !this.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT);
+        && !this.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT);
 
         // Handle Ghostly Gaze
         if (this.document.hasStatusEffect(CONFIG.specialStatusEffects.GHOSTLY_GAZE)) {
@@ -222,7 +221,7 @@ export default (Token) => class extends Token {
 
         this.#impreciseMesh = this.addChildAt(
             new SpriteMesh(impreciseTexture),
-            this.getChildIndex(this.detectionFilterMesh)
+            this.getChildIndex(this.detectionFilterMesh),
         );
         this.#impreciseMesh.anchor.set(0.5, 0.5);
         this.#impreciseMesh.renderable = false;
@@ -290,7 +289,8 @@ export default (Token) => class extends Token {
     /** @override */
     _getBorderColor() {
         return this._detectionLevel === DETECTION_LEVELS.PRECISE
-            ? super._getBorderColor() : CONFIG.Canvas.dispositionColors.INACTIVE;
+            ? super._getBorderColor()
+            : CONFIG.Canvas.dispositionColors.INACTIVE;
     }
 
     /** @override */

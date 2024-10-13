@@ -4,18 +4,17 @@ import DetectionModeDetect from "./detect.mjs";
  * The detection mode for Detect Evil and Good.
  */
 export default class DetectionModeDetectEvilAndGood extends DetectionModeDetect {
-
     constructor() {
         super({
             id: "detectEvilAndGood",
-            label: "VISION5E.DetectEvilAndGood"
+            label: "VISION5E.DetectEvilAndGood",
         });
     }
 
     /** @override */
     static getDetectionFilter() {
         return this._detectionFilter ??= GlowOverlayFilter.create({
-            glowColor: [1, 1, 0, 1]
+            glowColor: [1, 1, 0, 1],
         });
     }
 

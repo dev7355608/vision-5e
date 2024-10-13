@@ -5,7 +5,6 @@ import { DETECTION_LEVELS } from "../const.mjs";
  * The detection mode for Ethereal Sight.
  */
 export default class DetectionModeEtherealSight extends DetectionMode {
-
     constructor() {
         super({
             id: "etherealSight",
@@ -51,7 +50,7 @@ export default class DetectionModeEtherealSight extends DetectionMode {
                 const mode = CONFIG.Canvas.detectionModes[id];
 
                 return mode && mode !== this && mode.type === DetectionMode.DETECTION_TYPES.SIGHT && !mode.imprecise;
-            }
+            },
         );
 
         target.document.actor.statuses.delete(CONFIG.specialStatusEffects.ETHEREAL);

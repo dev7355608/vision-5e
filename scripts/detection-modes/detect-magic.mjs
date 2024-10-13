@@ -5,7 +5,6 @@ import { DETECTION_LEVELS } from "../const.mjs";
  * The detection mode for Detect Magic.
  */
 export default class DetectionModeDetectMagic extends DetectionModeDetect {
-
     constructor() {
         super({
             id: "detectMagic",
@@ -17,7 +16,7 @@ export default class DetectionModeDetectMagic extends DetectionModeDetect {
     /** @override */
     static getDetectionFilter() {
         return this._detectionFilter ??= GlowOverlayFilter.create({
-            glowColor: [1, 0, 1, 1]
+            glowColor: [1, 0, 1, 1],
         });
     }
 
@@ -51,7 +50,7 @@ export default class DetectionModeDetectMagic extends DetectionModeDetect {
                 const mode = CONFIG.Canvas.detectionModes[id];
 
                 return mode && mode !== this && mode.type === DetectionMode.DETECTION_TYPES.SIGHT && !mode.imprecise;
-            }
+            },
         );
 
         // Test whether this vision source sees the target

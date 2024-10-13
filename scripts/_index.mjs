@@ -93,10 +93,46 @@ Hooks.once("init", () => {
 
     // Create aliases for core special status effects
     Object.defineProperties(CONFIG.specialStatusEffects, {
-        BLIND: { get() { return this.BLINDED }, set(id) { this.BLINDED = id; }, configurable: true, enumerable: false },
-        BURROW: { get() { return this.BURROWING }, set(id) { this.BURROWING = id; }, configurable: true, enumerable: false },
-        FLY: { get() { return this.FLYING }, set(id) { this.FLYING = id; }, configurable: true, enumerable: false },
-        HOVER: { get() { return this.HOVERING }, set(id) { this.HOVERING = id; }, configurable: true, enumerable: false },
+        BLIND: {
+            get() {
+                return this.BLINDED;
+            },
+            set(id) {
+                this.BLINDED = id;
+            },
+            configurable: true,
+            enumerable: false,
+        },
+        BURROW: {
+            get() {
+                return this.BURROWING;
+            },
+            set(id) {
+                this.BURROWING = id;
+            },
+            configurable: true,
+            enumerable: false,
+        },
+        FLY: {
+            get() {
+                return this.FLYING;
+            },
+            set(id) {
+                this.FLYING = id;
+            },
+            configurable: true,
+            enumerable: false,
+        },
+        HOVER: {
+            get() {
+                return this.HOVERING;
+            },
+            set(id) {
+                this.HOVERING = id;
+            },
+            configurable: true,
+            enumerable: false,
+        },
     });
 
     // Register detection modes
@@ -169,15 +205,15 @@ Hooks.once("init", () => {
         CONFIG.Canvas.visionModes.devilsSight.updateSource({
             canvas: {
                 shader: ColorAdjustmentsSamplerShader,
-                uniforms: { contrast: -0.15, saturation: 0, exposure: 0 }
+                uniforms: { contrast: -0.15, saturation: 0, exposure: 0 },
             },
             lighting: {
-                background: { visibility: VisionMode.LIGHTING_VISIBILITY.REQUIRED }
+                background: { visibility: VisionMode.LIGHTING_VISIBILITY.REQUIRED },
             },
             vision: {
                 darkness: { adaptive: false },
                 defaults: { contrast: -0.15, saturation: 0, brightness: 0.5 },
-            }
+            },
         });
     }
 });

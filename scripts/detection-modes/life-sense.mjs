@@ -4,7 +4,6 @@ import DetectionMode from "./base.mjs";
  * The detection mode for Life Sense.
  */
 export default class DetectionModeLifeSense extends DetectionMode {
-
     constructor() {
         super({
             id: "lifeSense",
@@ -20,7 +19,7 @@ export default class DetectionModeLifeSense extends DetectionMode {
     /** @override */
     static getDetectionFilter() {
         return this._detectionFilter ??= GlowOverlayFilter.create({
-            glowColor: [1, 0, 0, 1]
+            glowColor: [1, 0, 0, 1],
         });
     }
 

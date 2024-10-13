@@ -4,7 +4,6 @@ import DetectionMode from "./base.mjs";
  * The detection mode for hearing.
  */
 export default class DetectionModeHearing extends DetectionMode {
-
     constructor() {
         super({
             id: "hearing",
@@ -20,7 +19,7 @@ export default class DetectionModeHearing extends DetectionMode {
     static getDetectionFilter() {
         return this._detectionFilter ??= PingDetectionFilter.create({
             color: [1, 1, 1],
-            alpha: 0.75
+            alpha: 0.75,
         });
     }
 
@@ -57,14 +56,13 @@ export default class DetectionModeHearing extends DetectionMode {
                 mode: "any",
                 source: visionSource,
                 wallDirectionMode: PointSourcePolygon.WALL_DIRECTION_MODES.REVERSED,
-                useThreshold: true
-            }
+                useThreshold: true,
+            },
         );
     }
 }
 
 class PingDetectionFilter extends AbstractBaseFilter {
-
     /** @override */
     autoFit = false;
 
@@ -74,7 +72,7 @@ class PingDetectionFilter extends AbstractBaseFilter {
     /** @override */
     static defaultUniforms = {
         color: [1, 1, 1],
-        alpha: 1
+        alpha: 1,
     };
 
     /** @override */

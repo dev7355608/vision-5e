@@ -1,7 +1,6 @@
 import { convertUnits, fromFeet } from "./utils.mjs";
 
 export default (TokenDocument) => class extends TokenDocument {
-
     /** @override */
     prepareBaseData() {
         super.prepareBaseData();
@@ -46,7 +45,7 @@ export default (TokenDocument) => class extends TokenDocument {
                     this.detectionModes.push({
                         id,
                         enabled: true,
-                        range: convertUnits(range, actorUnits, sceneUnits)
+                        range: convertUnits(range, actorUnits, sceneUnits),
                     });
                 }
             }

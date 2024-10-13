@@ -4,9 +4,6 @@ import DetectionMode from "./base.mjs";
  * The detection mode for Eyes of the Grave.
  */
 export default class DetectionModeEyesOfTheGrave extends DetectionMode {
-    imprecise = true;
-    important = true;
-
     constructor() {
         super({
             id: "eyesOfTheGrave",
@@ -63,8 +60,8 @@ export default class DetectionModeEyesOfTheGrave extends DetectionMode {
                 type: "sight",
                 mode: "any",
                 source: visionSource,
-                useThreshold: true
-            }
+                useThreshold: true,
+            },
         );
     }
 }

@@ -4,7 +4,6 @@ import DetectionMode from "./base.mjs";
  * The detection mode for Tremorsense.
  */
 export default class DetectionModeTremorsense extends DetectionMode {
-
     constructor() {
         super({
             id: "feelTremor",

@@ -1,5 +1,4 @@
 export default (PointVisionSource) => class extends PointVisionSource {
-
     /** @override */
     static defaultData = {
         ...super.defaultData,
@@ -41,7 +40,7 @@ export default (PointVisionSource) => class extends PointVisionSource {
                     let union = new PIXI.Circle(origin.x, origin.y, radius).intersectPolygon(polygon, {
                         clipType: ClipperLib.ClipType.ctUnion,
                         scalingFactor: 100,
-                        density: PIXI.Circle.approximateVertexDensity(radius)
+                        density: PIXI.Circle.approximateVertexDensity(radius),
                     });
                     const bounds = polygon.config.useInnerBounds ? canvas.dimensions.sceneRect : canvas.dimensions.rect;
 

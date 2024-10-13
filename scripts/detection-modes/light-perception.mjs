@@ -4,7 +4,6 @@ import DetectionMode from "./base.mjs";
  * The detection mode for Light Perception.
  */
 export default class DetectionModeLightPerception extends DetectionMode {
-
     constructor() {
         super({
             id: "lightPerception",

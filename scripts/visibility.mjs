@@ -1,7 +1,6 @@
 import { DETECTION_LEVELS } from "./const.mjs";
 
 export default (CanvasVisibility) => class extends CanvasVisibility {
-
     /** @override */
     testVisibility(point, options = {}) {
         const object = options.object ?? null;
@@ -182,6 +181,7 @@ class MultiDetectionFilter extends PIXI.Filter {
 
         for (let i = 0, n = filters.length; i < n; i++) {
             const filter = filters[i];
+
             if (!filter.enabled) {
                 continue;
             }
@@ -192,6 +192,7 @@ class MultiDetectionFilter extends PIXI.Filter {
 
             resolution = Math.max(resolution, filter.resolution);
         }
+
         return resolution;
     }
 

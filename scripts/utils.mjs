@@ -1,13 +1,12 @@
 export class Matcher {
-
     /** @type {RegExp} */
     #pattern;
 
     constructor(object) {
         object = Object.fromEntries(Object.entries(object).map(([key, matches]) => [key, Array.from(new Set(
             (Array.isArray(matches) ? matches : [matches])
-                .map(m => (Array.isArray(m) ? m : [m]).map(m => Array.isArray(m) ? m : [m]))
-                .flatMap(m => m.reduce((a, b) => a.flatMap((c) => b.map((d) => c + d))))
+                .map((m) => (Array.isArray(m) ? m : [m]).map((m) => Array.isArray(m) ? m : [m]))
+                .flatMap((m) => m.reduce((a, b) => a.flatMap((c) => b.map((d) => c + d)))),
         )).sort()]).sort((a, b) => a[0].compare(b[0])));
 
         this.#pattern = new RegExp(`^${Object.entries(object).map(([key, matches]) => `(?<${key}>${matches.map(RegExp.escape).join("|")})`).join("|")}$`, "i");

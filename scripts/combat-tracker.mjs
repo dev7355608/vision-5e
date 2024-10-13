@@ -1,7 +1,6 @@
 import { DETECTION_LEVELS } from "./const.mjs";
 
 export default (CombatTracker) => class extends CombatTracker {
-
     /** @override */
     _onCombatantHoverIn(event) {
         event.preventDefault();

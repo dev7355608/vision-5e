@@ -4,7 +4,6 @@ import DetectionMode from "./base.mjs";
  * The detection mode for Darkvision.
  */
 export default class DetectionModeDarkvision extends DetectionMode {
-
     constructor() {
         super({
             id: "basicSight",
@@ -24,7 +23,7 @@ export default class DetectionModeDarkvision extends DetectionMode {
 
         return this._detectionFilter ??= OutlineOverlayFilter.create({
             outlineColor: [1, 1, 1, 1],
-            knockout: true
+            knockout: true,
         });
     }
 

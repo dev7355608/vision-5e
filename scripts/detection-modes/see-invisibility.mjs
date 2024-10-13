@@ -5,21 +5,20 @@ import { DETECTION_LEVELS } from "../const.mjs";
  * The detection mode for See Invisibility.
  */
 export default class DetectionModeSeeInvisibility extends DetectionMode {
-
     constructor() {
         super({
             id: "seeInvisibility",
             label: "VISION5E.SeeInvisibility",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: false,
-            angle: false
+            angle: false,
         });
     }
 
     /** @override */
     static getDetectionFilter() {
         return this._detectionFilter ??= GlowOverlayFilter.create({
-            glowColor: [0, 0.60, 0.33, 1]
+            glowColor: [0, 0.60, 0.33, 1],
         });
     }
 
@@ -52,7 +51,7 @@ export default class DetectionModeSeeInvisibility extends DetectionMode {
                 const mode = CONFIG.Canvas.detectionModes[id];
 
                 return mode && mode !== this && mode.type === DetectionMode.DETECTION_TYPES.SIGHT && !mode.imprecise;
-            }
+            },
         );
 
         const wasInvisible = target.document.actor.statuses.delete(CONFIG.specialStatusEffects.INVISIBLE);

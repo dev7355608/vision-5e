@@ -13,9 +13,9 @@ Hooks.once("init", () => {
             requiresReload: true,
             type: new dnd5e.dataModels.fields.FormulaField({
                 deterministic: true,
-                initial: "15 + 2.5 * (@skills.prc.passive - 10)"
-            })
-        }
+                initial: "15 + 2.5 * (@skills.prc.passive - 10)",
+            }),
+        },
     );
 
     Hooks.on("renderSettingsConfig", (app, html) => {
@@ -33,7 +33,7 @@ Hooks.once("init", () => {
     if (Roll.validate(formula)) {
         try {
             defaultHearingRange = Roll.safeEval(formula);
-        } catch (error) {
+        } catch (_error) {
             defaultHearingRange = formula;
         }
     }

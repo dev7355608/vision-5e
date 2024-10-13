@@ -4,7 +4,6 @@ import DetectionMode from "./base.mjs";
  * The detection mode for Blindsight.
  */
 export default class DetectionModeBlindsight extends DetectionMode {
-
     constructor() {
         super({
             id: "blindsight",
@@ -63,8 +62,8 @@ export default class DetectionModeBlindsight extends DetectionMode {
                 type: "sight",
                 mode: "any",
                 source: visionSource,
-                useThreshold: true
-            }
+                useThreshold: true,
+            },
         );
     }
 }

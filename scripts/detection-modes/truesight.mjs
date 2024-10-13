@@ -4,16 +4,14 @@ import DetectionMode from "./base.mjs";
  * The detection mode for Truesight.
  */
 export default class DetectionModeTruesight extends DetectionMode {
-
     constructor() {
         super({
             id: "seeAll",
             label: "DND5E.SenseTruesight",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            priority: 5
+            priority: 5,
         });
     }
-
 
     /** @override */
     static getDetectionFilter(visionSource, object) {

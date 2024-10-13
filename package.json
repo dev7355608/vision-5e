@@ -1,0 +1,33 @@
+{
+    "name": "vision-5e",
+    "description": "Vision 5e (Foundry VTT Module)",
+    "author": {
+        "name": "dev7355608",
+        "email": "dev7355608@gmail.com",
+        "url": "https://github.com/dev7355608"
+    },
+    "license": "MIT",
+    "homepage": "https://github.com/dev7355608/vision-5e",
+    "bugs": {
+        "url": "https://github.com/dev7355608/vision-5e/issues",
+        "email": "dev7355608@gmail.com"
+    },
+    "private": true,
+    "scripts": {
+        "build": "npm run clean && rollup -c",
+        "clean": "rimraf module.zip script.js script.js.map",
+        "lint": "eslint",
+        "lint:fix": "eslint --fix",
+        "watch": "rollup -c -w --environment BUILD:development"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.12.0",
+        "@rollup/plugin-terser": "^0.4.4",
+        "@stylistic/eslint-plugin": "^2.9.0",
+        "archiver": "^7.0.1",
+        "eslint": "^9.12.0",
+        "globals": "^15.11.0",
+        "rimraf": "^6.0.1",
+        "rollup": "^4.24.0"
+    }
+}

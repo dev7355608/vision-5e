@@ -4,18 +4,17 @@ import DetectionModeDetect from "./detect.mjs";
  * The detection mode for Detect Thoughts.
  */
 export default class DetectionModeDetectThoughts extends DetectionModeDetect {
-
     constructor() {
         super({
             id: "detectThoughts",
-            label: "VISION5E.DetectThoughts"
+            label: "VISION5E.DetectThoughts",
         });
     }
 
     /** @override */
     static getDetectionFilter() {
         return this._detectionFilter ??= GlowOverlayFilter.create({
-            glowColor: [0, 1, 1, 1]
+            glowColor: [0, 1, 1, 1],
         });
     }
 

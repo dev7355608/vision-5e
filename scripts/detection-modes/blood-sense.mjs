@@ -4,7 +4,6 @@ import DetectionMode from "./base.mjs";
  * The detection mode for Blood Sense.
  */
 export default class DetectionModeBloodSense extends DetectionMode {
-
     constructor() {
         super({
             id: "bloodSense",

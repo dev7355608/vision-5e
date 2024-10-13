@@ -1,5 +1,4 @@
 export default (TokenHUD) => class extends TokenHUD {
-
     /** @override */
     async _renderInner(data) {
         const html = await super._renderInner(data);
@@ -57,18 +56,18 @@ export default (TokenHUD) => class extends TokenHUD {
         const visionModesList = visionControl.querySelector(`.vision-5e.vision-modes`);
 
         ["click", "contextmenu", "mouseenter", "mouseleave"].forEach(
-            eventType => visionModesList.addEventListener(eventType, (event) => {
+            (eventType) => visionModesList.addEventListener(eventType, (event) => {
                 event.preventDefault();
                 event.stopPropagation();
-            })
+            }),
         );
 
         visionModesList.querySelectorAll(`.vision-5e.vision-mode`).forEach(
-            element => element.addEventListener("click", (event) => {
+            (element) => element.addEventListener("click", (event) => {
                 event.preventDefault();
                 this.document.updateVisionMode(event.currentTarget.dataset.visionMode);
                 this.clear();
-            })
+            }),
         );
 
         return html;
