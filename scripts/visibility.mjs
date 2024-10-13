@@ -1,107 +1,111 @@
 import { DETECTION_LEVELS } from "./const.mjs";
 
-export default function (point, options = {}) {
-    const object = options.object ?? null;
+export default (CanvasVisibility) => class extends CanvasVisibility {
 
-    if (!canvas.effects.visionSources.some((source) => source.active)) {
-        if (game.user.isGM) {
+    /** @override */
+    testVisibility(point, options = {}) {
+        const object = options.object ?? null;
+
+        if (!canvas.effects.visionSources.some((source) => source.active)) {
+            if (game.user.isGM) {
+                if (object instanceof Token && object._detectionLevel === undefined) {
+                    object._detectionLevel = DETECTION_LEVELS.PRECISE;
+                    object._detectionFilter = null;
+                }
+
+                return true;
+            }
+
             if (object instanceof Token && object._detectionLevel === undefined) {
-                object._detectionLevel = DETECTION_LEVELS.PRECISE;
+                object._detectionLevel = DETECTION_LEVELS.NONE;
                 object._detectionFilter = null;
             }
 
-            return true;
+            return false;
         }
 
-        if (object instanceof Token && object._detectionLevel === undefined) {
-            object._detectionLevel = DETECTION_LEVELS.NONE;
-            object._detectionFilter = null;
-        }
+        const config = this._createVisibilityTestConfig(point, options);
 
-        return false;
-    }
-
-    const config = this._createVisibilityTestConfig(point, options);
-
-    for (const lightSource of canvas.effects.lightSources) {
-        if (!lightSource.data.vision || !lightSource.active) {
-            continue;
-        }
-
-        const result = lightSource.testVisibility(config);
-
-        if (result === true) {
-            if (object instanceof Token && object._detectionLevel === undefined) {
-                object._detectionLevel = DETECTION_LEVELS.PRECISE;
-                object._detectionFilter = null;
-            }
-
-            return true;
-        }
-    }
-
-    const sceneRect = canvas.dimensions.sceneRect;
-    const inBuffer = !sceneRect.contains(point.x, point.y);
-    const detectionFilters = new Set();
-    let visible = false;
-    let detectionLevel = DETECTION_LEVELS.NONE;
-
-    for (const visionSource of canvas.effects.visionSources) {
-        if (!visionSource.active || inBuffer === sceneRect.contains(visionSource.x, visionSource.y)) {
-            continue;
-        }
-
-        const token = visionSource.object.document;
-
-        // The detection modes have been sorted by TokenDocument#prepareBaseData
-        for (const mode of token.detectionModes) {
-            const detectionMode = CONFIG.Canvas.detectionModes[mode.id];
-            const result = detectionMode?.testVisibility(visionSource, mode, config);
-
-            if (result !== true) {
+        for (const lightSource of canvas.effects.lightSources) {
+            if (!lightSource.data.vision || !lightSource.active) {
                 continue;
             }
 
-            visible = true;
-            detectionLevel = Math.max(detectionLevel, detectionMode.imprecise ? DETECTION_LEVELS.IMPRECISE : DETECTION_LEVELS.PRECISE);
+            const result = lightSource.testVisibility(config);
 
-            if (object instanceof Token && object._detectionLevel === undefined) {
-                const detectionFilter = detectionMode.constructor.getDetectionFilter(visionSource, object);
+            if (result === true) {
+                if (object instanceof Token && object._detectionLevel === undefined) {
+                    object._detectionLevel = DETECTION_LEVELS.PRECISE;
+                    object._detectionFilter = null;
+                }
 
-                if (detectionFilter) {
-                    detectionFilters.add(detectionFilter);
+                return true;
+            }
+        }
+
+        const sceneRect = canvas.dimensions.sceneRect;
+        const inBuffer = !sceneRect.contains(point.x, point.y);
+        const detectionFilters = new Set();
+        let visible = false;
+        let detectionLevel = DETECTION_LEVELS.NONE;
+
+        for (const visionSource of canvas.effects.visionSources) {
+            if (!visionSource.active || inBuffer === sceneRect.contains(visionSource.x, visionSource.y)) {
+                continue;
+            }
+
+            const token = visionSource.object.document;
+
+            // The detection modes have been sorted by TokenDocument#prepareBaseData
+            for (const mode of token.detectionModes) {
+                const detectionMode = CONFIG.Canvas.detectionModes[mode.id];
+                const result = detectionMode?.testVisibility(visionSource, mode, config);
+
+                if (result !== true) {
+                    continue;
+                }
+
+                visible = true;
+                detectionLevel = Math.max(detectionLevel, detectionMode.imprecise ? DETECTION_LEVELS.IMPRECISE : DETECTION_LEVELS.PRECISE);
+
+                if (object instanceof Token && object._detectionLevel === undefined) {
+                    const detectionFilter = detectionMode.constructor.getDetectionFilter(visionSource, object);
+
+                    if (detectionFilter) {
+                        detectionFilters.add(detectionFilter);
+                    }
+                }
+
+                if (!detectionMode.important) {
+                    break;
                 }
             }
+        }
 
-            if (!detectionMode.important) {
-                break;
+        if (!visible) {
+            if (object instanceof Token && object._detectionLevel === undefined) {
+                object._detectionLevel = DETECTION_LEVELS.NONE;
+                object._detectionFilter = null;
+            }
+
+            return false;
+        }
+
+        if (object instanceof Token && object._detectionLevel === undefined) {
+            object._detectionLevel = detectionLevel;
+
+            if (detectionFilters.size > 1) {
+                object._detectionFilter = new MultiDetectionFilter([...detectionFilters].reverse());
+            } else if (detectionFilters.size === 1) {
+                object._detectionFilter = detectionFilters.first();
+            } else {
+                object._detectionFilter = null;
             }
         }
+
+        return true;
     }
-
-    if (!visible) {
-        if (object instanceof Token && object._detectionLevel === undefined) {
-            object._detectionLevel = DETECTION_LEVELS.NONE;
-            object._detectionFilter = null;
-        }
-
-        return false;
-    }
-
-    if (object instanceof Token && object._detectionLevel === undefined) {
-        object._detectionLevel = detectionLevel;
-
-        if (detectionFilters.size > 1) {
-            object._detectionFilter = new MultiDetectionFilter([...detectionFilters].reverse());
-        } else if (detectionFilters.size === 1) {
-            object._detectionFilter = detectionFilters.first();
-        } else {
-            object._detectionFilter = null;
-        }
-    }
-
-    return true;
-}
+};
 
 class MultiDetectionFilter extends PIXI.Filter {
     /** @type {PIXI.Filter[]} */

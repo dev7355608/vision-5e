@@ -3,6 +3,7 @@ import TokenMixin from "./token.mjs";
 import TokenConfigMixin from "./token-config.mjs";
 import TokenDocumentMixin from "./token-document.mjs";
 import TokenHUDMixin from "./token-hud.mjs";
+import VisibilityGroupMixin from "./visibility.mjs";
 import VisionSourceMixin from "./vision-source.mjs";
 import CombatTrackerMixin from "./combat-tracker.mjs";
 import DetectionModeBlindsense from "./detection-modes/blindsense.mjs";
@@ -29,7 +30,6 @@ import VisionModeDarkvision from "./vision-modes/darkvision.mjs";
 import VisionModeDevilsSight from "./vision-modes/devils-sight.mjs";
 import VisionModeEtherealness from "./vision-modes/etherealness.mjs";
 import VisionModeTruesight from "./vision-modes/truesight.mjs";
-import testVisibility from "./test-visibility.mjs";
 
 Hooks.once("init", () => {
     const legacy = foundry.utils.isNewerVersion("4.0.0", game.system.version) || game.settings.get("dnd5e", "rulesVersion") === "legacy";
@@ -39,6 +39,9 @@ Hooks.once("init", () => {
     CONFIG.Token.documentClass = TokenDocumentMixin(CONFIG.Token.documentClass);
     CONFIG.Token.objectClass = TokenMixin(CONFIG.Token.objectClass);
     CONFIG.Token.hudClass = TokenHUDMixin(CONFIG.Token.hudClass);
+
+    // Extend CanvasVisibility
+    CONFIG.Canvas.groups.visibility.groupClass = VisibilityGroupMixin(CONFIG.Canvas.groups.visibility.groupClass);
 
     // Extend PointVisionSource
     CONFIG.Canvas.visionSourceClass = VisionSourceMixin(CONFIG.Canvas.visionSourceClass);
@@ -176,19 +179,6 @@ Hooks.once("init", () => {
                 defaults: { contrast: -0.15, saturation: 0, brightness: 0.5 },
             }
         });
-    }
-
-    // Patch visiblity testing
-    if (game.modules.get("lib-wrapper")?.active) {
-        libWrapper.register(
-            "vision-5e",
-            "CanvasVisibility.prototype.testVisibility",
-            testVisibility,
-            libWrapper.OVERRIDE,
-            { perf_mode: libWrapper.PERF_FAST }
-        );
-    } else {
-        CanvasVisibility.prototype.testVisibility = testVisibility;
     }
 });
 
