@@ -14,7 +14,12 @@ export default class DetectionModeBlindsight extends DetectionMode {
     }
 
     /** @override */
-    static getDetectionFilter() {
+    static getDetectionFilter(visionSource, object) {
+        if (visionSource?.data.detectionMode === "blindsight"
+            && !canvas.effects.testInsideDarkness(object.center, object.document.elevation)) {
+            return;
+        }
+
         return this._detectionFilter ??= OutlineOverlayFilter.create({
             outlineColor: [1, 1, 1, 1],
             thickness: [0, 0],
