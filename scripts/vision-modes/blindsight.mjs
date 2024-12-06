@@ -15,7 +15,7 @@ export default class VisionModeBlindsight extends VisionMode {
             },
             vision: {
                 darkness: { adaptive: false },
-                defaults: { contrast: 0.3, saturation: -1, brightness: -1 },
+                defaults: { contrast: 0.3, saturation: -1, brightness: 0 },
             },
         }, { animated: true });
     }
