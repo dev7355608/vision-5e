@@ -53,7 +53,7 @@ export default {
             const archive = archiver("zip", { zlib: { level: 9 } });
 
             output.on("close", function () {
-                console.log(`\x1b[32mcreated \x1b[1mmodule.zip\x1b[21m in \x1b[1m${Date.now() - start}ms\x1b[21m\x1b[39m`);
+                console.log(`\x1b[32mcreated \x1b[1mmodule.zip\x1b[0m\x1b[32m in \x1b[1m${Date.now() - start}ms\x1b[0m`);
             });
 
             archive.on("warning", function (error) {
