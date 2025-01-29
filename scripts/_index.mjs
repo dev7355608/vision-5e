@@ -172,6 +172,11 @@ Hooks.once("init", () => {
         }
     }
 
+    // Legacy Divine Sense
+    if (legacy) {
+        CONFIG.Canvas.detectionModes.divineSense.updateSource({ walls: true });
+    }
+
     // Remove core detection modes that do not exist in D&D 5e
     delete CONFIG.Canvas.detectionModes.senseAll;
     delete CONFIG.Canvas.detectionModes.senseInvisibility;
