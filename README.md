@@ -81,7 +81,7 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Cannot detect actors that are _burrowing_, _ethereal_ (from the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM'14 147)_ NPC feat says otherwise), or _petrified_.
   - Does not reveal the identity of detected tokens.
   - Disabled while _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
-  - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
+  - Is restricted by sight-blocking walls with legacy rules, otherwise not. Isn't blocked by darkness sources.
   - Configured automatically for PC actors with the `Divine Sense`[\*](#translations) effect.
 - **Ethereal Sight** _(Monster Feature, e.g. SRD 5.1 / MM'14 147)_
   - Allows detection _ethereal_ actors.
