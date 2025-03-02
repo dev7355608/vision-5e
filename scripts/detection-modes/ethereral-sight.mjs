@@ -8,7 +8,7 @@ export default class DetectionModeEtherealSight extends DetectionMode {
     constructor() {
         super({
             id: "etherealSight",
-            label: "VISION5E.EtherealSight",
+            label: "VISIONGURPS.EtherealSight",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: false,
             angle: false,

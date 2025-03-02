@@ -5,7 +5,7 @@ export default class VisionModeDevilsSight extends VisionMode {
     constructor() {
         super({
             id: "devilsSight",
-            label: "VISION5E.DevilsSight",
+            label: "VISIONGURPS.DevilsSight",
             vision: {
                 darkness: { adaptive: false },
                 defaults: { contrast: 0, saturation: 0, brightness: 1 },

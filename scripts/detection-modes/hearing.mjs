@@ -7,7 +7,7 @@ export default class DetectionModeHearing extends DetectionMode {
     constructor() {
         super({
             id: "hearing",
-            label: "VISION5E.Hearing",
+            label: "VISIONGURPS.Hearing",
             type: DetectionMode.DETECTION_TYPES.SOUND,
             angle: false,
             imprecise: true,
@@ -32,12 +32,15 @@ export default class DetectionModeHearing extends DetectionMode {
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.INAUDIBLE)
+            || target.document.hasStatusEffect('stealth')
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)) {
             return false;
         }
 
         if (source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
+            || source.document.hasStatusEffect('dead')
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAFENED)
+            || source.document.hasStatusEffect('deaf')
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS)) {
             return false;

@@ -7,7 +7,7 @@ export default class DetectionModeDetectPoisonAndDisease extends DetectionModeDe
     constructor() {
         super({
             id: "detectPoisonAndDisease",
-            label: "VISION5E.DetectPoisonAndDisease",
+            label: "VISIONGURPS.DetectPoisonAndDisease",
         });
     }
 

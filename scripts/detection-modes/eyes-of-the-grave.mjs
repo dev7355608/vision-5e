@@ -7,7 +7,7 @@ export default class DetectionModeEyesOfTheGrave extends DetectionMode {
     constructor() {
         super({
             id: "eyesOfTheGrave",
-            label: "VISION5E.EyesOfTheGrave",
+            label: "VISIONGURPS.EyesOfTheGrave",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             angle: false,
             important: true,

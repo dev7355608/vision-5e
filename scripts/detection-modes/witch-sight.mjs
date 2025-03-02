@@ -8,7 +8,7 @@ export default class DetectionModeWitchSight extends DetectionMode {
     constructor() {
         super({
             id: "witchSight",
-            label: "VISION5E.WitchSight",
+            label: "VISIONGURPS.WitchSight",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: false,
             angle: false,

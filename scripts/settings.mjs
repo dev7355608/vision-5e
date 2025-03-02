@@ -6,8 +6,8 @@ Hooks.once("init", () => {
         "vision-5e",
         "defaultHearingRange",
         {
-            name: "VISION5E.SETTINGS.defaultHearingRange.label",
-            hint: "VISION5E.SETTINGS.defaultHearingRange.hint",
+            name: "VISIONGURPS.SETTINGS.defaultHearingRange.label",
+            hint: "VISIONGURPS.SETTINGS.defaultHearingRange.hint",
             scope: "world",
             config: true,
             requiresReload: true,

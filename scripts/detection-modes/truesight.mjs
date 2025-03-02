@@ -7,7 +7,7 @@ export default class DetectionModeTruesight extends DetectionMode {
     constructor() {
         super({
             id: "seeAll",
-            label: "DND5E.SenseTruesight",
+            label: "GURPS.SenseTruesight",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
             priority: 5,
         });

@@ -7,7 +7,7 @@ export default class DetectionModeDarkvision extends DetectionMode {
     constructor() {
         super({
             id: "basicSight",
-            label: "DND5E.SenseDarkvision",
+            label: "GURPS.SenseDarkvision",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
             priority: 7,
         });

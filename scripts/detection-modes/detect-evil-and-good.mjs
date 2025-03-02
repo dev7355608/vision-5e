@@ -7,7 +7,7 @@ export default class DetectionModeDetectEvilAndGood extends DetectionModeDetect 
     constructor() {
         super({
             id: "detectEvilAndGood",
-            label: "VISION5E.DetectEvilAndGood",
+            label: "VISIONGURPS.DetectEvilAndGood",
         });
     }
 

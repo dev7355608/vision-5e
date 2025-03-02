@@ -7,7 +7,7 @@ export default class DetectionModeBloodSense extends DetectionMode {
     constructor() {
         super({
             id: "bloodSense",
-            label: "VISION5E.BloodSense",
+            label: "VISIONGURPS.BloodSense",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: false,
             angle: false,

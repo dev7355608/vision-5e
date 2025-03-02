@@ -7,7 +7,7 @@ export default class DetectionModeBlindsense extends DetectionMode {
     constructor() {
         super({
             id: "blindsense",
-            label: "VISION5E.Blindsense",
+            label: "VISIONGURPS.Blindsense",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             angle: false,
             imprecise: true,

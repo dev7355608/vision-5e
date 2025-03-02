@@ -17,7 +17,7 @@ export default (TokenConfig) => class extends TokenConfig {
 
         for (const element of html[0].querySelectorAll(`[name="sight.range"],[name="sight.brightness"],[name="sight.saturation"],[name="sight.contrast"]`)) {
             element.disabled = true;
-            element.dataset.tooltip = "VISION5E.TOOLTIPS.AutomaticallyManaged";
+            element.dataset.tooltip = "VISIONGURPS.TOOLTIPS.AutomaticallyManaged";
             element.dataset.tooltipDirection = "LEFT";
         }
 

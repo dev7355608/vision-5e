@@ -7,7 +7,7 @@ export default class DetectionModeBlindsight extends DetectionMode {
     constructor() {
         super({
             id: "blindsight",
-            label: "DND5E.SenseBlindsight",
+            label: "GURPS.SenseBlindsight",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
             priority: 4,
         });

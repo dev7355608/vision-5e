@@ -161,11 +161,11 @@ function findRange(description, units) {
 const MAGIC_ITEM_TYPES = new Set([
     "consumable",
     "container",
-    "dnd-tashas-cauldron.tattoo",
     "equipment",
     "loot",
     "weapon",
     "tool",
+    "feature",
 ]);
 
 /**
@@ -173,7 +173,7 @@ const MAGIC_ITEM_TYPES = new Set([
  * @returns {boolean}
  */
 function isVisibleMagicItem(item) {
-    return MAGIC_ITEM_TYPES.has(item.type) && item.system.validProperties.has("mgc") && item.system.properties.has("mgc")
+    return MAGIC_ITEM_TYPES.has(item.type) && item.system.validProperties.has("spells") && item.system.properties.has("mgc")
         && (item.system.equipped === true || !item.container);
 }
 
@@ -182,7 +182,7 @@ function isVisibleMagicItem(item) {
  * @returns {boolean}
  */
 function isMagicEffect(effect) {
-    return effect.flags.dnd5e?.spellLevel !== undefined && !effect.statuses.has(CONFIG.specialStatusEffects.CONCENTRATING);
+    return effect.flags.gurps?.magic !== undefined && !effect.statuses.has(CONFIG.specialStatusEffects.CONCENTRATING);
 }
 
 /**
@@ -247,9 +247,8 @@ function isThinking(actor) {
         return false;
     }
 
-    return (actor.type === "character" || actor.type === "npc")
-        && (actor.system.traits.languages.value.size > 0
-            || !!actor.system.traits.languages.custom);
+    return (actor.type === "character" || actor.type === "npc" || actor.type === "enemy")
+        && (actor.system.attributes.IQ.value > 5);
 }
 
 /**

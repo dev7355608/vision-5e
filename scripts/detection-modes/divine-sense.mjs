@@ -7,7 +7,7 @@ export default class DetectionModeDivineSense extends DetectionMode {
     constructor() {
         super({
             id: "divineSense",
-            label: "VISION5E.DivineSense",
+            label: "VISIONGURPS.DivineSense",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: false,
             angle: false,

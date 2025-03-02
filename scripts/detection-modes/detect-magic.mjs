@@ -8,7 +8,7 @@ export default class DetectionModeDetectMagic extends DetectionModeDetect {
     constructor() {
         super({
             id: "detectMagic",
-            label: "VISION5E.DetectMagic",
+            label: "VISIONGURPS.DetectMagic",
             imprecise: false,
         });
     }

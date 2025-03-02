@@ -7,7 +7,7 @@ export default class DetectionModeDetectThoughts extends DetectionModeDetect {
     constructor() {
         super({
             id: "detectThoughts",
-            label: "VISION5E.DetectThoughts",
+            label: "VISIONGURPS.DetectThoughts",
         });
     }
 

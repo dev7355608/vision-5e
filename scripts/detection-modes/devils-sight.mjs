@@ -7,7 +7,7 @@ export default class DetectionModeDevilsSight extends DetectionMode {
     constructor() {
         super({
             id: "devilsSight",
-            label: "VISION5E.DevilsSight",
+            label: "VISIONGURPS.DevilsSight",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
             priority: 6,
         });

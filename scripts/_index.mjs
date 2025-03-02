@@ -52,7 +52,7 @@ Hooks.once("init", () => {
     // Register the Inaudible status effect
     CONFIG.statusEffects.push({
         id: "inaudible",
-        name: "VISION5E.Inaudible",
+        name: "VISIONGURPS.Inaudible",
         img: "modules/vision-5e/icons/inaudible.svg",
         _id: dnd5e.utils.staticID("dnd5einaudible"),
     });
@@ -85,6 +85,9 @@ Hooks.once("init", () => {
     CONFIG.specialStatusEffects.THINKING = "thinking";
     CONFIG.specialStatusEffects.UMBRAL_SIGHT = "umbralSight";
     CONFIG.specialStatusEffects.UNCONSCIOUS = "unconscious";
+    CONFIG.specialStatusEffects.DEAD = "dead";
+    CONFIG.specialStatusEffects.DEAF = "deaf";
+
 
     // Shapechanger detection is not needed in PHB'24 at the momement, because Witch Sight has been changed
     if (legacy) {

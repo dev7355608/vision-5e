@@ -7,7 +7,7 @@ export default class DetectionModeTremorsense extends DetectionMode {
     constructor() {
         super({
             id: "feelTremor",
-            label: "DND5E.SenseTremorsense",
+            label: "GURPS.SenseTremorsense",
             type: DetectionMode.DETECTION_TYPES.MOVE,
             walls: false,
             angle: false,

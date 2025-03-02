@@ -5,7 +5,7 @@ export default class VisionModeDarkvision extends VisionMode {
     constructor() {
         super({
             id: "darkvision",
-            label: "DND5E.SenseDarkvision",
+            label: "GURPS.SenseDarkvision",
             canvas: {
                 shader: ColorAdjustmentsSamplerShader,
                 uniforms: { contrast: 0, saturation: -1, exposure: 0 },

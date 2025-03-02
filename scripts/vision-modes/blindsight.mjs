@@ -5,7 +5,7 @@ export default class VisionModeBlindsight extends VisionMode {
     constructor() {
         super({
             id: "blindsight",
-            label: "DND5E.SenseBlindsight",
+            label: "GURPS.SenseBlindsight",
             canvas: {
                 shader: ColorAdjustmentsSamplerShader,
                 uniforms: { contrast: 0, saturation: -1, exposure: 0 },

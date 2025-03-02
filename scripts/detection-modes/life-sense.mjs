@@ -7,7 +7,7 @@ export default class DetectionModeLifeSense extends DetectionMode {
     constructor() {
         super({
             id: "lifeSense",
-            label: "VISION5E.LifeSense",
+            label: "VISIONGURPS.LifeSense",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: false,
             angle: false,

@@ -197,6 +197,7 @@ export default (Token) => class extends Token {
             this.initializeVisionSource();
         } else if (statusId === CONFIG.specialStatusEffects.BLIND_SENSES
             || statusId === CONFIG.specialStatusEffects.DEAFENED
+            || statusId === CONFIG.specialStatusEffects.DEAF
             || statusId === CONFIG.specialStatusEffects.DEVILS_SIGHT
             || statusId === CONFIG.specialStatusEffects.ECHOLOCATION
             || statusId === CONFIG.specialStatusEffects.GHOSTLY_GAZE

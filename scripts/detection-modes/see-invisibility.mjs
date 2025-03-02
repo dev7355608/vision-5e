@@ -8,7 +8,7 @@ export default class DetectionModeSeeInvisibility extends DetectionMode {
     constructor() {
         super({
             id: "seeInvisibility",
-            label: "VISION5E.SeeInvisibility",
+            label: "VISIONGURPS.SeeInvisibility",
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: false,
             angle: false,
