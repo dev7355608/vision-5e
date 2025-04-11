@@ -56,6 +56,7 @@ export default class DetectionModeSeeInvisibility extends DetectionMode {
 
         const wasInvisible = target.document.actor.statuses.delete(CONFIG.specialStatusEffects.INVISIBLE);
         const wasEthereal = target.document.actor.statuses.delete(CONFIG.specialStatusEffects.ETHEREAL);
+        const wasSBW = target.document.actor.statuses.delete(CONFIG.specialStatusEffects.SPACE_BETWEEN_WORLDS);
 
         // Test whether this vision source sees the target without the invisible and ethereal status effect
         const result = canvas.visibility.testVisibility(test.point, { tolerance: 0, object: target });
@@ -66,6 +67,10 @@ export default class DetectionModeSeeInvisibility extends DetectionMode {
 
         if (wasEthereal) {
             target.document.actor.statuses.add(CONFIG.specialStatusEffects.ETHEREAL);
+        }
+
+        if (wasSBW) {
+            target.document.actor.statuses.add(CONFIG.specialStatusEffects.SPACE_BETWEEN_WORLDS);
         }
 
         target._detectionLevel = detectionLevel;
