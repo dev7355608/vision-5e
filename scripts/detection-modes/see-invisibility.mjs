@@ -27,7 +27,8 @@ export default class DetectionModeSeeInvisibility extends DetectionMode {
         // Only invisible and ethereal tokens can be detected
         return !visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
             && target instanceof Token && (target.document.hasStatusEffect(CONFIG.specialStatusEffects.INVISIBLE)
-                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL));
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.SPACE_BETWEEN_WORLDS));
     }
 
     /** @override */
