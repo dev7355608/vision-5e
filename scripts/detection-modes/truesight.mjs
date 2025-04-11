@@ -27,8 +27,12 @@ export default class DetectionModeTruesight extends DetectionMode {
     _canDetect(visionSource, target) {
         const source = visionSource.object;
 
-        if (target instanceof Token && target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)) {
-            return false;
+        if (target instanceof Token) {
+            if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURROWING)
+                || target.document.hasStatusEffect(CONFIG.specialStatusEffects.SPACE_BETWEEN_WORLDS)
+                && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.SPACE_BETWEEN_WORLDS)
+                && !target.document.hasStatusEffect(CONFIG.specialStatusEffects.MATERIAL)) {
+                return false;
         }
 
         if (source.document.hasStatusEffect(CONFIG.specialStatusEffects.BLINDED)
