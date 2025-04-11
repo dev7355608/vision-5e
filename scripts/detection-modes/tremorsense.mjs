@@ -28,6 +28,8 @@ export default class DetectionModeTremorsense extends DetectionMode {
         // TODO: incorporeal creatures should not be detected
         if (!(target instanceof Token)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.SPACE_BETWEEN_WORLDS)
+            && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.SPACE_BETWEEN_WORLDS)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.FLYING)
