@@ -29,8 +29,8 @@ export default class DetectionModeBlindsense extends DetectionMode {
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
             && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.SPACE-BETWEEN-WORLDS)
-            && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.SPACE-BETWEEN-WORLDS)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.SPACE_BETWEEN_WORLDS)
+            && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.SPACE_BETWEEN_WORLDS)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.OBJECT)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)) {
             return false;
