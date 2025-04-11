@@ -27,7 +27,9 @@ export default class DetectionModeBloodSense extends DetectionMode {
 
         if (!(target instanceof Token)
             || target.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
-            && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
+            && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)
+            || target.document.hasStatusEffect(CONFIG.specialStatusEffects.SPACE_BETWEEN_WORLDS)
+            && !source.document.hasStatusEffect(CONFIG.specialStatusEffects.SPACE_BETWEEN_WORLDS)) {
             return false;
         }
 
