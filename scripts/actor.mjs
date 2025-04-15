@@ -426,9 +426,11 @@ const DATABASE = {
         ],
         mindBlank: [
             "Mind Blank",
+            "Mind Blanked",
         ],
         nondetection: [
             "Nondetection",
+            "Hidden from Divination",
         ],
         seeInvisibility: [
             "See Invisibility",
