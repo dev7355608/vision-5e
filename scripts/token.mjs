@@ -88,10 +88,17 @@ export default (Token) => class extends Token {
             return false;
         }
 
-        // If the user is the owner of a token that can perceive something but isn't controlling it, ...
-        if (this.layer.placeables.some((token) => !token.controlled && token.isOwner && canPerceive(token))) {
-            // ... this token is a source of vision only if the user has observer permissions
-            return this.actor.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER);
+        // If the user has observer permissions, ...
+        if (this.actor.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
+            // ... this token is a source of vision
+            return true;
+        }
+
+        // If the user is the owner or observer of a token that can perceive something but isn't controlling it, ...
+        if (this.layer.placeables.some((token) => !token.controlled && canPerceive(token)
+            && token.actor?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER))) {
+            // ... this token is not a source of vision
+            return false;
         }
 
         // If the user does not have a token that can perceive something,
@@ -186,7 +193,8 @@ export default (Token) => class extends Token {
         } else if (statusId === CONFIG.specialStatusEffects.DEFEATED
             || statusId === CONFIG.specialStatusEffects.PETRIFIED
             || statusId === CONFIG.specialStatusEffects.UNCONSCIOUS) {
-            if (!this.document.hidden && this.hasSight && !game.user.isGM && this.isOwner) {
+            if (!this.document.hidden && this.hasSight && !game.user.isGM
+                && this.actor?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
                 for (const token of this.layer.placeables) {
                     if (token !== this && !token.vision === token._isVisionSource()) {
                         token.initializeVisionSource();

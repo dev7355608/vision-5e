@@ -150,7 +150,7 @@ This module restricts the available vision modes to _Blindsight_, _Darkvision_, 
 
 ### Spectator Mode
 
-While a player controls/owns only tokens with vision that are _defeated_ (_dead_), _petrified_, or _unconscious_, tokens with vision owned by other players become a source of vision for this player if they have limited permission over the token's actor. This behavior aims to prevent players from missing out on all the fun when their character dies, is knocked unconscious, or is petrified, which are all conditions that make the token not perceive anything and are likely to affect the character more than one round of combat.
+While a player owns/observes only tokens with vision that are _defeated_ (_dead_), _petrified_, or _unconscious_, tokens with vision owned by other players become a source of vision for this player if they have limited permission over the token's actor. This behavior aims to prevent players from missing out on all the fun when their character dies, is knocked unconscious, or is petrified, which are all conditions that make the token not perceive anything and are likely to affect the character more than one round of combat.
 
 ---
 
