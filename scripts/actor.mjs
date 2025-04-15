@@ -320,7 +320,7 @@ const EFFECT_REGISTRY = {
         divineSense(effect) {
             upgradeDetectionMode(this, "divineSense", 60, "ft");
         },
-        eyesOfTheGrave(item) {
+        eyesOfTheGrave(effect) {
             upgradeDetectionMode(this, "eyesOfTheGrave", 60, "ft");
         },
         invocationGhostlyGaze(effect) {
@@ -330,14 +330,17 @@ const EFFECT_REGISTRY = {
         magicAwareness(effect) {
             upgradeDetectionMode(this, "detectMagic", 60, "ft");
         },
-        mindBlank(item) {
+        mindBlank(effect) {
             this.statuses.add(CONFIG.specialStatusEffects.MIND_BLANK);
         },
-        nondetection(item) {
+        nondetection(effect) {
             this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
         },
         seeInvisibility(effect) {
             upgradeDetectionMode(this, "seeInvisibility", null);
+        },
+        sequester(effect) {
+            this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
         },
     },
     npc: {
@@ -353,14 +356,17 @@ const EFFECT_REGISTRY = {
         detectThoughts(effect) {
             upgradeDetectionMode(this, "detectThoughts", 30, "ft");
         },
-        mindBlank(item) {
+        mindBlank(effect) {
             this.statuses.add(CONFIG.specialStatusEffects.MIND_BLANK);
         },
-        nondetection(item) {
+        nondetection(effect) {
             this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
         },
         seeInvisibility(effect) {
             upgradeDetectionMode(this, "seeInvisibility", null);
+        },
+        sequester(effect) {
+            this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
         },
     },
 };
@@ -438,6 +444,10 @@ const DATABASE = {
         senseMagic: [
             "Sense Magic",
         ],
+        sequester: [
+            "Sequester",
+            "Sequestered",
+        ],
         umbralSight: [
             "Umbral Sight",
         ],
@@ -510,6 +520,9 @@ const DATABASE = {
         ],
         senseMagic: [
             "Magie spüren",
+        ],
+        sequester: [
+            // TODO
         ],
         umbralSight: [
             "Düstersicht",
@@ -587,6 +600,9 @@ const DATABASE = {
         senseMagic: [
             [["Détection", "Perception"], " de la magie"],
         ],
+        sequester: [
+            // TODO
+        ],
         umbralSight: [
             "Vision des ombres",
         ],
@@ -661,6 +677,9 @@ const DATABASE = {
         ],
         senseMagic: [
             "Sentir Magia",
+        ],
+        sequester: [
+            // TODO
         ],
         umbralSight: [
             "Visión en la Umbra",
@@ -738,6 +757,9 @@ const DATABASE = {
         ],
         senseMagic: [
             "Sentir Magia",
+        ],
+        sequester: [
+            // TODO
         ],
         umbralSight: [
             "Visão Umbral",
