@@ -1,3 +1,4 @@
+import ActiveEffectMixin from "./active-effect.mjs";
 import ActorMixin from "./actor.mjs";
 import TokenMixin from "./token.mjs";
 import TokenConfigMixin from "./token-config.mjs";
@@ -34,7 +35,8 @@ import VisionModeTruesight from "./vision-modes/truesight.mjs";
 Hooks.once("init", () => {
     const legacy = foundry.utils.isNewerVersion("4.0.0", game.system.version) || game.settings.get("dnd5e", "rulesVersion") === "legacy";
 
-    // Extend Actor, TokenDocument, Token, and TokenHUD
+    // Extend ActiveEffect, Actor, TokenDocument, Token, and TokenHUD
+    CONFIG.ActiveEffect.documentClass = ActiveEffectMixin(CONFIG.ActiveEffect.documentClass);
     CONFIG.Actor.documentClass = ActorMixin(CONFIG.Actor.documentClass);
     CONFIG.Token.documentClass = TokenDocumentMixin(CONFIG.Token.documentClass);
     CONFIG.Token.objectClass = TokenMixin(CONFIG.Token.objectClass);
