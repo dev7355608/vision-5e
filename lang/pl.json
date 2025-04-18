@@ -1,0 +1,20 @@
+{
+    "VISION5E.Blindsense": "Ślepozmysł",
+    "VISION5E.BloodSense": "Zmysł krwi",
+    "VISION5E.DetectEvilAndGood": "Wykrycie zła i dobra",
+    "VISION5E.DetectMagic": "Wykrycie magii",
+    "VISION5E.DetectPoisonAndDisease": "Wykrycie trucizny i choroby",
+    "VISION5E.DetectThoughts": "Wykrycie myśli",
+    "VISION5E.DevilsSight": "Diabelski wzrok",
+    "VISION5E.DivineSense": "Boski zmysł",
+    "VISION5E.EtherealSight": "Eteryczny wzrok",
+    "VISION5E.EyesOfTheGrave": "Grobowe oczy",
+    "VISION5E.Hearing": "Słuch",
+    "VISION5E.Inaudible": "Niesłyszalny",
+    "VISION5E.LifeSense": "Zmysł życia",
+    "VISION5E.SeeInvisibility": "Zobaczenie niewidzialnego",
+    "VISION5E.WitchSight": "Wiedźmi wzrok",
+    "VISION5E.SETTINGS.defaultHearingRange.label": "Domyślny zakres słyszenia",
+    "VISION5E.SETTINGS.defaultHearingRange.hint": "Konfiguruje domyślną odległość słyszalności tokenów. Wymaga przeładowania świata.",
+    "VISION5E.TOOLTIPS.AutomaticallyManaged": "Automatycznie zarządzane przez Vision 5e"
+}
