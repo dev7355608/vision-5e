@@ -172,9 +172,16 @@ const MAGIC_ITEM_TYPES = new Set([
  * @param {Item} item
  * @returns {boolean}
  */
+export function isMagicItem(item) {
+    return MAGIC_ITEM_TYPES.has(item.type) && item.system.validProperties.has("mgc") && item.system.properties.has("mgc");
+}
+
+/**
+ * @param {Item} item
+ * @returns {boolean}
+ */
 function isVisibleMagicItem(item) {
-    return MAGIC_ITEM_TYPES.has(item.type) && item.system.validProperties.has("mgc") && item.system.properties.has("mgc")
-        && (item.system.equipped === true || !item.container);
+    return isMagicItem(item) && (item.system.equipped === true || !item.container);
 }
 
 /**
