@@ -529,7 +529,7 @@ const DATABASE = {
             "Magie spüren",
         ],
         sequester: [
-            // TODO
+            "Verbergen",
         ],
         umbralSight: [
             "Düstersicht",
@@ -608,7 +608,7 @@ const DATABASE = {
             [["Détection", "Perception"], " de la magie"],
         ],
         sequester: [
-            // TODO
+            "Dissimulation suprême",
         ],
         umbralSight: [
             "Vision des ombres",
@@ -686,7 +686,7 @@ const DATABASE = {
             "Sentir Magia",
         ],
         sequester: [
-            // TODO
+            "Recluir",
         ],
         umbralSight: [
             "Visión en la Umbra",
@@ -766,7 +766,7 @@ const DATABASE = {
             "Sentir Magia",
         ],
         sequester: [
-            // TODO
+            "Refugiar",
         ],
         umbralSight: [
             "Visão Umbral",
