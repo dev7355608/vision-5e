@@ -45,6 +45,11 @@
       "lang": "pt-BR",
       "name": "Portuguese (Brazil)",
       "path": "lang/pt-BR.json"
+    },
+    {
+      "lang": "pl",
+      "name": "Polish",
+      "path": "lang/pl.json"
     }
   ],
   "relationships": {
