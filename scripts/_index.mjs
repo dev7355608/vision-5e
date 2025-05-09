@@ -47,18 +47,18 @@ Hooks.once("init", () => {
 
     // Extend CombatTracker
     CONFIG.ui.combat = CombatTrackerMixin(CONFIG.ui.combat);
+
+    // Register the Inaudible status effect
+    CONFIG.DND5E.conditionTypes.inaudible = {
+        name: "VISION5E.Inaudible",
+        img: "modules/vision-5e/icons/inaudible.svg",
+        pseudo: true,
+        special: "INAUDIBLE",
+    };
 });
 
 Hooks.once("i18nInit", () => {
     const legacy = game.settings.get("dnd5e", "rulesVersion") === "legacy";
-
-    // Register the Inaudible status effect
-    CONFIG.statusEffects.push({
-        id: "inaudible",
-        name: "VISION5E.Inaudible",
-        img: "modules/vision-5e/icons/inaudible.svg",
-        _id: dnd5e.utils.staticID("dnd5einaudible"),
-    });
 
     // Register special status effects
     CONFIG.specialStatusEffects.BLEEDING = "bleeding";
@@ -75,7 +75,6 @@ Hooks.once("i18nInit", () => {
     CONFIG.specialStatusEffects.FLYING = "flying";
     CONFIG.specialStatusEffects.GHOSTLY_GAZE = "ghostlyGaze";
     CONFIG.specialStatusEffects.HOVERING = "hovering";
-    CONFIG.specialStatusEffects.INAUDIBLE = "inaudible";
     CONFIG.specialStatusEffects.MAGICAL = "magical";
     CONFIG.specialStatusEffects.MATERIAL = "material";
     CONFIG.specialStatusEffects.MIND_BLANK = "mindBlank";
