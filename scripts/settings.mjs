@@ -127,7 +127,7 @@ Hooks.once("ready", () => {
     });
 });
 
-Hooks.on("renderSettingsConfig", (application, element, options) => {
+Hooks.on("renderSettingsConfig", (application, element, context, options) => {
     if (!game.user.isGM) {
         return;
     }
