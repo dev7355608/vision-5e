@@ -1,7 +1,7 @@
 /**
  * The vision mode for Truesight.
  */
-export default class VisionModeTruesight extends VisionMode {
+export default class VisionModeTruesight extends foundry.canvas.perception.VisionMode {
     constructor() {
         super({
             id: "truesight",

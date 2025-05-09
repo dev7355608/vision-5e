@@ -1,6 +1,8 @@
 import DetectionMode from "./base.mjs";
 import { DETECTION_LEVELS } from "../const.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for See Invisibility.
  */
@@ -17,7 +19,7 @@ export default class DetectionModeSeeInvisibility extends DetectionMode {
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= GlowOverlayFilter.create({
+        return this._detectionFilter ??= foundry.canvas.rendering.filters.GlowOverlayFilter.create({
             glowColor: [0, 0.60, 0.33, 1],
         });
     }

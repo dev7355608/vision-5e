@@ -13,8 +13,10 @@
     "VISION5E.Inaudible": "Inaudible",
     "VISION5E.LifeSense": "Perception de la vie",
     "VISION5E.SeeInvisibility": "Détection de l'invisibilité",
+    "VISION5E.ThermalVision": "Vision thermique",
     "VISION5E.WitchSight": "Vision sorcière",
     "VISION5E.SETTINGS.defaultHearingRange.label": "Distance d'audition par défaut",
     "VISION5E.SETTINGS.defaultHearingRange.hint": "Configurez la distance jusqu'où les tokens peuvent entendre par défaut. Un redémarrage du monde est nécessaire.",
-    "VISION5E.TOOLTIPS.AutomaticallyManaged": "Géré automatiquement par Vision 5e"
+    "VISION5E.TOOLTIPS.AutomaticallyManaged": "Géré automatiquement par Vision 5e",
+    "VISION5E.TOOLTIPS.SelectVisionMode": "Seleccionar modo de visión"
 }

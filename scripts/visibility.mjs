@@ -1,5 +1,7 @@
 import { DETECTION_LEVELS } from "./const.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 export default (CanvasVisibility) => class extends CanvasVisibility {
     /** @override */
     testVisibility(point, options = {}) {

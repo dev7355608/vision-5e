@@ -1,4 +1,5 @@
 import { DETECTION_LEVELS } from "./const.mjs";
+import { spectatorMode } from "./settings.mjs";
 import { fromFeet } from "./utils.mjs";
 
 export default (Token) => class extends Token {
@@ -76,6 +77,23 @@ export default (Token) => class extends Token {
             return false;
         }
 
+        if (!spectatorMode) {
+            // If the user doesn't have observer permissions, ...
+            if (!this.actor.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
+                // ... this token is not source of vision
+                return false;
+            }
+
+            // If the user controls a token that has sight, ...
+            if (this.layer.controlled.some((token) => !token.document.hidden && token.hasSight)) {
+                // ... this token is not a source of vision
+                return false;
+            }
+
+            // The user has observer permissions and controls no token that has sight
+            return true;
+        }
+
         // A token that is defeated, petrified, or unconscious cannot perceive anything
         const canPerceive = (token) => !token.document.hidden && token.hasSight
             && !(token.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
@@ -141,14 +159,29 @@ export default (Token) => class extends Token {
             if (data.detectionMode === "blindsight"
                 && (this.document.hasStatusEffect(CONFIG.specialStatusEffects.BLIND_SENSES)
                     || this.document.hasStatusEffect(CONFIG.specialStatusEffects.ECHOLOCATION))
-                    && this.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAFENED)) {
+                && this.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAFENED)) {
                 data.radius = 0;
             }
         }
 
-        // Senses other than Darkvision can see through magical darkness
-        data.includeDarkness = data.detectionMode === "basicSight"
-        && !this.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT);
+        // Configure the priority of the vision source
+        switch (data.detectionMode) {
+            case "basicSight":
+                // Darkvision can see through magical darkness with the Devil's Sight feat
+                data.priority = this.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT) ? 100 : 0;
+
+                break;
+            case "blindsight":
+                // Blindsight can see through magical darkness and fog
+                data.priority = Infinity;
+
+                break;
+            default:
+                // Devil's Sight and Truesight can see through magical darkness but not fog
+                data.priority = 100;
+
+                break;
+        }
 
         // Handle Ghostly Gaze
         if (this.document.hasStatusEffect(CONFIG.specialStatusEffects.GHOSTLY_GAZE)) {
@@ -225,15 +258,15 @@ export default (Token) => class extends Token {
         // Patch because Token#_renderDetectionFilter uses Token#_detectionFilter instead of Token#detectionFilter
         this.detectionFilterMesh.render = (renderer) => this._renderDetectionFilter(renderer);
 
-        const impreciseTexture = await loadTexture(this.document.constructor.DEFAULT_ICON);
+        const impreciseTexture = await foundry.canvas.loadTexture(this.document.constructor.DEFAULT_ICON);
 
         this.#impreciseMesh = this.addChildAt(
-            new SpriteMesh(impreciseTexture),
+            new foundry.canvas.containers.SpriteMesh(impreciseTexture),
             this.getChildIndex(this.detectionFilterMesh),
         );
         this.#impreciseMesh.anchor.set(0.5, 0.5);
         this.#impreciseMesh.renderable = false;
-        this.#impreciseChildren = [this.border, this.detectionFilterMesh, this.tooltip, this.target];
+        this.#impreciseChildren = [this.border, this.detectionFilterMesh, this.tooltip, this.targetArrows, this.targetPips];
     }
 
     /** @override */
@@ -271,13 +304,15 @@ export default (Token) => class extends Token {
         }
 
         const imprecise = this._detectionLevel !== DETECTION_LEVELS.PRECISE;
+        const priorImprecise = priorDetectionLevel !== DETECTION_LEVELS.PRECISE;
 
         this.#impreciseMesh.visible = imprecise;
         this.mesh.visible &&= !imprecise;
 
-        if (this._detectionLevel !== priorDetectionLevel) {
-            this.border.tint = this._getBorderColor();
-            this._refreshTarget();
+        // Refresh state without refreshing visibility again
+        if (imprecise !== priorImprecise) {
+            this.renderFlags.set({ refreshState: true });
+            this.renderFlags.delete("refreshVisibility");
         }
     }
 
@@ -285,7 +320,7 @@ export default (Token) => class extends Token {
     _refreshSize() {
         super._refreshSize();
 
-        const { width, height } = this.getSize();
+        const { width, height } = this.document.getSize();
         const texture = this.#impreciseMesh.texture;
         const scale = Math.min(width / texture.width, height / texture.height);
 
@@ -322,7 +357,7 @@ export default (Token) => class extends Token {
         mesh.filters = detectionFilterArray;
         mesh.tint = 0xFFFFFF;
         mesh.worldAlpha = 1;
-        mesh.pluginName = BaseSamplerShader.classPluginName;
+        mesh.pluginName = foundry.canvas.rendering.shaders.BaseSamplerShader.classPluginName;
         this.#impreciseMesh.renderable = true;
 
         mesh.render(renderer);

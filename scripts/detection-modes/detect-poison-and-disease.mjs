@@ -13,7 +13,7 @@ export default class DetectionModeDetectPoisonAndDisease extends DetectionModeDe
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= GlowOverlayFilter.create({
+        return this._detectionFilter ??= foundry.canvas.rendering.filters.GlowOverlayFilter.create({
             glowColor: [0, 1, 0, 1],
         });
     }

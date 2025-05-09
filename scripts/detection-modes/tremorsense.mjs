@@ -1,5 +1,7 @@
 import DetectionMode from "./base.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Tremorsense.
  */
@@ -12,7 +14,7 @@ export default class DetectionModeTremorsense extends DetectionMode {
             walls: false,
             angle: false,
             imprecise: true,
-            priority: 3,
+            sort: -3,
         });
     }
 

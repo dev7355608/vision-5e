@@ -15,7 +15,7 @@ export default class DetectionModeDetectMagic extends DetectionModeDetect {
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= GlowOverlayFilter.create({
+        return this._detectionFilter ??= foundry.canvas.rendering.filters.GlowOverlayFilter.create({
             glowColor: [1, 0, 1, 1],
         });
     }
@@ -49,7 +49,7 @@ export default class DetectionModeDetectMagic extends DetectionModeDetect {
             ({ id }) => {
                 const mode = CONFIG.Canvas.detectionModes[id];
 
-                return mode && mode !== this && mode.type === DetectionMode.DETECTION_TYPES.SIGHT && !mode.imprecise;
+                return mode && mode !== this && mode.type === this.constructor.DETECTION_TYPES.SIGHT && !mode.imprecise;
             },
         );
 

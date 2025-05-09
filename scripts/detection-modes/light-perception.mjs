@@ -1,5 +1,7 @@
 import DetectionMode from "./base.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Light Perception.
  */
@@ -9,14 +11,13 @@ export default class DetectionModeLightPerception extends DetectionMode {
             id: "lightPerception",
             label: "DETECTION.LightPerception",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            priority: 8,
+            sort: -8,
         });
     }
 
     /** @override */
     static getDetectionFilter(visionSource, object) {
-        if (visionSource?.visionMode.perceivesLight && (!object.document.hasStatusEffect(CONFIG.specialStatusEffects.BURNING)
-            || canvas.effects.testInsideLight(object.center, object.document.elevation))) {
+        if (visionSource?.visionMode.perceivesLight && canvas.effects.testInsideLight(object.document.getCenterPoint())) {
             return;
         }
 
@@ -52,7 +53,7 @@ export default class DetectionModeLightPerception extends DetectionMode {
     /** @override */
     _testPoint(visionSource, mode, target, test) {
         return super._testPoint(visionSource, mode, target, test)
-            && (canvas.effects.testInsideLight(test.point, test.elevation)
+            && (canvas.effects.testInsideLight(test.point)
                 || target instanceof Token && target.document.hasStatusEffect(CONFIG.specialStatusEffects.BURNING));
     }
 }

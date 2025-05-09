@@ -1,5 +1,7 @@
 import DetectionMode from "./base.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Blindsense.
  */
@@ -11,7 +13,7 @@ export default class DetectionModeBlindsense extends DetectionMode {
             type: DetectionMode.DETECTION_TYPES.OTHER,
             angle: false,
             imprecise: true,
-            priority: 2,
+            sort: -2,
         });
     }
 
@@ -48,13 +50,14 @@ export default class DetectionModeBlindsense extends DetectionMode {
     /** @override */
     _testLOS(visionSource, mode, target, test) {
         return !CONFIG.Canvas.polygonBackends.sight.testCollision(
-            { x: visionSource.x, y: visionSource.y },
+            visionSource.origin,
             test.point,
             {
                 type: "sight",
                 mode: "any",
                 source: visionSource,
                 useThreshold: true,
+                priority: Infinity,
             },
         );
     }

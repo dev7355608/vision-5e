@@ -1,75 +1,95 @@
 export default (TokenHUD) => class extends TokenHUD {
     /** @override */
-    async _renderInner(data) {
-        const html = await super._renderInner(data);
+    static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
+        actions: {
+            "vision-5e.visionMode": this.#onSelectVisionMode,
+        },
+    }, { inplace: false });
 
-        if (!this.document || !this.document.sight.enabled || !this.document.isOwner) {
-            return html;
+    /** @override */
+    async _renderHTML(context, options) {
+        const result = await super._renderHTML(context, options);
+
+        const visionModes = this.#getSelectableVisionModes();
+
+        if (visionModes.length > 1) {
+            const button = document.createElement("button");
+
+            button.classList.add("control-icon");
+            button.dataset.action = "togglePalette";
+            button.dataset.palette = "vision-5e.visionModes";
+            button.dataset.tooltip = "VISION5E.TOOLTIPS.SelectVisionMode";
+            button.ariaLabel = game.i18n.localize("VISION5E.TOOLTIPS.SelectVisionMode");
+
+            const i = document.createElement("i");
+
+            i.classList.add("fa-solid", "fa-eye");
+            i.inert = true;
+
+            button.append(i);
+
+            result.hud.querySelector(`.control-icon[data-action="target"]`).insertAdjacentElement("beforebegin", button);
+
+            const div = document.createElement("div");
+
+            div.classList.add("palette");
+            div.dataset.palette = "vision-5e.visionModes";
+
+            for (const mode of visionModes) {
+                const a = document.createElement("a");
+
+                a.classList.add("flexrow");
+                a.classList.toggle("active", mode.id === this.document.sight.visionMode);
+                a.dataset.action = "vision-5e.visionMode";
+                a.dataset.visionModeId = mode.id;
+
+                const span = document.createElement("span");
+
+                span.classList.add("ellipsis");
+                span.textContent = game.i18n.localize(mode.label);
+
+                a.append(span);
+                div.append(a);
+            }
+
+            button.insertAdjacentElement("afterend", div);
         }
 
+        return result;
+    }
+
+    /**
+     * @returns {foundry.canvas.perception.VisionMode[]}
+     */
+    #getSelectableVisionModes() {
         const visionModes = [];
 
-        for (const [visionId, detectionId] of [
+        if (!this.document || !this.document.sight.enabled || !this.document.isOwner) {
+            return visionModes;
+        }
+
+        for (const [visionModeId, detectionModeId] of [
             ["blindsight", "blindsight"],
             ["darkvision", "basicSight"],
             ["devilsSight", "devilsSight"],
             ["truesight", "seeAll"],
         ]) {
-            if (this.document.detectionModes.some((mode) => mode.id === detectionId && mode.enabled && mode.range > 0)) {
-                visionModes.push(CONFIG.Canvas.visionModes[visionId]);
+            if (this.document.detectionModes.some((mode) => mode.id === detectionModeId && mode.enabled && mode.range > 0)) {
+                visionModes.push(CONFIG.Canvas.visionModes[visionModeId]);
             }
-        }
-
-        if (visionModes.length <= 1) {
-            return html;
         }
 
         visionModes.sort((a, b) => game.i18n.localize(a.label).localeCompare(game.i18n.localize(b.label), game.i18n.lang));
 
-        html[0].querySelector(`.control-icon[data-action="target"]`)
-            .insertAdjacentHTML("beforebegin", `
-                <div class="control-icon" data-action="vision-mode">
-                    <i class="fas fa-eye"></i>
-                </div>
-            `);
+        return visionModes;
+    }
 
-        const visionControl = html[0].querySelector(`.control-icon[data-action="vision-mode"]`);
-
-        visionControl.addEventListener("click", (event) => {
-            event.preventDefault();
-
-            const button = event.currentTarget;
-
-            button.classList.toggle("active");
-            button.querySelector(`.vision-5e.vision-modes`).classList.toggle("active");
-        });
-
-        visionControl.insertAdjacentHTML("beforeend", `
-            <div class="vision-5e vision-modes">
-                ${visionModes.map((mode) => `
-                <div class="vision-5e vision-mode ${mode.id === this.document.sight.visionMode ? "active" : ""} flexrow" data-vision-mode="${mode.id}">
-                    <span class="vision-5e vision-mode-label">${game.i18n.localize(mode.label)}</span>
-                </div>`).join("")}
-            </div>
-        `);
-
-        const visionModesList = visionControl.querySelector(`.vision-5e.vision-modes`);
-
-        ["click", "contextmenu", "mouseenter", "mouseleave"].forEach(
-            (eventType) => visionModesList.addEventListener(eventType, (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-            }),
-        );
-
-        visionModesList.querySelectorAll(`.vision-5e.vision-mode`).forEach(
-            (element) => element.addEventListener("click", (event) => {
-                event.preventDefault();
-                this.document.updateVisionMode(event.currentTarget.dataset.visionMode);
-                this.clear();
-            }),
-        );
-
-        return html;
+    /**
+     * @this
+     * @param {PointerEvent} event
+     * @param {HTMLButtonElement} target
+     */
+    static async #onSelectVisionMode(event, target) {
+        await this.document.updateVisionMode(target.dataset.visionModeId);
     }
 };

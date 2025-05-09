@@ -1,4 +1,4 @@
-export default class extends DetectionMode {
+export default class extends foundry.canvas.perception.DetectionMode {
     /** @override */
     static defineSchema() {
         return Object.assign(
@@ -6,7 +6,7 @@ export default class extends DetectionMode {
             {
                 imprecise: new foundry.data.fields.BooleanField(),
                 important: new foundry.data.fields.BooleanField(),
-                priority: new foundry.data.fields.NumberField({ nullable: false, initial: 0, required: true }),
+                sort: new foundry.data.fields.NumberField({ required: true, nullable: false, initial: 0 }),
             },
         );
     }

@@ -1,5 +1,7 @@
 import DetectionMode from "./base.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Divine Sense.
  */
@@ -48,23 +50,24 @@ export default class DetectionModeDivineSense extends DetectionMode {
             return true;
         }
 
-        const type = target.actor.system.details.type.value;
+        const creatureType = target.actor.system.details.type.value;
 
-        return type === "celestial"
-            || type === "fiend"
-            || type === "undead";
+        return creatureType === "celestial"
+            || creatureType === "fiend"
+            || creatureType === "undead";
     }
 
     /** @override */
     _testLOS(visionSource, mode, target, test) {
         return !(this.walls && CONFIG.Canvas.polygonBackends.sight.testCollision(
-            { x: visionSource.x, y: visionSource.y },
+            visionSource.origin,
             test.point,
             {
                 type: "sight",
                 mode: "any",
                 source: visionSource,
                 useThreshold: true,
+                priority: Infinity,
             },
         ));
     }

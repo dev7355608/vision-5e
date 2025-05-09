@@ -13,8 +13,13 @@
     "VISION5E.Inaudible": "Inaudible",
     "VISION5E.LifeSense": "Life Sense",
     "VISION5E.SeeInvisibility": "See Invisibility",
+    "VISION5E.ThermalVision": "Thermal Vision",
     "VISION5E.WitchSight": "Witch Sight",
+    "VISION5E.HINTS.DarknessSource": "Darkvision and Thermal Vision are always blocked by darkness sources. Devil's Sight and Truesight are blocked only if the priority is at least 100. All other detection modes are never blocked.",
     "VISION5E.SETTINGS.defaultHearingRange.label": "Default Hearing Range",
     "VISION5E.SETTINGS.defaultHearingRange.hint": "Configure how far tokens can hear by default. Requires the world to be reloaded.",
-    "VISION5E.TOOLTIPS.AutomaticallyManaged": "Automatically managed by Vision 5e"
+    "VISION5E.SETTINGS.spectatorMode.label": "Spectator Mode",
+    "VISION5E.SETTINGS.spectatorMode.hint": "Configure whether tokens belonging to actors the player has limited permissions for can provide vision when all of the player's own tokens are defeated, petrified, or unconscious.",
+    "VISION5E.TOOLTIPS.AutomaticallyManaged": "Automatically managed by Vision 5e",
+    "VISION5E.TOOLTIPS.SelectVisionMode": "Select Vision Mode"
 }

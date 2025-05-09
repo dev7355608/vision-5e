@@ -1,13 +1,13 @@
 /**
  * The vision mode for Etherealness.
  */
-export default class VisionModeEtherealness extends VisionMode {
+export default class VisionModeEtherealness extends foundry.canvas.perception.VisionMode {
     constructor() {
         super({
             id: "etherealness",
             tokenConfig: false,
             canvas: {
-                shader: ColorAdjustmentsSamplerShader,
+                shader: foundry.canvas.rendering.shaders.ColorAdjustmentsSamplerShader,
                 uniforms: { contrast: 0, saturation: -1, exposure: 0 },
             },
             lighting: {

@@ -13,8 +13,12 @@
     "VISION5E.Inaudible": "Lautlos",
     "VISION5E.LifeSense": "Lebensgespür",
     "VISION5E.SeeInvisibility": "Unsichtbares sehen",
+    "VISION5E.ThermalVision": "Thermische Sicht",
     "VISION5E.WitchSight": "Hexensicht",
     "VISION5E.SETTINGS.defaultHearingRange.label": "Standard-Hörweite",
     "VISION5E.SETTINGS.defaultHearingRange.hint": "Legt fest, wie weit Spielfiguren standardmäßig hören können. Erfordert Neuladen.",
-    "VISION5E.TOOLTIPS.AutomaticallyManaged": "Automatisch verwaltet von Vision 5e"
+    "VISION5E.SETTINGS.spectatorMode.label": "Zuschauermodus",
+    "VISION5E.SETTINGS.spectatorMode.hint": "Legt fest, ob Figuren von Akteuren, für die der Spieler nur beschränkte Rechte hat, Sicht gewähren können, wenn alle eigenen Figuren des Spielers besiegt (tot), versteinert oder bewusstlos sind.",
+    "VISION5E.TOOLTIPS.AutomaticallyManaged": "Automatisch verwaltet von Vision 5e",
+    "VISION5E.TOOLTIPS.SelectVisionMode": "Sichtmodus auswählen"
 }

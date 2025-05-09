@@ -7,7 +7,7 @@
 
 Additional and improved Vision/Detection modes for D&D 5e including automatic vision management based on the actor's senses, feats, and active effects.
 
-The automation detects relevant feats and effects that affect the creatures senses and detection by their name (supported are English, German, French, Spanish, and Portuguese (Brazil)). No configuration is required unless you want to adjust the default hearing range formula or turn hearing off entirely by default.
+The automation detects relevant feats and effects that affect the creatures senses and detection by their name (supported are English, German, French, Spanish, and Portuguese (Brazil)). No configuration is required unless you want to adjust the default hearing range formula (for example, turn hearing off entirely by default) or disable [Spectator Mode](#spectator-mode).
 
 ---
 
@@ -37,7 +37,7 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Detects tokens, notes, and door controls.
   - Cannot detect actors that are _burrowing_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM'14 147)_ NPC feat says otherwise), or _invisible_. Also cannot detect PC actors with the `Umbral Sight`[\*](#translations) _(Subclass Feature: Gloom Stalker Ranger, XGE 41 / PHB'24 126)_ feat.
   - Disabled while _blinded_, _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
-  - Is restricted by sight-blocking walls and is blocked by darkness sources unless the actor in a NPC with the `Devil's Sight`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM'14 70)_ feat.
+  - Is restricted by sight-blocking walls and is blocked by darkness sources unless the actor in a NPC with the `Devil's Sight`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM'14 70)_ feat, in which case it is blocked by darkness sources with priority less than 100.
   - Configured automatically from the actor's _Darkvision_.
 - **Detect Evil and Good** _(Spell, SRD 5.1 / PHB'14 231 / PHB'24 261)_
   - Detects aberrations, celestials, elementals, feys, fiends, undeads, and PC actors with the `Hollow One`[\*](#translations) _(Character Creation Option, EGW 182)_, `Supernatural Gift: Hollow One`, or `Supernatural Gifts: Hollow One` feat.
@@ -73,7 +73,7 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Can detect tokens, notes, and door controls.
   - Cannot detect actors that are _burrowing_, _ethereal_ (from the the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM'14 147)_ NPC feat says otherwise), or _invisible_.
   - Disabled while _blinded_, _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
-  - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
+  - Is restricted by sight-blocking walls and isn't blocked by darkness sources with priority less than 100.
   - Configured automatically for PC actors that have the `Devil's Sight`[\*](#translations), `Invocation: Devil's Sight`, `Invocations: Devil's Sight`, `Eldritch Invocation: Devil's Sight`, `Eldritch Invocations: Devil's Sight`, or `Eldritch Adept: Devil's Sight` feat.
   - _Note: Remove the active effect that gives 120 feet Darkvision from the Invocation: Devil's Sight feat if it exists: Devil's Sight doesn't increase the range of Darkvision._
 - **Divine Sense** _(Class Feature: Paladin, SRD 5.1 / PHB'14 82 / PHB'24 110)_
@@ -119,6 +119,12 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Cannot detect anything on its own and requires another sense to see the target without the _ethereal_ and _invisible_ status.
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically for actors with the `See Invisibility`[\*](#translations) effect and PC actors with the `The Third Eye: See Invisibility`[\*](#translations) _(Class Feature: Wizard, PHB'14 116)_ feat.
+- **Thermal Vision** _(Ancestry Feature: Ashka, Ember)_
+  - Detects beasts, celestials, dragons, feys, fiends, giants, humanoids, monstrosities, and other warm-blooded creatures. Also detects any creature that is _burning_.
+  - Cannot detect actors that are _burrowing_ or _ethereal_.
+  - Disabled while _blinded_, _burrowing_, _defeated_ (_dead_), _incapacitated_, _petrified_, _sleeping_, or _unconscious_.
+  - Is restricted by sight-blocking walls and is blocked by darkness sources.
+  - Configured automatically for actors with the `Thermal Vision`[\*](#translations) _(Ancestry Feature: Ashka, Ember)_ feat.
 - **Tremorsense** _(Sense, SRD 5.1 / MM'14 9 / PHB'24 377)_
   - Detects PC/NPC actors that are not objects (e.g. [Item Piles](https://foundryvtt.com/packages/item-piles)).
   - Cannot detect actors that are _burrowing_, _defeated (dead)_, _ethereal_ (from the the material plane), _flying_, _hovering_, or _petrified_.
@@ -130,7 +136,7 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Detects tokens, notes, and door controls.
   - Cannot detect actors that are _burrowing_.
   - Disabled while _blinded_, _burrowing_, _defeated_ (_dead_), _petrified_, _sleeping_, or _unconscious_.
-  - Is restricted by sight-blocking walls and isn't blocked by darkness sources.
+  - Is restricted by sight-blocking walls and isn't blocked by darkness sources with priority less than 100.
   - Configured automatically from the actor's _Truesight_.
 - **Witch Sight _(Legacy)_** _(Eldritch Invocation, SRD 5.1 / PHB'14 111)_
   - Allows detection of PC/NPC actors that have has the `Shapechanger`[\*](#translations) creature subtype and NPC actors with the `Shapechanger`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM'14 220)_ feat.
@@ -150,7 +156,7 @@ This module restricts the available vision modes to _Blindsight_, _Darkvision_, 
 
 ### Spectator Mode
 
-While a player owns/observes only tokens with vision that are _defeated_ (_dead_), _petrified_, or _unconscious_, tokens with vision owned by other players become a source of vision for this player if they have limited permission over the token's actor. This behavior aims to prevent players from missing out on all the fun when their character dies, is knocked unconscious, or is petrified, which are all conditions that make the token not perceive anything and are likely to affect the character more than one round of combat.
+While a player owns/observes only tokens with vision that are _defeated_ (_dead_), _petrified_, or _unconscious_, tokens with vision owned by other players become a source of vision for this player if they have limited permission for the token's actor. This behavior aims to prevent players from missing out on all the fun when their character dies, is knocked unconscious, or is petrified, which are all conditions which make the token not perceive anything and are likely to affect the character more than one round of combat.
 
 ---
 
@@ -174,6 +180,7 @@ While a player owns/observes only tokens with vision that are _defeated_ (_dead_
 | Life Sense                | `ATL.detectionModes.lifeSense.range`              |
 | Light Perception          | `ATL.detectionModes.lightPerception.range`        |
 | See Invisibility          | `ATL.detectionModes.seeInvisibility.range`        |
+| Thermal Vision            | `system.attributes.senses.thermalVision`          |
 | Tremorsense               | `system.attributes.senses.tremorsense`            |
 | Truesight                 | `system.attributes.senses.truesight`              |
 | Witch Sight               | `ATL.detectionModes.witchSight.range`             |
@@ -212,6 +219,7 @@ _Note: Attribute keys starting with `ATL.` require the [Active Token Effects](ht
 | `Shapechanger`              | _Monster feat / Subtype_              | `Gestaltwandler`               | `Métamorphe`                                                                | `Cambiaformas`                    | `Metamorfo`                                       |
 | `Supernatural Gift`         | _Character Creation Option_           | `Übernatürliche Gabe`          | `Don surnaturel`                                                            | `Don supernatural`                | `Dom Sobrenatural`                                |
 | `The Third Eye`             | _Wizard (Divination) feat_            | `Das dritte Auge`              | `Troisième œil`                                                             | `El Tercer Ojo`                   | `O Terceiro Olho`                                 |
+| `Thermal Vision`            | _Ancestry (Ashka) feat_               | `Thermische Sicht`             | `Vision thermique`                                                          | `Visión Térmica`                  | `Visão Térmica`                                   |
 | `Umbral Sight`              | _Ranger (Gloomstalker) feat_          | `Düstersicht`                  | `Vision des ombres`                                                         | `Visión en la umbra`              | `Visão Umbral`                                    |
 | `Witch Sight`               | _Warlock invocation_                  | `Hexensicht`                   | `Vision de sorcier` / `Vision sorcière` / `Vue de sorcier` / `Vue sorcière` | `Visión bruja`                    | `Visão da Bruxa`                                  |
 
