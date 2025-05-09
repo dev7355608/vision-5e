@@ -1,5 +1,7 @@
 import DetectionMode from "./base.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Blindsight.
  */
@@ -9,18 +11,18 @@ export default class DetectionModeBlindsight extends DetectionMode {
             id: "blindsight",
             label: "DND5E.SenseBlindsight",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            priority: 4,
+            sort: -4,
         });
     }
 
     /** @override */
     static getDetectionFilter(visionSource, object) {
         if (visionSource?.data.detectionMode === "blindsight"
-            && !canvas.effects.testInsideDarkness(object.center, object.document.elevation)) {
+            && !canvas.effects.testInsideDarkness(object.document.getCenterPoint())) {
             return;
         }
 
-        return this._detectionFilter ??= OutlineOverlayFilter.create({
+        return this._detectionFilter ??= foundry.canvas.rendering.filters.OutlineOverlayFilter.create({
             outlineColor: [1, 1, 1, 1],
             thickness: [0, 0],
             knockout: true,
@@ -51,7 +53,7 @@ export default class DetectionModeBlindsight extends DetectionMode {
 
         if ((source.document.hasStatusEffect(CONFIG.specialStatusEffects.BLIND_SENSES)
             || source.document.hasStatusEffect(CONFIG.specialStatusEffects.ECHOLOCATION))
-            && source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAFENED)) {
+        && source.document.hasStatusEffect(CONFIG.specialStatusEffects.DEAFENED)) {
             return false;
         }
 
@@ -60,15 +62,16 @@ export default class DetectionModeBlindsight extends DetectionMode {
 
     /** @override */
     _testLOS(visionSource, mode, target, test) {
-        return !CONFIG.Canvas.polygonBackends.sight.testCollision(
-            { x: visionSource.x, y: visionSource.y },
-            test.point,
-            {
-                type: "sight",
-                mode: "any",
-                source: visionSource,
-                useThreshold: true,
-            },
-        );
+        if (super._testLOS(visionSource, mode, target, test)) {
+            return true;
+        }
+
+        const los = visionSource.getLOS(Infinity);
+
+        if (los !== visionSource.los) {
+            return los.contains(test.point.x, test.point.y);
+        }
+
+        return false;
     }
 }

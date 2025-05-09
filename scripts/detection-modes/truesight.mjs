@@ -1,5 +1,7 @@
 import DetectionMode from "./base.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Truesight.
  */
@@ -9,14 +11,14 @@ export default class DetectionModeTruesight extends DetectionMode {
             id: "seeAll",
             label: "DND5E.SenseTruesight",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            priority: 5,
+            sort: -5,
         });
     }
 
     /** @override */
     static getDetectionFilter(visionSource, object) {
         if (visionSource?.data.detectionMode === "seeAll"
-            && !canvas.effects.testInsideDarkness(object.center, object.document.elevation)) {
+            && !canvas.effects.testInsideDarkness(object.document.getCenterPoint())) {
             return;
         }
 
@@ -49,8 +51,10 @@ export default class DetectionModeTruesight extends DetectionMode {
             return true;
         }
 
-        if (visionSource.losDarknessExcluded !== visionSource.los) {
-            return visionSource.losDarknessExcluded.contains(test.point.x, test.point.y);
+        const los = visionSource.getLOS(0);
+
+        if (los !== visionSource.los) {
+            return los.contains(test.point.x, test.point.y);
         }
 
         return false;

@@ -64,7 +64,7 @@ export default (Actor) => class extends Actor {
             this.statuses.add(CONFIG.specialStatusEffects.SHAPECHANGER);
         }
 
-        this.detectionModes = { lightPerception: null };
+        this.detectionModes = { lightPerception: Infinity };
 
         const senses = this.system.attributes?.senses;
 
@@ -74,7 +74,7 @@ export default (Actor) => class extends Actor {
             this.detectionModes.blindsight = senses.blindsight;
             this.detectionModes.feelTremor = senses.tremorsense;
             this.detectionModes.hearing = Math.max(toFeet(typeof defaultHearingRange === "string"
-                ? new Roll(defaultHearingRange, this.getRollData({ deterministic: true })).evaluateSync().total
+                ? new foundry.dice.Roll(defaultHearingRange, this.getRollData({ deterministic: true })).evaluateSync().total
                 : defaultHearingRange, senses.units), 0);
         }
 
@@ -121,25 +121,21 @@ export default (Actor) => class extends Actor {
 /**
  * @param {Actor} actor
  * @param {string} id
- * @param {number | null | undefined} range
+ * @param {number | undefined} range
  * @param {string} [units]
  */
 function upgradeDetectionMode(actor, id, range, units) {
-    if (range === undefined || range !== null && range <= 0) {
+    if (range === undefined || range <= 0) {
         return;
     }
 
     const currentRange = actor.detectionModes[id];
 
-    if (currentRange === null) {
-        return;
-    }
-
-    if (range !== null && units !== undefined) {
+    if (units !== undefined) {
         range = convertUnits(range, units, actor.system.attributes.senses.units);
     }
 
-    if (currentRange !== undefined && range !== null) {
+    if (currentRange !== undefined) {
         range = Math.max(range, currentRange);
     }
 
@@ -189,19 +185,7 @@ function isVisibleMagicItem(item) {
  * @returns {boolean}
  */
 function isMagicEffect(effect) {
-    if (effect.statuses.has(CONFIG.specialStatusEffects.CONCENTRATING)) {
-        return false;
-    }
-
-    if (effect.flags.dnd5e?.spellLevel !== undefined) {
-        return true;
-    }
-
-    if (!effect.origin) {
-        return false;
-    }
-
-    return SPELL_EFFECT_NAMES.has(effect.name);
+    return effect.flags.dnd5e?.spellLevel !== undefined && !effect.statuses.has(CONFIG.specialStatusEffects.CONCENTRATING);
 }
 
 /**
@@ -285,6 +269,9 @@ const FEAT_REGISTRY = {
         invocationDevilsSight(item) {
             upgradeDetectionMode(this, "devilsSight", 120, "ft");
         },
+        thermalVision(item) {
+            upgradeDetectionMode(this, "thermalVision", 60, "ft");
+        },
         umbralSight(item) {
             this.statuses.add(CONFIG.specialStatusEffects.UMBRAL_SIGHT);
         },
@@ -317,6 +304,9 @@ const FEAT_REGISTRY = {
         },
         senseMagic(item) {
             upgradeDetectionMode(this, "detectMagic", findRange(item.system.description.value, this.system.attributes.senses.units));
+        },
+        thermalVision(item) {
+            upgradeDetectionMode(this, "thermalVision", 60, "ft");
         },
     },
 };
@@ -356,7 +346,7 @@ const EFFECT_REGISTRY = {
             this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
         },
         seeInvisibility(effect) {
-            upgradeDetectionMode(this, "seeInvisibility", null);
+            upgradeDetectionMode(this, "seeInvisibility", Infinity);
         },
         sequester(effect) {
             this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
@@ -382,7 +372,7 @@ const EFFECT_REGISTRY = {
             this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
         },
         seeInvisibility(effect) {
-            upgradeDetectionMode(this, "seeInvisibility", null);
+            upgradeDetectionMode(this, "seeInvisibility", Infinity);
         },
         sequester(effect) {
             this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
@@ -467,6 +457,9 @@ const DATABASE = {
             "Sequester",
             "Sequestered",
         ],
+        thermalVision: [
+            "Thermal Vision",
+        ],
         umbralSight: [
             "Umbral Sight",
         ],
@@ -542,6 +535,9 @@ const DATABASE = {
         ],
         sequester: [
             "Verbergen",
+        ],
+        thermalVision: [
+            "Thermische Sicht",
         ],
         umbralSight: [
             "Düstersicht",
@@ -622,6 +618,9 @@ const DATABASE = {
         sequester: [
             "Dissimulation suprême",
         ],
+        thermalVision: [
+            "Vision thermique",
+        ],
         umbralSight: [
             "Vision des ombres",
         ],
@@ -699,6 +698,9 @@ const DATABASE = {
         ],
         sequester: [
             "Recluir",
+        ],
+        thermalVision: [
+            "Termowizja",
         ],
         umbralSight: [
             "Visión en la Umbra",
@@ -780,6 +782,9 @@ const DATABASE = {
         sequester: [
             "Refugiar",
         ],
+        thermalVision: [
+            "Visão térmica",
+        ],
         umbralSight: [
             "Visão Umbral",
         ],
@@ -818,32 +823,6 @@ let FEAT_MATCHERS = createMatchers(FEAT_REGISTRY);
 let EFFECT_MATCHERS = createMatchers(EFFECT_REGISTRY);
 
 Hooks.once("init", () => {
-    if (foundry.utils.isNewerVersion("4.0.0", game.system.version)) {
-        // eslint-disable-next-line no-func-assign
-        isPoisonous = function (actor) {
-            if (actor.statuses.has(CONFIG.specialStatusEffects.OBJECT)
-                || actor.statuses.has(CONFIG.specialStatusEffects.PETRIFIED)) {
-                return false;
-            }
-
-            for (const item of actor.items) {
-                if (item.type === "weapon" && item.system.type.value === "natural"
-                    && (item.system.damage.parts.some((part) => part[1] === "poison")
-                        || [
-                            item.system.critical.damage,
-                            item.system.damage.versatile,
-                            item.system.formula,
-                        ].some((formula) => /\[poison\]/i.test(formula)))) {
-                    return true;
-                }
-            }
-
-            return false;
-        };
-
-        return;
-    }
-
     if (game.settings.get("dnd5e", "rulesVersion") !== "legacy") {
         return;
     }
@@ -987,133 +966,3 @@ Hooks.once("init", () => {
     FEAT_MATCHERS = createMatchers(FEAT_REGISTRY);
     EFFECT_MATCHERS = createMatchers(EFFECT_REGISTRY);
 });
-
-/** @type {Set<string>} */
-const SPELL_EFFECT_NAMES = new Set([
-    "Aid", "Level 2: +5 Max HP", "Level 3: +10 Max HP", "Level 4: +15 Max HP", "Level 5: +20 Max HP", "Level 6: +25 Max HP", "Level 7: +30 Max HP", "Level 8: +35 Max HP", "Level 9: +40 Max HP",
-    "Animal Friendship", "Charmed",
-    "Animal Messenger", "Carrying Message",
-    "Animal Shapes",
-    "Animate Objects",
-    "Antipathy/Sympathy", "Antipathy", "Sympathy", "Charmed", "Frightened",
-    "Astral Projection", "Suspended Animation",
-    "Bane",
-    "Banishment", "Banished",
-    "Barkskin", "Bark-like Skin",
-    "Beacon of Hope", "Hopeful",
-    "Beast Bond",
-    "Beast Sense",
-    "Bestow Curse", "Cursed Actions", "Cursed Attacks", "Cursed Charisma", "Cursed Constitution", "Cursed Dexterity", "Cursed Intelligence", "Cursed Strength", "Cursed Wisdom", "Cursed Charisma", "Cursed Resilience",
-    "Blade of Disaster",
-    "Bless", "Blessed",
-    "Blindness/Deafness", "Blindness", "Deafness",
-    "Booming Blade", "Booming Energy",
-    "Catnap",
-    "Cause Fear",
-    "Charm Monster", "Charmed",
-    "Charm Person", "Charmed",
-    "Compelled Duel", "Compelled",
-    "Compulsion", "Charmed",
-    "Contagion", "Infected (Charisma)", "Infected (Constitution)", "Infected (Dexterity)", "Infected (Intelligence)", "Infected (Strength)", "Infected (Wisdom)",
-    "Crown of Madness", "Spectral Crown",
-    "Crown of Stars",
-    "Darkvision",
-    "Death Ward", "Protection from Death",
-    "Dispel Evil and Good", "Dispelling Evil and Good",
-    "Dominate Beast",
-    "Dominate Monster",
-    "Dominate Person", "Dominated",
-    "Dragon's Breath", "Dragon’s Breath",
-    "Dream", "Trance State",
-    "Earthbind",
-    "Elemental Bane",
-    "Enemies Abound",
-    "Enervation",
-    "Enhance Ability", "Enhanced Charisma", "Enhanced Dexterity", "Enhanced Intelligence", "Enhanced Strength", "Enhanced Wisdom",
-    "Enlarge/Reduce", "Enlarged", "Reduced",
-    "Enthrall", "Distracted",
-    "Eyebite", "Asleep", "Panicked", "Sickend",
-    "Fast Friends",
-    "Feather Fall",
-    "Feign Death", "Cataleptic",
-    "Flame Blade",
-    "Flesh to Stone", "Turning to Stone", "Unable to Move",
-    "Fly", "Flight",
-    "Foresight",
-    "Fortune's Favor", "Fortune’s Favor",
-    "Freedom of Movement", "Unrestricted Movement",
-    "Friends", "Charmed",
-    "Gaseous Form",
-    "Geas", "Under Orders",
-    "Gift of Alacrity",
-    "Greater Invisibility", "Invisible",
-    "Guidance", "Acrobatic Guidance", "Animal Handling Guidance", "Arcana Guidance", "Athletic Guidance", "Deception Guidance", "History Guidance", "Insight Guidance", "Investigation Guidance", "Intimidation Guidance", "Medicine Guidance", "Nature Guidance", "Persuasion Guidance", "Perception Guidance", "Performance Guidance", "Religion Guidance", "Sleight of Hand Guidance", "Stealth Guidance", "Survival Guidance",
-    "Guiding Bolt",
-    "Haste", "Hasted", "Lethargy",
-    "Heat Metal", "Heated Metal",
-    "Heroism", "Bravery",
-    "Hex", "Hexed Charisma", "Hexed Constitution", "Hexed Dexterity", "Hexed Intelligence", "Hexed Strength", "Hexed Wisdom",
-    "Hold Monster", "Paralyzed",
-    "Hold Person", "Paralyzed",
-    "Holy Weapon",
-    "Hunter's Mark", "Hunter’s Mark",
-    "Immolation",
-    "Imprisonment", "Chaining", "Slumber", "Burial", "Hedged Prison", "Minimus Containment",
-    "Incite Greed",
-    "Invisibility", "Invisible",
-    "Jump",
-    "Levitate", "Levitating",
-    "Longstrider",
-    "Mage Armor",
-    "Magic Stone",
-    "Mass Polymorph",
-    "Mass Suggestion", "Charmed",
-    "Maximilian's Earthen Grasp", "Maximilian’s Earthen Grasp",
-    "Maze", "Banished",
-    "Mental Prison",
-    "Mind Blank", "Mind Blanked",
-    "Mind Spike", "Spiked",
-    "Modify Memory", "Memory Modification",
-    "Mordenkainen's Sword", "Mordenkainen’s Sword",
-    "Motivational Speech",
-    "Nondetection", "Hidden from Divination",
-    "Nystul's Magic Aura", "Nystul’s Magic Aura", "Masked",
-    "Otiluke's Resilient Sphere", "Otiluke’s Resilient Sphere", "Enclosed in Sphere",
-    "Otto's Irresistible Dance", "Otto’s Irresistible Dance", "Irresistible Dance", "Short Dance",
-    "Pass without Trace", "Concealed",
-    "Phantasmal Killer", "Fears Manifested",
-    "Planar Binding", "Bound to Service",
-    "Polymorph",
-    "Produce Flame",
-    "Protection from Energy", "Acid Protection", "Cold Protection", "Fire Protection", "Lightning Protection", "Thunder Protection",
-    "Protection from Evil and Good", "Protected",
-    "Protection from Poison", "Poison Protection",
-    "Rary's Telepathic Bond", "Rary’s Telepathic Bond", "Bonded Telepathy",
-    "Ray of Enfeeblement", "Brief Enfeeblement", "Enervated",
-    "Reality Break",
-    "Regenerate", "Regenerating",
-    "Resistance", "Acid Protection", "Bludgeoning Protection", "Cold Protection", "Fire Protection", "Lightning Protection", "Necrotic Protection", "Piercing Protection", "Poison Protection", "Radiant Protection", "Slashing Protection", "Thunder Protection",
-    "Sanctuary", "Warded",
-    "Seeming", "Changed Appearance",
-    "Sequester", "Sequestered",
-    "Shield of Faith", "Shimmering Field",
-    "Shining Smite", "Shining",
-    "Skill Empowerment",
-    "Slow", "Slowed",
-    "Stoneskin",
-    "Suggestion", "Pursuing Suggestion",
-    "Tasha's Hideous Laughter", "Tasha’s Hideous Laughter", "Uncontrollable Laughter",
-    "Tasha's Mind Whip", "Tasha’s Mind Whip",
-    "Telekinesis",
-    "Telepathy", "Telepathically Linked",
-    "Temporal Shunt",
-    "Tether Essence",
-    "Tongues", "Universal Communication",
-    "True Polymorph",
-    "Vampiric Touch",
-    "Warding Bond", "Bonded",
-    "Water Breathing",
-    "Water Walk", "Water Walking",
-    "Wind Walk", "Cloud Form",
-    "Witch Bolt", "Sustained Lightning",
-].sort());

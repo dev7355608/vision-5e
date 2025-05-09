@@ -22,6 +22,7 @@ import DetectionModeHearing from "./detection-modes/hearing.mjs";
 import DetectionModeLifeSense from "./detection-modes/life-sense.mjs";
 import DetectionModeLightPerception from "./detection-modes/light-perception.mjs";
 import DetectionModeSeeInvisibility from "./detection-modes/see-invisibility.mjs";
+import DetectionModeThermalVision from "./detection-modes/thermal-vision.mjs";
 import DetectionModeTremorsense from "./detection-modes/tremorsense.mjs";
 import DetectionModeTruesight from "./detection-modes/truesight.mjs";
 import DetectionModeWitchSight from "./detection-modes/witch-sight.mjs";
@@ -32,8 +33,6 @@ import VisionModeEtherealness from "./vision-modes/etherealness.mjs";
 import VisionModeTruesight from "./vision-modes/truesight.mjs";
 
 Hooks.once("init", () => {
-    const legacy = foundry.utils.isNewerVersion("4.0.0", game.system.version) || game.settings.get("dnd5e", "rulesVersion") === "legacy";
-
     // Extend Actor, TokenDocument, Token, and TokenHUD
     CONFIG.Actor.documentClass = ActorMixin(CONFIG.Actor.documentClass);
     CONFIG.Token.documentClass = TokenDocumentMixin(CONFIG.Token.documentClass);
@@ -48,6 +47,10 @@ Hooks.once("init", () => {
 
     // Extend CombatTracker
     CONFIG.ui.combat = CombatTrackerMixin(CONFIG.ui.combat);
+});
+
+Hooks.once("i18nInit", () => {
+    const legacy = game.settings.get("dnd5e", "rulesVersion") === "legacy";
 
     // Register the Inaudible status effect
     CONFIG.statusEffects.push({
@@ -68,6 +71,7 @@ Hooks.once("init", () => {
     CONFIG.specialStatusEffects.DISEASED = "diseased";
     CONFIG.specialStatusEffects.ECHOLOCATION = "echolocation";
     CONFIG.specialStatusEffects.ETHEREAL = "ethereal";
+    CONFIG.specialStatusEffects.INCAPACITATED = "incapacitated";
     CONFIG.specialStatusEffects.FLYING = "flying";
     CONFIG.specialStatusEffects.GHOSTLY_GAZE = "ghostlyGaze";
     CONFIG.specialStatusEffects.HOVERING = "hovering";
@@ -152,6 +156,7 @@ Hooks.once("init", () => {
         DetectionModeLifeSense,
         DetectionModeLightPerception,
         DetectionModeSeeInvisibility,
+        DetectionModeThermalVision,
         DetectionModeTremorsense,
         DetectionModeTruesight,
     ]) {
@@ -209,11 +214,11 @@ Hooks.once("init", () => {
     if (legacy) {
         CONFIG.Canvas.visionModes.devilsSight.updateSource({
             canvas: {
-                shader: ColorAdjustmentsSamplerShader,
+                shader: foundry.canvas.rendering.shaders.ColorAdjustmentsSamplerShader,
                 uniforms: { contrast: -0.15, saturation: 0, exposure: 0 },
             },
             lighting: {
-                background: { visibility: VisionMode.LIGHTING_VISIBILITY.REQUIRED },
+                background: { visibility: foundry.canvas.perception.VisionMode.LIGHTING_VISIBILITY.REQUIRED },
             },
             vision: {
                 darkness: { adaptive: false },
@@ -230,4 +235,15 @@ Hooks.once("ready", () => {
     }
 
     CONFIG.Token.prototypeSheetClass = TokenConfigMixin(CONFIG.Token.prototypeSheetClass);
+});
+
+Hooks.on("renderAmbientLightConfig", (application, element, context, options) => {
+    if (!options.parts.includes("basic")) {
+        return;
+    }
+
+    element.querySelector(`[name="config.negative"]`).closest(".form-group").insertAdjacentHTML(
+        "beforeend",
+        `<p class="hint">${game.i18n.localize("VISION5E.HINTS.DarknessSource")}</p>`,
+    );
 });

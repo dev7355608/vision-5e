@@ -15,7 +15,7 @@ export default (TokenDocument) => class extends TokenDocument {
             return (b.important ?? false) - (a.important ?? false)
                 || (a.imprecise ?? false) - (b.imprecise ?? false)
                 || (b.id === this.sight.detectionMode) - (a.id === this.sight.detectionMode)
-                || (b.priority ?? 0) - (a.priority ?? 0);
+                || (a.sort ?? 0) - (b.sort ?? 0);
         });
     }
 
@@ -51,7 +51,7 @@ export default (TokenDocument) => class extends TokenDocument {
             }
         } else {
             if (!this.detectionModes.find((mode) => mode.id === "lightPerception")) {
-                this.detectionModes.push({ id: "lightPerception", enabled: true, range: null });
+                this.detectionModes.push({ id: "lightPerception", enabled: true, range: Infinity });
             }
         }
 
@@ -59,11 +59,7 @@ export default (TokenDocument) => class extends TokenDocument {
             const maxRange = fromFeet(60, sceneUnits);
 
             for (const mode of this.detectionModes) {
-                if (mode.range !== null) {
-                    mode.range = Math.min(mode.range, maxRange);
-                } else {
-                    mode.range = maxRange;
-                }
+                mode.range = Math.min(mode.range, maxRange);
             }
         }
     }
@@ -120,7 +116,7 @@ export default (TokenDocument) => class extends TokenDocument {
         } else {
             const { color, attenuation, brightness, saturation, contrast } = CONFIG.Canvas.visionModes[this.sight.visionMode].vision.defaults;
 
-            this.sight.color = color !== undefined ? color : this._source.sight.color !== null ? Color.from(this._source.sight.color) : null;
+            this.sight.color = color !== undefined ? color : this._source.sight.color !== null ? foundry.utils.Color.from(this._source.sight.color) : null;
             this.sight.attenuation = attenuation !== undefined ? attenuation : this._source.sight.attenuation;
             this.sight.brightness = brightness !== undefined ? brightness : 0;
             this.sight.saturation = saturation !== undefined ? saturation : 0;

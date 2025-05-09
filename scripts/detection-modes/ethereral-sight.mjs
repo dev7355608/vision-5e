@@ -1,6 +1,8 @@
 import DetectionMode from "./base.mjs";
 import { DETECTION_LEVELS } from "../const.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Ethereal Sight.
  */
@@ -12,7 +14,7 @@ export default class DetectionModeEtherealSight extends DetectionMode {
             type: DetectionMode.DETECTION_TYPES.OTHER,
             walls: false,
             angle: false,
-            priority: -1,
+            sort: 1,
         });
     }
 

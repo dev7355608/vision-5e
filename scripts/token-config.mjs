@@ -1,40 +1,36 @@
 export default (TokenConfig) => class extends TokenConfig {
     /** @override */
-    async getData(options) {
-        const data = await super.getData(options);
+    async _onRender(context, options) {
+        await super._onRender(context, options);
 
-        data.visionModes.sort((a, b) => game.i18n.localize(a.label).localeCompare(game.i18n.localize(b.label), game.i18n.lang));
-        data.detectionModes.sort((a, b) => game.i18n.localize(a.label).localeCompare(game.i18n.localize(b.label), game.i18n.lang));
-        data.preparedDetectionModes.sort((a, b) => game.i18n.localize(CONFIG.Canvas.detectionModes[a.id].label)
-            .localeCompare(game.i18n.localize(CONFIG.Canvas.detectionModes[b.id].label), game.i18n.lang));
-
-        return data;
-    }
-
-    /** @override */
-    async _renderInner(data) {
-        const html = await super._renderInner(data);
-
-        for (const element of html[0].querySelectorAll(`[name="sight.range"],[name="sight.brightness"],[name="sight.saturation"],[name="sight.contrast"]`)) {
-            element.disabled = true;
-            element.dataset.tooltip = "VISION5E.TOOLTIPS.AutomaticallyManaged";
-            element.dataset.tooltipDirection = "LEFT";
-        }
-
-        html[0].querySelector(`[name="sight.range"]`).value = this.preview.sight.range;
-        html[0].querySelector(`[name="sight.visionMode"]`).value = this.preview.sight.visionMode;
-
-        return html;
-    }
-
-    /** @override */
-    _previewChanges(data) {
-        super._previewChanges(data);
-
-        if (!this.preview || !this.rendered) {
+        if (!options.parts.includes("vision")) {
             return;
         }
 
-        this.element[0].querySelector(`[name="sight.range"]`).value = this.preview.sight.range;
+        // Disable input fields that are automatically managed by Vision 5e
+        for (const element of this.element.querySelectorAll(`[name="sight.range"],[name="sight.brightness"],[name="sight.saturation"],[name="sight.contrast"]`)) {
+            element.disabled = true;
+            element.dataset.tooltip = "VISION5E.TOOLTIPS.AutomaticallyManaged";
+        }
+
+        if (!this._preview) {
+            return;
+        }
+
+        // Set vision range to the prepared preview vision range
+        this.element.querySelector(`[name="sight.range"]`).value = this._preview.sight.range;
+        this.element.querySelector(`[name="sight.visionMode"]`).value = this._preview.sight.visionMode;
+    }
+
+    /** @override */
+    _previewChanges(changes) {
+        super._previewChanges(changes);
+
+        if (!changes || !this._preview) {
+            return;
+        }
+
+        // Set vision range to the prepared preview vision range
+        this.element.querySelector(`[name="sight.range"]`).value = this._preview.sight.range;
     }
 };

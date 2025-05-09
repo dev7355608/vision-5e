@@ -1,5 +1,7 @@
 import DetectionMode from "./base.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Darkvision.
  */
@@ -9,7 +11,7 @@ export default class DetectionModeDarkvision extends DetectionMode {
             id: "basicSight",
             label: "DND5E.SenseDarkvision",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            priority: 7,
+            sort: -7,
         });
     }
 
@@ -17,11 +19,11 @@ export default class DetectionModeDarkvision extends DetectionMode {
     static getDetectionFilter(visionSource, object) {
         if (visionSource?.data.detectionMode === "basicSight"
             && !(visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT)
-                && canvas.effects.testInsideDarkness(object.center, object.document.elevation))) {
+                && canvas.effects.testInsideDarkness(object.document.getCenterPoint()))) {
             return;
         }
 
-        return this._detectionFilter ??= OutlineOverlayFilter.create({
+        return this._detectionFilter ??= foundry.canvas.rendering.filters.OutlineOverlayFilter.create({
             outlineColor: [1, 1, 1, 1],
             knockout: true,
         });
@@ -60,9 +62,12 @@ export default class DetectionModeDarkvision extends DetectionMode {
             return true;
         }
 
-        if (visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT)
-            && visionSource.losDarknessExcluded !== visionSource.los) {
-            return visionSource.losDarknessExcluded.contains(test.point.x, test.point.y);
+        if (visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT)) {
+            const los = visionSource.getLOS(100);
+
+            if (los !== visionSource.los) {
+                return los.contains(test.point.x, test.point.y);
+            }
         }
 
         return false;

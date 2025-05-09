@@ -13,6 +13,7 @@
     "VISION5E.Inaudible": "Niesłyszalny",
     "VISION5E.LifeSense": "Zmysł życia",
     "VISION5E.SeeInvisibility": "Zobaczenie niewidzialnego",
+    "VISION5E.ThermalVision": "Termowizja",
     "VISION5E.WitchSight": "Wiedźmi wzrok",
     "VISION5E.SETTINGS.defaultHearingRange.label": "Domyślny zakres słyszenia",
     "VISION5E.SETTINGS.defaultHearingRange.hint": "Konfiguruje domyślną odległość słyszalności tokenów. Wymaga przeładowania świata.",

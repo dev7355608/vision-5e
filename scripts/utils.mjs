@@ -38,10 +38,6 @@ export class Matcher {
 }
 
 export function fromFeet(range, units) {
-    if (range === null) {
-        return null;
-    }
-
     switch (units) {
         case "in": return range / 12;
         case "ft": return range;
@@ -57,10 +53,6 @@ export function fromFeet(range, units) {
 }
 
 export function toFeet(range, units) {
-    if (range === null) {
-        return null;
-    }
-
     switch (units) {
         case "in": return range * 12;
         case "ft": return range;

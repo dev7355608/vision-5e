@@ -1,5 +1,7 @@
 import DetectionMode from "./base.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Eyes of the Grave.
  */
@@ -54,13 +56,14 @@ export default class DetectionModeEyesOfTheGrave extends DetectionMode {
     /** @override */
     _testLOS(visionSource, mode, target, test) {
         return !CONFIG.Canvas.polygonBackends.sight.testCollision(
-            { x: visionSource.x, y: visionSource.y },
+            visionSource.origin,
             test.point,
             {
                 type: "sight",
                 mode: "any",
                 source: visionSource,
                 useThreshold: true,
+                priority: Infinity,
             },
         );
     }

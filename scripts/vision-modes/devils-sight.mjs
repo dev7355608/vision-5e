@@ -1,7 +1,7 @@
 /**
  * The vision mode for Devil's Sight.
  */
-export default class VisionModeDevilsSight extends VisionMode {
+export default class VisionModeDevilsSight extends foundry.canvas.perception.VisionMode {
     constructor() {
         super({
             id: "devilsSight",

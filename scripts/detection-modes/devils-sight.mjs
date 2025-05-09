@@ -1,5 +1,7 @@
 import DetectionMode from "./base.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Devil's Sight.
  */
@@ -9,14 +11,14 @@ export default class DetectionModeDevilsSight extends DetectionMode {
             id: "devilsSight",
             label: "VISION5E.DevilsSight",
             type: DetectionMode.DETECTION_TYPES.SIGHT,
-            priority: 6,
+            sort: -6,
         });
     }
 
     /** @override */
     static getDetectionFilter(visionSource, object) {
         if (visionSource?.data.detectionMode === "devilsSight"
-            && !canvas.effects.testInsideDarkness(object.center, object.document.elevation)) {
+            && !canvas.effects.testInsideDarkness(object.document.getCenterPoint())) {
             return;
         }
 
@@ -55,8 +57,10 @@ export default class DetectionModeDevilsSight extends DetectionMode {
             return true;
         }
 
-        if (visionSource.losDarknessExcluded !== visionSource.los) {
-            return visionSource.losDarknessExcluded.contains(test.point.x, test.point.y);
+        const los = visionSource.getLOS(100);
+
+        if (los !== visionSource.los) {
+            return los.contains(test.point.x, test.point.y);
         }
 
         return false;

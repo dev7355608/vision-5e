@@ -8,11 +8,10 @@
       "email": "dev7355608@gmail.com"
     }
   ],
-  "version": "2.5.8",
+  "version": "3.0.0",
   "compatibility": {
-    "minimum": "12",
-    "verified": "12",
-    "maximum": "12"
+    "minimum": "13",
+    "verified": "13"
   },
   "scripts": [
     "script.js"
@@ -58,16 +57,16 @@
         "id": "dnd5e",
         "type": "system",
         "compatibility": {
-          "minimum": "3.2.0",
-          "verified": "4.4.0"
+          "minimum": "5.0.0",
+          "verified": "5.0.2"
         }
       }
     ]
   },
   "url": "https://github.com/dev7355608/vision-5e",
   "manifest": "https://github.com/dev7355608/vision-5e/releases/latest/download/module.json",
-  "download": "https://github.com/dev7355608/vision-5e/releases/download/v2.5.8/module.zip",
-  "changelog": "https://github.com/dev7355608/vision-5e/releases/tag/v2.5.8",
+  "download": "https://github.com/dev7355608/vision-5e/releases/download/v3.0.0/module.zip",
+  "changelog": "https://github.com/dev7355608/vision-5e/releases/tag/v3.0.0",
   "bugs": "https://github.com/dev7355608/vision-5e/issues",
   "readme": "https://raw.githubusercontent.com/dev7355608/vision-5e/main/README.md",
   "license": "https://raw.githubusercontent.com/dev7355608/vision-5e/main/LICENSE"

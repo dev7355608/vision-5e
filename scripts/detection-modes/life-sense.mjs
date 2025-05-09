@@ -1,5 +1,7 @@
 import DetectionMode from "./base.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Life Sense.
  */
@@ -18,7 +20,7 @@ export default class DetectionModeLifeSense extends DetectionMode {
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= GlowOverlayFilter.create({
+        return this._detectionFilter ??= foundry.canvas.rendering.filters.GlowOverlayFilter.create({
             glowColor: [1, 0, 0, 1],
         });
     }

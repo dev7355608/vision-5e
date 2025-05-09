@@ -1,5 +1,7 @@
 import DetectionMode from "./base.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for hearing.
  */
@@ -11,7 +13,7 @@ export default class DetectionModeHearing extends DetectionMode {
             type: DetectionMode.DETECTION_TYPES.SOUND,
             angle: false,
             imprecise: true,
-            priority: 1,
+            sort: -1,
         });
     }
 
@@ -49,20 +51,20 @@ export default class DetectionModeHearing extends DetectionMode {
     /** @override */
     _testLOS(visionSource, mode, target, test) {
         return !CONFIG.Canvas.polygonBackends.sound.testCollision(
-            { x: visionSource.x, y: visionSource.y },
+            visionSource.origin,
             test.point,
             {
                 type: "sound",
                 mode: "any",
                 source: visionSource,
-                wallDirectionMode: PointSourcePolygon.WALL_DIRECTION_MODES.REVERSED,
+                wallDirectionMode: foundry.canvas.geometry.PointSourcePolygon.WALL_DIRECTION_MODES.REVERSED,
                 useThreshold: true,
             },
         );
     }
 }
 
-class PingDetectionFilter extends AbstractBaseFilter {
+class PingDetectionFilter extends foundry.canvas.rendering.filters.AbstractBaseFilter {
     /** @override */
     autoFit = false;
 

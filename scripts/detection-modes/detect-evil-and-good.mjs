@@ -13,7 +13,7 @@ export default class DetectionModeDetectEvilAndGood extends DetectionModeDetect 
 
     /** @override */
     static getDetectionFilter() {
-        return this._detectionFilter ??= GlowOverlayFilter.create({
+        return this._detectionFilter ??= foundry.canvas.rendering.filters.GlowOverlayFilter.create({
             glowColor: [1, 1, 0, 1],
         });
     }
@@ -34,13 +34,13 @@ export default class DetectionModeDetectEvilAndGood extends DetectionModeDetect 
             return true;
         }
 
-        const type = target.actor.system.details.type.value;
+        const creatureType = target.actor.system.details.type.value;
 
-        return type === "aberration"
-            || type === "celestial"
-            || type === "elemental"
-            || type === "fey"
-            || type === "fiend"
-            || type === "undead";
+        return creatureType === "aberration"
+            || creatureType === "celestial"
+            || creatureType === "elemental"
+            || creatureType === "fey"
+            || creatureType === "fiend"
+            || creatureType === "undead";
     }
 }

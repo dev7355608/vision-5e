@@ -1,6 +1,8 @@
 import DetectionMode from "./base.mjs";
 import { DETECTION_LEVELS } from "../const.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Witch Sight.
  */
@@ -13,7 +15,7 @@ export default class DetectionModeWitchSight extends DetectionMode {
             walls: false,
             angle: false,
             important: true,
-            priority: -1,
+            sort: 1,
         });
     }
 

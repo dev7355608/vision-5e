@@ -1,17 +1,17 @@
 /**
  * The vision mode for Darkvision.
  */
-export default class VisionModeDarkvision extends VisionMode {
+export default class VisionModeDarkvision extends foundry.canvas.perception.VisionMode {
     constructor() {
         super({
             id: "darkvision",
             label: "DND5E.SenseDarkvision",
             canvas: {
-                shader: ColorAdjustmentsSamplerShader,
+                shader: foundry.canvas.rendering.shaders.ColorAdjustmentsSamplerShader,
                 uniforms: { contrast: 0, saturation: -1, exposure: 0 },
             },
             lighting: {
-                background: { visibility: VisionMode.LIGHTING_VISIBILITY.REQUIRED },
+                background: { visibility: foundry.canvas.perception.VisionMode.LIGHTING_VISIBILITY.REQUIRED },
             },
             vision: {
                 darkness: { adaptive: false },

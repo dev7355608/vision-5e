@@ -1,5 +1,7 @@
 import DetectionMode from "./base.mjs";
 
+const { Token } = foundry.canvas.placeables;
+
 /**
  * The detection mode for Blood Sense.
  */
@@ -48,12 +50,12 @@ export default class DetectionModeBloodSense extends DetectionMode {
             return false;
         }
 
-        const type = target.actor.system.details.type.value;
+        const creatureType = target.actor.system.details.type.value;
 
-        return type !== "construct"
-            && type !== "elemental"
-            && type !== "ooze"
-            && type !== "plant"
-            && type !== "undead";
+        return creatureType !== "construct"
+            && creatureType !== "elemental"
+            && creatureType !== "ooze"
+            && creatureType !== "plant"
+            && creatureType !== "undead";
     }
 }
