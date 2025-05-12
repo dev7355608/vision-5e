@@ -49,6 +49,8 @@ export default (CanvasVisibility) => class extends CanvasVisibility {
         const detectionFilters = new Set();
         let visible = false;
         let detectionLevel = DETECTION_LEVELS.NONE;
+        const tests = [];
+        let numVisionSources = 0;
 
         for (const visionSource of canvas.effects.visionSources) {
             if (!visionSource.active || inBuffer === sceneRect.contains(visionSource.x, visionSource.y)) {
@@ -56,30 +58,52 @@ export default (CanvasVisibility) => class extends CanvasVisibility {
             }
 
             const token = visionSource.object.document;
+            let hasDetectionMode = false;
 
-            // The detection modes have been sorted by TokenDocument#prepareBaseData
             for (const mode of token.detectionModes) {
                 const detectionMode = CONFIG.Canvas.detectionModes[mode.id];
-                const result = detectionMode?.testVisibility(visionSource, mode, config);
 
-                if (result !== true) {
-                    continue;
+                if (detectionMode) {
+                    tests.push([detectionMode, visionSource, mode]);
+                    hasDetectionMode = true;
                 }
+            }
 
-                visible = true;
-                detectionLevel = Math.max(detectionLevel, detectionMode.imprecise ? DETECTION_LEVELS.IMPRECISE : DETECTION_LEVELS.PRECISE);
+            if (hasDetectionMode) {
+                numVisionSources++;
+            }
+        }
 
-                if (object instanceof Token && object._detectionLevel === undefined) {
-                    const detectionFilter = detectionMode.constructor.getDetectionFilter(visionSource, object);
+        // The detection modes have been sorted by TokenDocument#prepareBaseData
+        if (numVisionSources >= 0) {
+            tests.sort(([detectionMode1, visionSource1], [detectionMode2, visionSource2]) => {
+                return (detectionMode2.important ?? false) - (detectionMode1.important ?? false)
+                    || (detectionMode1.imprecise ?? false) - (detectionMode2.imprecise ?? false)
+                    || (detectionMode2.id === visionSource2.object.document.sight.detectionMode) - (detectionMode1.id === visionSource1.object.document.sight.detectionMode)
+                    || (detectionMode1.sort ?? 0) - (detectionMode2.sort ?? 0);
+            });
+        }
 
-                    if (detectionFilter) {
-                        detectionFilters.add(detectionFilter);
-                    }
+        for (const [detectionMode, visionSource, mode] of tests) {
+            const result = detectionMode.testVisibility(visionSource, mode, config);
+
+            if (result !== true) {
+                continue;
+            }
+
+            visible = true;
+            detectionLevel = Math.max(detectionLevel, detectionMode.imprecise ? DETECTION_LEVELS.IMPRECISE : DETECTION_LEVELS.PRECISE);
+
+            if (object instanceof Token && object._detectionLevel === undefined) {
+                const detectionFilter = detectionMode.constructor.getDetectionFilter(visionSource, object);
+
+                if (detectionFilter) {
+                    detectionFilters.add(detectionFilter);
                 }
+            }
 
-                if (!detectionMode.important) {
-                    break;
-                }
+            if (!detectionMode.important) {
+                break;
             }
         }
 
