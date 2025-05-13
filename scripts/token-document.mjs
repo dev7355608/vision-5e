@@ -32,7 +32,7 @@ export default (TokenDocument) => class extends TokenDocument {
                 continue;
             }
 
-            this.detectionModes.push({ id, enabled, range });
+            this.detectionModes.push({ id, enabled, range: range ?? Infinity });
         }
 
         const sceneUnits = this.parent?.grid.units || "";
