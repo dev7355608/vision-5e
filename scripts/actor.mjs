@@ -537,7 +537,7 @@ const DATABASE = {
             "Verbergen",
         ],
         thermalVision: [
-            "Thermische Sicht",
+            "Wärmesicht",
         ],
         umbralSight: [
             "Düstersicht",
