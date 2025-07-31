@@ -46,7 +46,7 @@ export default class DetectionModeThermalVision extends DetectionMode {
             return true;
         }
 
-        const creatureType = target.actor?.system.details?.type.value;
+        const creatureType = target.actor?.system.details?.type?.value;
 
         if (!creatureType) {
             return false;
