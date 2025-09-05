@@ -26,11 +26,6 @@
       "path": "lang/en.json"
     },
     {
-      "lang": "cs",
-      "name": "Čeština",
-      "path": "lang/sc.json"
-    },
-    {
       "lang": "de",
       "name": "German",
       "path": "lang/de.json"
@@ -54,6 +49,11 @@
       "lang": "pl",
       "name": "Polish",
       "path": "lang/pl.json"
+    },
+    {
+      "lang": "cs",
+      "name": "Czech",
+      "path": "lang/cs.json"
     }
   ],
   "relationships": {
