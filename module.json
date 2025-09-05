@@ -49,6 +49,11 @@
       "lang": "pl",
       "name": "Polish",
       "path": "lang/pl.json"
+    },
+    {
+      "lang": "cs",
+      "name": "Czech",
+      "path": "lang/cs.json"
     }
   ],
   "relationships": {
