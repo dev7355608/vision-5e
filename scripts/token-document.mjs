@@ -37,7 +37,7 @@ export default (TokenDocument) => class extends TokenDocument {
 
         const sceneUnits = this.parent?.grid.units || "";
 
-        if (this.actor) {
+        if (this.actor?.detectionModes) {
             const actorUnits = this.actor.system.attributes?.senses?.units ?? "ft";
 
             for (const [id, range] of Object.entries(this.actor.detectionModes)) {
