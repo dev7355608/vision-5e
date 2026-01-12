@@ -24,6 +24,10 @@ export default class DetectionModeDetectThoughts extends DetectionModeDetect {
             return false;
         }
 
+        if (target.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)) {
+            return false;
+        }
+
         return target.document.hasStatusEffect(CONFIG.specialStatusEffects.THINKING);
     }
 }
