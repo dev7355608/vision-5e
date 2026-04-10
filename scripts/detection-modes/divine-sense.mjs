@@ -59,13 +59,11 @@ export default class DetectionModeDivineSense extends DetectionMode {
 
     /** @override */
     _testLOS(visionSource, mode, target, test) {
-        return !(this.walls && CONFIG.Canvas.polygonBackends.sight.testCollision(
-            visionSource.origin,
-            test.point,
+        return !(this.walls && this.constructor._testCollision(
+            visionSource,
+            test,
             {
                 type: "sight",
-                mode: "any",
-                source: visionSource,
                 useThreshold: true,
                 priority: Infinity,
             },

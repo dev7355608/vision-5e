@@ -49,13 +49,11 @@ export default class DetectionModeBlindsense extends DetectionMode {
 
     /** @override */
     _testLOS(visionSource, mode, target, test) {
-        return !CONFIG.Canvas.polygonBackends.sight.testCollision(
-            visionSource.origin,
-            test.point,
+        return !this.constructor._testCollision(
+            visionSource,
+            test,
             {
                 type: "sight",
-                mode: "any",
-                source: visionSource,
                 useThreshold: true,
                 priority: Infinity,
             },

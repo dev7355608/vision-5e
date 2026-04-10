@@ -16,10 +16,10 @@ export default class DetectionModeDarkvision extends DetectionMode {
     }
 
     /** @override */
-    static getDetectionFilter(visionSource, object) {
+    static getDetectionFilter(visionSource, { tests }) {
         if (visionSource?.data.detectionMode === "basicSight"
-            && !(visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT)
-                && canvas.effects.testInsideDarkness(object.document.getCenterPoint()))) {
+            && (!visionSource.object.document.hasStatusEffect(CONFIG.specialStatusEffects.DEVILS_SIGHT)
+                || !tests.some((test) => canvas.effects.testInsideDarkness(test.point)))) {
             return;
         }
 

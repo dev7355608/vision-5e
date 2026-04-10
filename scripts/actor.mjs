@@ -12,7 +12,15 @@ export default (Actor) => class extends Actor {
 
         super.prepareData();
 
-        if (!detectionModes || foundry.utils.objectsEqual(this.detectionModes, detectionModes)
+        let objectsEqual;
+
+        if (game.release.generation >= 14) {
+            objectsEqual = foundry.utils.equals;
+        } else {
+            objectsEqual = foundry.utils.objectsEqual;
+        }
+
+        if (!detectionModes || objectsEqual(this.detectionModes, detectionModes)
             && wasEthereal === this.statuses.has(CONFIG.specialStatusEffects.ETHEREAL)) {
             return;
         }
@@ -22,7 +30,7 @@ export default (Actor) => class extends Actor {
                 continue;
             }
 
-            token.prepareData();
+            token.reset();
 
             if (token.rendered && token.object.vision) {
                 token.object.initializeVisionSource();
@@ -66,7 +74,12 @@ export default (Actor) => class extends Actor {
 
         this.detectionModes = { lightPerception: Infinity };
 
-        const senses = this.system.attributes?.senses;
+        let senses = this.system.attributes?.senses;
+        const units = senses?.units;
+
+        if (!foundry.utils.isNewerVersion("5.3.0", game.system.version)) {
+            senses = senses?.ranges;
+        }
 
         if (senses) {
             this.detectionModes.basicSight = senses.darkvision;
@@ -75,7 +88,7 @@ export default (Actor) => class extends Actor {
             this.detectionModes.feelTremor = senses.tremorsense;
             this.detectionModes.hearing = Math.max(toFeet(typeof defaultHearingRange === "string"
                 ? new foundry.dice.Roll(defaultHearingRange, this.getRollData({ deterministic: true })).evaluateSync().total
-                : defaultHearingRange, senses.units), 0);
+                : defaultHearingRange, units), 0);
         }
 
         const featRegistry = FEAT_REGISTRY[this.type];
@@ -144,13 +157,15 @@ function upgradeDetectionMode(actor, id, range, units) {
 
 /**
  * @param {Document} document
+ * @param {string} units
+ * @param {number} [defaultRange]
  * @returns {number | undefined}
  */
-function findRange(description, units) {
+function findRange(description, units, defaultRange) {
     const result = new DOMParser().parseFromString(description, "text/html").body.textContent
         ?.match(/(?<=^|\D)(?<range>[1-9]\d*)\s*(?:(?<ft>ft|feet|Fuß|pieds?|pies?|pés?)|(?<m>m|meters?|metres?|Meter|mètres?|metros?))(?=$|[\s.:,;])/i);
 
-    return result ? convertUnits(Number(result.groups.range), result.groups.ft !== undefined ? "ft" : "m", units) : undefined;
+    return result ? convertUnits(Number(result.groups.range), result.groups.ft !== undefined ? "ft" : "m", units) : defaultRange;
 }
 
 /** @type {Set<string>} */
@@ -296,9 +311,6 @@ const FEAT_REGISTRY = {
         etherealSight(item) {
             upgradeDetectionMode(this, "etherealSight", findRange(item.system.description.value, this.system.attributes.senses.units));
         },
-        devilsSight(item) {
-            this.statuses.add(CONFIG.specialStatusEffects.DEVILS_SIGHT);
-        },
         lifeSense(item) {
             upgradeDetectionMode(this, "lifeSense", findRange(item.system.description.value, this.system.attributes.senses.units));
         },
@@ -401,9 +413,6 @@ const DATABASE = {
         detectThoughts: [
             "Detect Thoughts",
         ],
-        devilsSight: [
-            ["Devil", ["'", "’"], "s Sight"],
-        ],
         divineSense: [
             "Divine Sense",
         ],
@@ -483,9 +492,6 @@ const DATABASE = {
         detectThoughts: [
             "Gedanken wahrnehmen",
         ],
-        devilsSight: [
-            "Teufelssicht",
-        ],
         divineSense: [
             "Göttliches Gespür",
         ],
@@ -561,9 +567,6 @@ const DATABASE = {
         ],
         detectThoughts: [
             "Détection des pensées",
-        ],
-        devilsSight: [
-            [["Vision", "Vue"], " ", ["de", "du"], " diable"],
         ],
         divineSense: [
             "Perception divine",
@@ -644,9 +647,6 @@ const DATABASE = {
         detectThoughts: [
             "Detectar Pensamientos",
         ],
-        devilsSight: [
-            "Vista del Diablo",
-        ],
         divineSense: [
             "Sentidos Divinos",
         ],
@@ -724,10 +724,6 @@ const DATABASE = {
         ],
         detectThoughts: [
             "Detectar Pensamentos",
-        ],
-        devilsSight: [
-            "Visão Diabólica",
-            "Visão do Diabo",
         ],
         divineSense: [
             "Sentido Divino",
@@ -851,6 +847,9 @@ Hooks.once("init", () => {
         },
     });
     Object.assign(FEAT_REGISTRY.npc, {
+        devilsSight(item) {
+            this.statuses.add(CONFIG.specialStatusEffects.DEVILS_SIGHT);
+        },
         shapechanger(item) {
             this.statuses.add(CONFIG.specialStatusEffects.SHAPECHANGER);
         },
@@ -867,6 +866,9 @@ Hooks.once("init", () => {
     Object.assign(DATABASE.en, {
         blindsense: [
             "Blindsense",
+        ],
+        devilsSight: [
+            ["Devil", ["'", "’"], "s Sight"],
         ],
         invocationWitchSight: [
             [["Eldritch ", ""], "Invocation", ["s", ""], ": Witch Sight"],
@@ -887,6 +889,9 @@ Hooks.once("init", () => {
         blindsense: [
             "Blindgespür",
         ],
+        devilsSight: [
+            "Teufelssicht",
+        ],
         invocationWitchSight: [
             [["Schauerliche ", ""], "Anrufung", ["en", ""], ": Hexensicht"],
             "Schauerlicher Adept: Hexensicht",
@@ -905,6 +910,9 @@ Hooks.once("init", () => {
     Object.assign(DATABASE.fr, {
         blindsense: [
             "Perception aveugle",
+        ],
+        devilsSight: [
+            [["Vision", "Vue"], " ", ["de", "du"], " diable"],
         ],
         invocationWitchSight: [
             [["Invocation", "Manifestation"], [" occulte", ""], [": ", " : "], ["Vision", "Vue"], " ", ["de sorcier", "sorcière"]],
@@ -926,6 +934,9 @@ Hooks.once("init", () => {
         blindsense: [
             "Sentir sin Ver",
         ],
+        devilsSight: [
+            "Vista del Diablo",
+        ],
         invocationWitchSight: [
             ["Invocación", [" Sobrenatural", ""], ": Visión Bruja"],
             ["Invocaciones", [" Sobrenaturales", ""], ": Visión Bruja"],
@@ -945,6 +956,10 @@ Hooks.once("init", () => {
     Object.assign(DATABASE["pt-BR"], {
         blindsense: [
             "Sentido Cego",
+        ],
+        devilsSight: [
+            "Visão Diabólica",
+            "Visão do Diabo",
         ],
         invocationWitchSight: [
             ["Invocação", [" Mística", ""], ": Visão da Bruxa"],

@@ -6,33 +6,22 @@ export default (TokenDocument) => class extends TokenDocument {
         super.prepareBaseData();
 
         this._prepareSight();
-
-        // Sorting is necessary for patched CanvasVisibility#testVisibility
-        this.detectionModes.sort((a, b) => {
-            a = CONFIG.Canvas.detectionModes[a.id];
-            b = CONFIG.Canvas.detectionModes[b.id];
-
-            return (b.important ?? false) - (a.important ?? false)
-                || (a.imprecise ?? false) - (b.imprecise ?? false)
-                || (b.id === this.sight.detectionMode) - (a.id === this.sight.detectionMode)
-                || (a.sort ?? 0) - (b.sort ?? 0);
-        });
     }
 
     /** @override */
     _prepareDetectionModes() {
-        this.detectionModes = [];
+        this._clearDetectionModes();
 
         if (!this.sight.enabled) {
             return;
         }
 
-        for (const { id, enabled, range } of this._source.detectionModes) {
+        for (const [id, { enabled, range }] of this._getDetectionModes(true)) {
             if (!(id in CONFIG.Canvas.detectionModes)) {
                 continue;
             }
 
-            this.detectionModes.push({ id, enabled, range: range ?? Infinity });
+            this._setDetectionMode(id, range ?? Infinity, enabled);
         }
 
         const sceneUnits = this.parent?.grid.units || "";
@@ -41,24 +30,20 @@ export default (TokenDocument) => class extends TokenDocument {
             const actorUnits = this.actor.system.attributes?.senses?.units ?? "ft";
 
             for (const [id, range] of Object.entries(this.actor.detectionModes)) {
-                if (!this.detectionModes.find((mode) => mode.id === id)) {
-                    this.detectionModes.push({
-                        id,
-                        enabled: true,
-                        range: convertUnits(range, actorUnits, sceneUnits),
-                    });
+                if (!this._hasDetectionMode(id)) {
+                    this._setDetectionMode(id, convertUnits(range, actorUnits, sceneUnits));
                 }
             }
         } else {
-            if (!this.detectionModes.find((mode) => mode.id === "lightPerception")) {
-                this.detectionModes.push({ id: "lightPerception", enabled: true, range: Infinity });
+            if (!this._hasDetectionMode("lightPerception")) {
+                this._setDetectionMode("lightPerception", Infinity);
             }
         }
 
         if (this.hasStatusEffect(CONFIG.specialStatusEffects.ETHEREAL)) {
             const maxRange = fromFeet(60, sceneUnits);
 
-            for (const mode of this.detectionModes) {
+            for (const [_id, mode] of this._getDetectionModes()) {
                 mode.range = Math.min(mode.range, maxRange);
             }
         }
@@ -80,19 +65,20 @@ export default (TokenDocument) => class extends TokenDocument {
             return;
         }
 
-        let detectionMode = VISION_TO_DETECTION_MODE_MAPPING[this._source.sight.visionMode];
+        const detectionMode = VISION_TO_DETECTION_MODE_MAPPING[this._source.sight.visionMode];
+        const mode = this._getDetectionMode(detectionMode);
 
-        if (detectionMode && (detectionMode = this.detectionModes.find((mode) => mode.id === detectionMode && mode.enabled && mode.range > 0))) {
-            this.sight.range = detectionMode.range;
+        if (mode && mode.enabled && mode.range > 0) {
+            this.sight.range = mode.range;
             this.sight.visionMode = this._source.sight.visionMode;
-            this.sight.detectionMode = detectionMode.id;
+            this.sight.detectionMode = detectionMode;
         } else {
             this.sight.range = 0;
             this.sight.visionMode = "basic";
             this.sight.detectionMode = "basicSight";
 
             for (const [visionMode, detectionMode] of Object.entries(VISION_TO_DETECTION_MODE_MAPPING)) {
-                const mode = this.detectionModes.find((mode) => mode.id === detectionMode);
+                const mode = this._getDetectionMode(detectionMode);
 
                 if (!mode || !mode.enabled || this.sight.range >= mode.range) {
                     continue;
@@ -122,6 +108,96 @@ export default (TokenDocument) => class extends TokenDocument {
             this.sight.saturation = saturation !== undefined ? saturation : 0;
             this.sight.contrast = contrast !== undefined ? contrast : 0;
         }
+    }
+
+    /**
+     * @param {string} id
+     * @returns {{ range: number; enabled: boolean }}
+     * @internal
+     */
+    _getDetectionMode(id) {
+        if (game.release.generation >= 14) {
+            return this.detectionModes[id];
+        } else {
+            return this.detectionModes.find((mode) => mode.id === id);
+        }
+    }
+
+    /**
+     * @param {string} id
+     * @param {number} range
+     * @param {boolean} [enabled]
+     * @internal
+     */
+    _setDetectionMode(id, range, enabled = true) {
+        if (game.release.generation >= 14) {
+            this.detectionModes[id] = { range, enabled };
+        } else {
+            this.detectionModes.push({ id, range, enabled });
+        }
+    }
+
+    /**
+     * @param {string} id
+     * @returns {boolean}
+     * @internal
+     */
+    _hasDetectionMode(id) {
+        if (game.release.generation >= 14) {
+            return id in this.detectionModes;
+        } else {
+            return this.detectionModes.some((mode) => mode.id === id);
+        }
+    }
+
+    /**
+     * @param {boolean} [source]
+     * @returns {Generator<{ range: number; enabled: boolean }>}
+     * @internal
+     */
+    * _getDetectionModes(source = false) {
+        const detectionModes = source ? this._source.detectionModes : this.detectionModes;
+
+        if (game.release.generation >= 14) {
+            for (const [id, mode] of Object.entries(detectionModes)) {
+                yield [id, mode];
+            }
+        } else {
+            for (const mode of detectionModes) {
+                yield [mode.id, mode];
+            }
+        }
+    }
+
+    /** @internal */
+    _clearDetectionModes() {
+        if (game.release.generation >= 14) {
+            this.detectionModes = {};
+        } else {
+            this.detectionModes = [];
+        }
+    }
+
+    /**
+     * @param {(id: string, range: number, enabled: boolean) => boolean} condition
+     * @internal
+     */
+    _filterDetectionModes(condition) {
+        let detectionModes;
+
+        if (game.release.generation >= 14) {
+            detectionModes = {};
+
+            for (const [id, mode] of Object.entries(this.detectionModes)) {
+                if (condition(id, mode.range, mode.enabled)) {
+                    detectionModes[id] = mode;
+                }
+            }
+        } else {
+            detectionModes = this.detectionModes.filter((mode) => condition(mode.id, mode.range, mode.enabled));
+        }
+
+        this.detectionModes = detectionModes;
     }
 };
 

@@ -5,6 +5,7 @@ import TokenDocumentMixin from "./token-document.mjs";
 import TokenHUDMixin from "./token-hud.mjs";
 import VisibilityGroupMixin from "./visibility.mjs";
 import VisionSourceMixin from "./vision-source.mjs";
+import CombatTrackerMixin from "./combat-tracker.mjs";
 import DetectionModeBlindsense from "./detection-modes/blindsense.mjs";
 import DetectionModeBlindsight from "./detection-modes/blindsight.mjs";
 import DetectionModeBloodSense from "./detection-modes/blood-sense.mjs";
@@ -45,10 +46,14 @@ Hooks.once("init", () => {
     // Extend PointVisionSource
     CONFIG.Canvas.visionSourceClass = VisionSourceMixin(CONFIG.Canvas.visionSourceClass);
 
-    // Patch CombatTracker
-    CONFIG.ui.combat.prototype._isTokenVisible = function (token) {
-        return token.detectionLevel === DETECTION_LEVELS.PRECISE;
-    };
+    // Extend CombatTracker
+    if (game.release.generation >= 14) {
+        CONFIG.ui.combat = CombatTrackerMixin(CONFIG.ui.combat);
+    } else {
+        CONFIG.ui.combat.prototype._isTokenVisible = function (token) {
+            return token.detectionLevel === DETECTION_LEVELS.PRECISE;
+        };
+    }
 
     // Register the Inaudible status effect
     CONFIG.DND5E.conditionTypes.inaudible = {

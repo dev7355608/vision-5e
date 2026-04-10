@@ -16,9 +16,9 @@ export default class DetectionModeTruesight extends DetectionMode {
     }
 
     /** @override */
-    static getDetectionFilter(visionSource, object) {
+    static getDetectionFilter(visionSource, { tests }) {
         if (visionSource?.data.detectionMode === "seeAll"
-            && !canvas.effects.testInsideDarkness(object.document.getCenterPoint())) {
+            && !tests.some((test) => canvas.effects.testInsideDarkness(test.point))) {
             return;
         }
 

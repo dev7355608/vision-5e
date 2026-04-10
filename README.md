@@ -87,7 +87,7 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Allows detection _ethereal_ actors.
   - Cannot detect anything on its own and requires another sense to see the target without the _ethereal_ status.
   - Is not restricted by walls or blocked by darkness sources.
-  - Configured automatically for NPC actors that have the `Ethereal Sight`[\*](#translations) feat and PC actors with the `The Third Eye: Ethereal Sight`[\*](#translations) feat.
+  - Configured automatically for NPC actors that have the `Ethereal Sight`[\*](#translations) feat and PC actors with the `The Third Eye: Ethereal Sight`[\*](#translations) feat (legacy).
 - **Eyes of the Grave** _(Class Feature: Cleric, XGE 19)_
   - Detects undead, and PC actors with the `Hollow One`[\*](#translations) _(Character Creation Option, EGW 182)_, `Supernatural Gift: Hollow One`, or `Supernatural Gifts: Hollow One` feat.
   - Cannot detect actors that are _burrowing_, _ethereal_ (from the material plane unless the `Etherealness`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM'14 147)_ NPC feat says otherwise), or _petrified_. Also cannot detect actors with the `Nondetection`[\*](#translations) _(Spell, SRD 5.1 / PHB'14 263)_ effect.
@@ -139,7 +139,7 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Is restricted by sight-blocking walls and isn't blocked by darkness sources with priority less than 100.
   - Configured automatically from the actor's _Truesight_.
 - **Witch Sight _(Legacy)_** _(Eldritch Invocation, SRD 5.1 / PHB'14 111)_
-  - Allows detection of PC/NPC actors that have has the `Shapechanger`[\*](#translations) creature subtype and NPC actors with the `Shapechanger`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM'14 220)_ feat.
+  - Allows detection of PC/NPC actors that have has the `Shapechanger`[\*](#translations) creature subtype and NPC actors with the `Shapechanger`[\*](#translations) _(Monster Feature, e.g. SRD 5.1 / MM'14 220)_ feat (legacy).
   - Cannot detect anything on its own and requires another sense to see the target.
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically for PC actor that have the `Witch Sight`[\*](#translations), `Invocation: Witch Sight`, `Invocations: Witch Sight`, `Eldritch Invocation: Witch Sight`, `Eldritch Invocations: Witch Sight`, or `Eldritch Adept: Witch Sight` feat.
@@ -150,7 +150,9 @@ PC actors that have the `Ghostly Gaze`[\*](#translations) _(Eldritch Invocation,
 
 ### Vision Modes
 
-This module restricts the available vision modes to _Blindsight_, _Darkvision_, _Devil's Sight_, and _Truesight_. The vision mode can be changed in token's HUD (<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/eye.svg" width="16px" height="16px" style="filter: invert(100%);">) if the token has at least two of these senses. Players can select their preferred vision mode for their owned tokens on their own this way.
+This module restricts the available vision modes to _Blindsight_, _Darkvision_, _Devil's Sight_, and _Truesight_. The vision mode can be changed in token's HUD (<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/7.x/svgs/solid/glasses.svg" width="16px" height="16px" style="filter: invert(100%);">) if the token has at least two of these senses. Players can select their preferred vision mode for their owned tokens on their own this way.
+
+_Note: Pre V14 the icon is <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/7.x/svgs/solid/eye.svg" width="16px" height="16px" style="filter: invert(100%);">._
 
 ---
 
@@ -162,30 +164,32 @@ While a player owns/observes only tokens with vision that are _defeated_ (_dead_
 
 ### Active Effects
 
-| Detection Mode            | Attribute Key                                     |
-| ------------------------- | ------------------------------------------------- |
-| Blindsense                | `ATL.detectionModes.bindsense.range`              |
-| Blindsight                | `system.attributes.senses.blindsight`             |
-| Blood Sense               | `ATL.detectionModes.bloodSense.range`             |
-| Darkvision                | `system.attributes.senses.darkvision`             |
-| Detect Evil and Good      | `ATL.detectionModes.detectEvilAndGood.range`      |
-| Detect Magic              | `ATL.detectionModes.detectMagic.range`            |
-| Detect Poison and Disease | `ATL.detectionModes.detectPoisonAndDisease.range` |
-| Detect Thoughts           | `ATL.detectionModes.detectThoughts.range`         |
-| Devil's Sight             | `ATL.detectionModes.devilsSight.range`            |
-| Divine Sense              | `ATL.detectionModes.divineSense.range`            |
-| Ethereal Sight            | `ATL.detectionModes.etherealSight.range`          |
-| Eyes of the Grave         | `ATL.detectionModes.eyesOfTheGrave.range`         |
-| Hearing                   | `ATL.detectionModes.hearing.range`                |
-| Life Sense                | `ATL.detectionModes.lifeSense.range`              |
-| Light Perception          | `ATL.detectionModes.lightPerception.range`        |
-| See Invisibility          | `ATL.detectionModes.seeInvisibility.range`        |
-| Thermal Vision            | `system.attributes.senses.thermalVision`          |
-| Tremorsense               | `system.attributes.senses.tremorsense`            |
-| Truesight                 | `system.attributes.senses.truesight`              |
-| Witch Sight               | `ATL.detectionModes.witchSight.range`             |
+| Detection Mode            | Attribute Key                                       |
+| ------------------------- | --------------------------------------------------- |
+| Blindsense                | `token.detectionModes.bindsense.range`              |
+| Blindsight                | `system.attributes.senses.ranges.blindsight`        |
+| Blood Sense               | `token.detectionModes.bloodSense.range`             |
+| Darkvision                | `system.attributes.senses.ranges.darkvision`        |
+| Detect Evil and Good      | `token.detectionModes.detectEvilAndGood.range`      |
+| Detect Magic              | `token.detectionModes.detectMagic.range`            |
+| Detect Poison and Disease | `token.detectionModes.detectPoisonAndDisease.range` |
+| Detect Thoughts           | `token.detectionModes.detectThoughts.range`         |
+| Devil's Sight             | `token.detectionModes.devilsSight.range`            |
+| Divine Sense              | `token.detectionModes.divineSense.range`            |
+| Ethereal Sight            | `token.detectionModes.etherealSight.range`          |
+| Eyes of the Grave         | `token.detectionModes.eyesOfTheGrave.range`         |
+| Hearing                   | `token.detectionModes.hearing.range`                |
+| Life Sense                | `token.detectionModes.lifeSense.range`              |
+| Light Perception          | `token.detectionModes.lightPerception.range`        |
+| See Invisibility          | `token.detectionModes.seeInvisibility.range`        |
+| Thermal Vision            | `token.detectionModes.thermalVision`                |
+| Tremorsense               | `system.attributes.senses.ranges.tremorsense`       |
+| Truesight                 | `system.attributes.senses.ranges.truesight`         |
+| Witch Sight               | `ATL.detectionModes.witchSight.range`               |
 
-_Note: Attribute keys starting with `ATL.` require the [Active Token Effects](https://foundryvtt.com/packages/ATL) module._
+_Note: Pre V14 replace `token.` by `ATL.` (requires the [Active Token Effects](https://foundryvtt.com/packages/ATL) module)._
+
+_Note: Pre dnd5e 5.3.0 replace `.senses.ranges.` by `.senses.`._
 
 ---
 

@@ -48,8 +48,8 @@ export default class DetectionModeSeeInvisibility extends DetectionMode {
 
         target._detectionLevel = DETECTION_LEVELS.NONE;
 
-        visionSource.object.document.detectionModes = detectionModes.filter(
-            ({ id }) => {
+        visionSource.object.document._filterDetectionModes(
+            (id) => {
                 const mode = CONFIG.Canvas.detectionModes[id];
 
                 return mode && mode !== this && mode.type === DetectionMode.DETECTION_TYPES.SIGHT && !mode.imprecise;

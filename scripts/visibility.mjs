@@ -4,7 +4,7 @@ const { Token } = foundry.canvas.placeables;
 
 export default (CanvasVisibility) => class extends CanvasVisibility {
     /** @override */
-    testVisibility(point, options = {}) {
+    testVisibility(points, options = {}) {
         const object = options.object ?? null;
 
         if (!canvas.effects.visionSources.some((source) => source.active)) {
@@ -25,7 +25,11 @@ export default (CanvasVisibility) => class extends CanvasVisibility {
             return false;
         }
 
-        const config = this._createVisibilityTestConfig(point, options);
+        if (game.release.generation >= 14 && !Array.isArray(points)) {
+            points = [points];
+        }
+
+        const config = this._createVisibilityTestConfig(points, options);
 
         for (const lightSource of canvas.effects.lightSources) {
             if (!lightSource.data.vision || !lightSource.active) {
@@ -45,7 +49,14 @@ export default (CanvasVisibility) => class extends CanvasVisibility {
         }
 
         const sceneRect = canvas.dimensions.sceneRect;
-        const inBuffer = !sceneRect.contains(point.x, point.y);
+        let inBuffer;
+
+        if (game.release.generation >= 14) {
+            inBuffer = points.every((point) => !sceneRect.contains(point.x, point.y));
+        } else {
+            inBuffer = !sceneRect.contains(points.x, points.y);
+        }
+
         const detectionFilters = new Set();
         let visible = false;
         let detectionLevel = DETECTION_LEVELS.NONE;
@@ -60,8 +71,8 @@ export default (CanvasVisibility) => class extends CanvasVisibility {
             const token = visionSource.object.document;
             let hasDetectionMode = false;
 
-            for (const mode of token.detectionModes) {
-                const detectionMode = CONFIG.Canvas.detectionModes[mode.id];
+            for (const [id, mode] of token._getDetectionModes()) {
+                const detectionMode = CONFIG.Canvas.detectionModes[id];
 
                 if (detectionMode) {
                     tests.push([detectionMode, visionSource, mode]);
@@ -95,7 +106,7 @@ export default (CanvasVisibility) => class extends CanvasVisibility {
             detectionLevel = Math.max(detectionLevel, detectionMode.imprecise ? DETECTION_LEVELS.IMPRECISE : DETECTION_LEVELS.PRECISE);
 
             if (object instanceof Token && object._detectionLevel === undefined) {
-                const detectionFilter = detectionMode.constructor.getDetectionFilter(visionSource, object);
+                const detectionFilter = detectionMode.constructor.getDetectionFilter(visionSource, config);
 
                 if (detectionFilter) {
                     detectionFilters.add(detectionFilter);

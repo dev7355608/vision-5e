@@ -266,7 +266,25 @@ export default (Token) => class extends Token {
         );
         this.#impreciseMesh.anchor.set(0.5, 0.5);
         this.#impreciseMesh.renderable = false;
-        this.#impreciseChildren = [this.border, this.detectionFilterMesh, this.tooltip, this.targetArrows, this.targetPips];
+
+        if (game.release.generation >= 14) {
+            this.#impreciseChildren = [
+                this.border,
+                this.detectionFilterMesh,
+                this.tooltip,
+                this.levelIndicator,
+                this.targetArrows,
+                this.targetPips,
+            ];
+        } else {
+            this.#impreciseChildren = [
+                this.border,
+                this.detectionFilterMesh,
+                this.tooltip,
+                this.targetArrows,
+                this.targetPips,
+            ];
+        }
     }
 
     /** @override */

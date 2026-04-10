@@ -50,17 +50,23 @@ export default class DetectionModeHearing extends DetectionMode {
 
     /** @override */
     _testLOS(visionSource, mode, target, test) {
-        return !CONFIG.Canvas.polygonBackends.sound.testCollision(
-            visionSource.origin,
-            test.point,
-            {
+        let config;
+
+        if (game.release.generation >= 14) {
+            config = {
                 type: "sound",
-                mode: "any",
-                source: visionSource,
+                edgeDirectionMode: CONST.EDGE_DIRECTION_MODES.REVERSED,
+                useThreshold: true,
+            };
+        } else {
+            config = {
+                type: "sound",
                 wallDirectionMode: foundry.canvas.geometry.PointSourcePolygon.WALL_DIRECTION_MODES.REVERSED,
                 useThreshold: true,
-            },
-        );
+            };
+        }
+
+        return !this.constructor._testCollision(visionSource, test, config);
     }
 }
 
@@ -78,36 +84,63 @@ class PingDetectionFilter extends foundry.canvas.rendering.filters.AbstractBaseF
     };
 
     /** @override */
-    static vertexShader = `
-        attribute vec2 aVertexPosition;
+    static _createVertexShader(options) {
+        return `
+            attribute vec2 aVertexPosition;
 
-        uniform mat3 projectionMatrix;
-        uniform vec4 inputSize;
-        uniform vec4 outputFrame;
+            uniform mat3 projectionMatrix;
+            uniform vec4 inputSize;
+            uniform vec4 outputFrame;
 
-        varying vec2 vFilterCoord;
+            varying vec2 vFilterCoord;
 
-        void main() {
-            vFilterCoord = aVertexPosition;
-            vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;
-            gl_Position = vec4((projectionMatrix * vec3(position, 1.0)).xy, 0.0, 1.0);
-        }`;
+            void main() {
+                vFilterCoord = aVertexPosition;
+                vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;
+                gl_Position = vec4((projectionMatrix * vec3(position, 1.0)).xy, 0.0, 1.0);
+            }
+        `;
+    }
 
     /** @override */
-    static fragmentShader = `
-        varying vec2 vFilterCoord;
+    static _createFragmentShader(options) {
+        return `
+            varying vec2 vFilterCoord;
 
-        uniform vec3 color;
-        uniform float alpha;
-        uniform float time;
+            uniform vec3 color;
+            uniform float alpha;
+            uniform float time;
 
-        ${this.CONSTANTS}
-        ${this.WAVE()}
+            ${this.CONSTANTS}
+            ${this.WAVE()}
 
-        void main(void) {
-            float dist = distance(vFilterCoord, vec2(0.5)) * 2.0;
-            gl_FragColor = vec4(color, 1.0) * alpha * wcos(0.0, 1.0, dist * 75.0, -time * 0.01 + 3.0 * step(dist, 1.0)) * (1.0 - dist);
-        }`;
+            void main(void) {
+                float dist = distance(vFilterCoord, vec2(0.5)) * 2.0;
+                gl_FragColor = vec4(color, 1.0) * alpha * wcos(0.0, 1.0, dist * 75.0, -time * 0.01 + 3.0 * step(dist, 1.0)) * (1.0 - dist);
+            }
+        `;
+    }
+
+    static {
+        Hooks.once("init", () => {
+            if (game.release.generation >= 14) {
+                return;
+            }
+
+            Object.defineProperties(PingDetectionFilter, {
+                vertexShader: {
+                    get() {
+                        return this._createVertexShader();
+                    },
+                },
+                fragmentShader: {
+                    get() {
+                        return this._createFragmentShader();
+                    },
+                },
+            });
+        });
+    }
 
     /** @override */
     apply(filterManager, input, output, clear) {
