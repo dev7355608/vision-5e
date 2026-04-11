@@ -16,10 +16,10 @@ export default class DetectionModeLightPerception extends DetectionMode {
     }
 
     /** @override */
-    static getDetectionFilter(visionSource, { object, tests }) {
+    static getDetectionFilter(visionSource, config) {
         if (visionSource?.visionMode.perceivesLight
-            && (!object.document.hasStatusEffect(CONFIG.specialStatusEffects.BURNING)
-                || tests.some((test) => canvas.effects.testInsideLight(test.point)))) {
+            && (!config.object.document.hasStatusEffect(CONFIG.specialStatusEffects.BURNING)
+                || config.tests.some((test) => canvas.effects.testInsideLight(test.point)))) {
             return;
         }
 
