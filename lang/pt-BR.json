@@ -15,8 +15,11 @@
     "VISION5E.SeeInvisibility": "Ver o Invisível",
     "VISION5E.ThermalVision": "Visão Térmica",
     "VISION5E.WitchSight": "Visão de Bruxa",
+    "VISION5E.HINTS.DarknessSource": "Visão no Escuro e Visão Térmica são sempre bloqueadas por fontes de escuridão. Visão Diabólica e Visão Verdadeira são bloqueadas apenas se a prioridade for de pelo menos 100. Todos os outros modos de detecção nunca são bloqueados.",
     "VISION5E.SETTINGS.defaultHearingRange.label": "Alcance de Audição Padrão",
     "VISION5E.SETTINGS.defaultHearingRange.hint": "Configure o quão longe tokens podem ouvir por padrão. Requer que o mundo seja reiniciado.",
+    "VISION5E.SETTINGS.spectatorMode.label": "Modo Espectador",
+    "VISION5E.SETTINGS.spectatorMode.hint": "Configure se os tokens pertencentes a atores para os quais o jogador tem permissões limitadas podem fornecer visão quando todos os tokens do próprio jogador forem derrotados, petrificados ou ficarem inconscientes.",
     "VISION5E.TOOLTIPS.AutomaticallyManaged": "Gerenciado automaticamente pelo Vision 5e",
     "VISION5E.TOOLTIPS.SelectVisionMode": "Selecionar Modo de Visão"
 }
